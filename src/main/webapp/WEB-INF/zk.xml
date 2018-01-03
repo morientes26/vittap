@@ -3,7 +3,7 @@
 <zk>
 	<preference>
 		<name>org.zkoss.zk.ui.WebApp.name</name>
-		<value>zk boot</value>
+		<value>VittaP</value>
 	</preference>
 	
 	<preference>
@@ -45,6 +45,6 @@
 
 	<library-property>
     	<name>org.zkoss.web.preferred.locale</name>
-    	<value>es</value>
+    	<value>en</value>
 	</library-property>
 </zk>

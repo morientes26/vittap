@@ -27,7 +27,7 @@ public class Application {
 	/*
 	 * plain URL...
 	 */
-	@RequestMapping("/")
+	@RequestMapping("/test")
 	@ResponseBody
 	String home() {
 		return "hi!";

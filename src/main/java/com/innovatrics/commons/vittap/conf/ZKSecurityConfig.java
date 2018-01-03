@@ -19,22 +19,23 @@ public class ZKSecurityConfig extends WebSecurityConfigurerAdapter {
 					"/zkau*",				// <--- for zk ajax (internal)
 					"/login*", "/logout",	// <--- for login/logout
 					"/js/**", 	// <--- static resources...
-					"/css/**", 
-					"/bootstrap/**", 
-					"/img/**", 
+					"/css/**",
+					"/bootstrap/**",
+					"/img/**",
 					"/static/**"
 					)
 			.permitAll().anyRequest().authenticated().and()
 			.headers().frameOptions().disable().and()
-			.formLogin().permitAll().defaultSuccessUrl("/testVM.zul", true).and() // this redirect allways to testVM.zul page
+			.formLogin().permitAll().defaultSuccessUrl("/index.zul", true).and() // this redirect allways to testVM.zul page
 			.logout().permitAll().and()
 			.csrf().disable();
+		//http.formLogin().loginPage("/login.zul");
 	}
-	
+
 	@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		// testing login user uuu / ppp
-        auth.inMemoryAuthentication().withUser("uuu").password("ppp").roles("USER");
+        auth.inMemoryAuthentication().withUser("u").password("p").roles("USER");
     }
 
 }

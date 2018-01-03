@@ -1,0 +1,10 @@
+<zk>
+    <borderlayout hflex="1" vflex="1">
+        <north height="80px" border="none">
+            <include src="/header-admin.zul"/>
+        </north>
+        <center id="mainContent" autoscroll="true" border="none"
+                self="@insert(content)">
+        </center>
+    </borderlayout>
+</zk>

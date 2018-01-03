@@ -1,0 +1,36 @@
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<zk>
+    <hbox self="@define(content)" vflex="1" hflex="1" align="center"
+          pack="center" spacing="20px">
+        <vlayout>
+            <window id="loginWin"
+                    apply="com.innovatrics.commons.vittap.auth.vm.LoginController"
+                    title="VittaP - Login with you name" border="normal" hflex="min">
+                <vbox hflex="min" align="center">
+                    <grid hflex="min">
+                        <columns>
+                            <column hflex="min" align="right" />
+                            <column />
+                        </columns>
+                        <rows>
+                            <row>
+                                Account :
+                                <textbox id="account" width="200px" />
+                            </row>
+                            <row>
+                                Password :
+                                <textbox id="password" type="password"
+                                         width="200px" />
+                            </row>
+                        </rows>
+                    </grid>
+                    <label id="message" sclass="warn" value="&#160;" />
+                    <button id="login" label="Login" />
+
+                </vbox>
+            </window>
+            (use account='test' and password='test' to login)
+        </vlayout>
+    </hbox>
+</zk>
