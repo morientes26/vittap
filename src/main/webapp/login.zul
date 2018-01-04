@@ -1,12 +1,12 @@
 <?link rel="stylesheet" type="text/css" href="/css/style.css"?>
-<?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?>
+<?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
 <zk>
     <hbox self="@define(content)" vflex="1" hflex="1" align="center"
-          pack="center" spacing="20px">
+          pack="center" spacing="20px" style="background-image: url('/img/bg.jpg'); background-size: 100% 100%;">
         <vlayout>
             <window id="loginWin"
-                    apply="com.innovatrics.commons.vittap.auth.vm.LoginController"
-                    title="VittaP - Login with you name" border="normal" hflex="min">
+                    apply="com.innovatrics.commons.vittap.auth.controller.LoginController"
+                    title="VittaP (login)" border="normal" hflex="min">
                 <vbox hflex="min" align="center">
                     <grid hflex="min">
                         <columns>
@@ -15,7 +15,7 @@
                         </columns>
                         <rows>
                             <row>
-                                Account :
+                                Login name:
                                 <textbox id="account" width="200px" />
                             </row>
                             <row>
@@ -30,7 +30,7 @@
 
                 </vbox>
             </window>
-            (use account='test' and password='test' to login)
+            (use test login name='test' and password='test' to login)
         </vlayout>
     </hbox>
 </zk>

@@ -1,25 +1,29 @@
-<div hflex="1" vflex="1" sclass="head" >
-    <hbox hflex="1" vflex="1" align="center">
-        <a href="http://vittapilates.com">
-            <image src="/img/vittap.png" width="90px" />
-        </a>
-        <hbox hflex="1" vflex="1" align="left">
-            <a href="/studioadmin/index.zul">Studio Adminstration</a>
-        </hbox>
-        <hbox hflex="1" vflex="1" align="left">
-            <a href="">Finances</a>
-        </hbox>
-        <hbox hflex="1" vflex="1" align="left">
-            <a href="">Events Management</a>
-        </hbox>
-        <hbox hflex="1" vflex="1" align="left">
-            <a href="">People</a>
-        </hbox>
-        <hbox hflex="1" vflex="1" align="left">
-            <a href="">Login: Anonymous</a>
-        </hbox>
-        <hbox hflex="1" vflex="1" pack="end">
-            version: 0.0.1
-        </hbox>
-    </hbox>
+<div hflex="1" vflex="1" sclass="head" align="center">
+    <menubar autodrop="true">
+        <menu label="${labels.menu.studioadmin}">
+
+            <menupopup>
+                <menuitem label="${labels.menu.rooms}" href="/studioadmin/rooms.zul"/>
+                <menuitem label="${labels.menu.courses}" href="" />
+                <menuitem label="${labels.menu.programs}" href="" />
+            </menupopup>
+
+        </menu>
+        <menu label="${labels.menu.finance}">
+
+        </menu>
+        <menu label="${labels.menu.events}">
+
+        </menu>
+        <menu label="${labels.menu.people}">
+
+        </menu>
+        <menu label="${labels.menu.account}">
+            <menupopup>
+                <menuitem label="${labels.menu.profile}" href=""/>
+                <menuitem label="${labels.menu.settings}" href="" />
+                <menuitem label="${labels.menu.logout}" href="/logout.zul" />
+            </menupopup>
+        </menu>
+    </menubar>
 </div>

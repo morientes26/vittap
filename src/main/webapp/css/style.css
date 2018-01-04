@@ -3,3 +3,22 @@
 body {
     background-color: white;
 }
+
+.warn {
+    color:red;
+}
+.success {
+    color:green;
+}
+
+.head {
+    display: inline;
+    float:left;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+.mt40 {
+    margin-top: 40px;
+}

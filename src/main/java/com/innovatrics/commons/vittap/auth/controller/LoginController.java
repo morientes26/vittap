@@ -1,7 +1,8 @@
-package com.innovatrics.commons.vittap.auth.vm;
+package com.innovatrics.commons.vittap.auth.controller;
 
+import com.innovatrics.commons.vittap.auth.service.AuthenticationService;
 import com.innovatrics.commons.vittap.auth.service.UserCredential;
-import com.innovatrics.commons.vittap.auth.service.AuthenticationServiceImpl;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.SelectorComposer;
@@ -17,7 +18,6 @@ import org.zkoss.zul.Textbox;
 @VariableResolver(DelegatingVariableResolver.class)
 public class LoginController extends SelectorComposer<Component> {
 
-  //wire components
   @Wire
   Textbox account;
   @Wire
@@ -25,8 +25,8 @@ public class LoginController extends SelectorComposer<Component> {
   @Wire
   Label message;
 
-  @WireVariable
-  AuthenticationServiceImpl authService;
+  @WireVariable("authenticationServiceImpl")
+  AuthenticationService authService;
 
   @Listen("onClick=#login; onOK=#loginWin")
   public void doLogin(){
@@ -34,14 +34,14 @@ public class LoginController extends SelectorComposer<Component> {
     String pd = password.getValue();
 
     if(!authService.login(nm,pd)){
-      message.setValue("account or password are not correct.");
+      message.setValue("Account or password are not correct.");
       return;
     }
     UserCredential cre= authService.getUserCredential();
     message.setValue("Welcome, "+cre.getName());
     message.setSclass("");
 
-    Executions.sendRedirect("/rooms.zul");
+    Executions.sendRedirect("/index.zul");
 
   }
 }

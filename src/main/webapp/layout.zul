@@ -1,10 +1,16 @@
 <zk>
+    <?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+    <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
     <borderlayout hflex="1" vflex="1">
-        <north height="80px" border="none">
+        <north border="none">
             <include src="/header-admin.zul"/>
         </north>
-        <center id="mainContent" autoscroll="true" border="none"
-                self="@insert(content)">
+        <center id="mainContent"
+                autoscroll="true" border="none" self="@insert(content)"
+                style="background-image: url('/img/bg.jpg'); background-size: 100% 100%;">
         </center>
+        <south style="text-align:right">
+            <include src="/footer.zul"/>
+        </south>
     </borderlayout>
 </zk>

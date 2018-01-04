@@ -1,6 +1,5 @@
 package com.innovatrics.commons.vittap.auth.service;
 
-import com.innovatrics.commons.vittap.auth.service.UserCredential;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,12 +9,12 @@ import org.springframework.stereotype.Service;
 public interface AuthenticationService {
 
   /**login with account and password**/
-  public boolean login(String account, String password);
+  boolean login(String account, String password);
 
   /**logout current user**/
-  public void logout();
+  void logout();
 
   /**get current user credential**/
-  public UserCredential getUserCredential();
+  UserCredential getUserCredential();
 
 }

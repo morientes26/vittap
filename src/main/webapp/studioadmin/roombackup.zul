@@ -1,0 +1,53 @@
+<zk>
+	<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
+	<window self="@define(content)" title="Rooms" width="100%" border="normal">
+
+		<grid apply="com.innovatrics.commons.vittap.core.studioadmin.controller.RoomController"
+			  mold="paging" pageSize="5">
+
+			<auxhead sclass="rooms">
+				<auxheader label="Available rooms" colspan="3" rowspan="1" />
+			</auxhead>
+			search
+
+			<columns sizable="true">
+				<column label="Id" width="50px" />
+				<column label="Name" />
+				<column label="Description" />
+			</columns>
+			<template name="model" >
+				<row sclass="row" id="${each.id}">
+					<label value="${each.id}"></label>
+					<label value="${each.name}"></label>
+					<label value="${each.description}"></label>
+				</row>
+			</template>
+			<foot>
+				<footer span="3" id="footerRoom" align="right" />
+			</foot>
+		</grid>
+		<grid>
+			<auxhead sclass="rooms">
+				<auxheader label="Create or edit room" colspan="4" rowspan="1" />
+			</auxhead>
+			<columns sizable="true">
+				<column label="Id" />
+				<column label="Name" />
+				<column label="Description" />
+				<column label="" />
+			</columns>
+			<rows>
+				<row>
+					<label id="updateId" />
+					<textbox id="updateName" />
+					<textbox id="updateDescription" />
+					<hbox>
+						<button id="btnSave" label="Save" />
+						<button id="btnDelete" label="Delete" />
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+		<separator></separator>
+	</window>
+</zk>

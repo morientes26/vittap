@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
@@ -21,6 +22,7 @@ public class RoomViewModel {
 
   private final Logger log = LoggerFactory.getLogger(RoomViewModel.class);
 
+  private String keyword;
   private List<Room> roomList;
   private Room selectedRoom;
 
@@ -30,8 +32,7 @@ public class RoomViewModel {
   @Command
   @NotifyChange("roomList")
   public void search(){
-    //TODO: implement
-    roomList = roomService.getAll();
+    roomList = roomService.findByNameOrDescription(keyword);
   }
 
   @Command
@@ -39,6 +40,8 @@ public class RoomViewModel {
   public void save(){
     roomService.save(selectedRoom);
     log.info("Save room {}", selectedRoom);
+    //FIXME: component has to refresh by its self without redirect
+    Executions.sendRedirect(null);
   }
 
   @Command
@@ -46,17 +49,19 @@ public class RoomViewModel {
   public void delete(){
     roomService.delete(selectedRoom);
     log.info("Delete room {}", selectedRoom);
+    //FIXME: component has to refresh by its self without redirect
+    Executions.sendRedirect(null);
   }
 
   @Command
   @NotifyChange({"roomList", "room"})
   public void clear(){
-    this.roomList = roomService.getAll();
-    this.selectedRoom = new Room();
+    init();
   }
 
   @Init
   public void init(){
+    keyword = "";
     roomList = roomService.getAll();
     selectedRoom = new Room();
   }
@@ -83,5 +88,13 @@ public class RoomViewModel {
 
   public void setRoomService(RoomService roomService) {
     this.roomService = roomService;
+  }
+
+  public String getKeyword() {
+    return keyword;
+  }
+
+  public void setKeyword(String keyword) {
+    this.keyword = keyword;
   }
 }

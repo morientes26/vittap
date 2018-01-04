@@ -18,7 +18,7 @@ public class AuthenticationServiceImpl implements AuthenticationService, Seriali
 
   @Override
   public boolean login(String nm, String pd) {
-    User user = userRepository.findOneByName(nm);
+    User user = userRepository.findOneByLogin(nm);
     //a simple plan text password verification
     if(user==null || !user.getPassword().equals(pd)){
       return false;

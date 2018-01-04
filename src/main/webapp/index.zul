@@ -1,6 +1,21 @@
 <?link rel="stylesheet" type="text/css" href="/css/style.css" ?>
-<!--<?init class="com.innovatrics.commons.vittap.auth.vm.AuthenticationInit" ?>-->
+<?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" ?>
 <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
 <zk>
-    <include id="mainInclude" self="@define(content)" src="/footer.zul"/>
+
+    <div self="@define(content)"  width="100%" style="margin-top:50px" align="center">
+
+        <hbox>
+            <label value="Welcome user " />
+            <label style="font-weight:bold;" value="${sessionScope.userCredential.name}" />
+            <label value=" to VittaP " />
+        </hbox>
+        <hbox>
+            <label value="This is a snapshot version of application" />
+        </hbox>
+        <hbox sclass="mt20">
+            <image src="/img/vittap.png" width="90px" />
+        </hbox>
+
+    </div>
 </zk>

@@ -29,4 +29,9 @@ public class RoomService {
 	public List<Room> getAll(){
 		return repository.findAll();
 	}
+
+	public List<Room> findByNameOrDescription(String keyword){
+		keyword = (keyword==null) ? "*" : keyword;
+		return repository.findByNameOrDescription(keyword);
+	}
 }

@@ -1,6 +1,4 @@
-<div hflex="1" vflex="1" sclass="footer">
-    <vbox hflex="1" vflex="1" align="center">
-       Version ${application.version}, copyright by Morione
-        <a href="http://morione.sk">http://morione.sk</a>
-    </vbox>
+<div align="end">
+    <label style="font-weight:bold;" value="${sessionScope.userCredential.name}" />
+    <label value="version. 0.0.1" />
 </div>

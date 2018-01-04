@@ -1,0 +1,6 @@
+<zk>
+    <hbox id="logout-box" align="center"
+          apply="com.innovatrics.commons.vittap.auth.controller.LogoutController">
+        <label value="${labels.logout.process}"/>
+    </hbox>
+</zk>
