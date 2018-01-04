@@ -50,6 +50,8 @@ public class ProgramTest {
   @Test
   public void testProgramCRUD() {
 
+    int count = programRepository.findAll().size();
+
     Program program = programRepository.save(this.program);
     Program program2 = programRepository.findOne(program.getId());
 
@@ -61,7 +63,7 @@ public class ProgramTest {
     programRepository.delete(program2);
     List<Program> result = programRepository.findAll();
 
-    assertThat(result.isEmpty(), is(true));
+    assertThat(result.size(), is(count));
 
   }
 }

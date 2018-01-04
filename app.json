@@ -1,0 +1,7 @@
+{
+  "name": "VittaP",
+  "description": "Reservation system for Pilates studio.",
+  "website": "https://morione.sk/apps/vittap",
+  "repository": "https://github.com/morientes26/vittap",
+  "addons": [ "heroku-postgresql" ]
+}

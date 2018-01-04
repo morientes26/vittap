@@ -37,16 +37,18 @@ public class RoomTest {
   @Test
   public void testRoomCRUD() {
 
+    int count = roomRepository.findAll().size();
+
     Room room = roomRepository.save(this.room);
     Room room2 = roomRepository.findOne(room.getId());
 
-    assertThat(room, instanceOf(User.class));
+    assertThat(room, instanceOf(Room.class));
     assertThat(room2.getDescription(), is("description of room 1"));
 
     roomRepository.delete(room2);
     List<Room> result = roomRepository.findAll();
 
-    assertThat(result.isEmpty(), is(true));
+    assertThat(result.size(), is(count));
 
   }
 

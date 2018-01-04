@@ -46,6 +46,9 @@ public class CoursesTest {
 
   @Test
   public void testClassCategoryCRUD() {
+
+    int count = classCategoryRepository.findAll().size();
+
     ClassCategory cc = classCategoryRepository.save(this.classCategory);
     ClassCategory cc2 = classCategoryRepository.findOne(cc.getId());
     assertThat(cc, instanceOf(ClassCategory.class));
@@ -53,12 +56,15 @@ public class CoursesTest {
 
     classCategoryRepository.delete(cc2);
     List<ClassCategory> result = classCategoryRepository.findAll();
-    assertThat(result.isEmpty(), is(true));
+    assertThat(result.size(), is(count));
 
   }
 
   @Test
   public void testClassTemplateCRUD() {
+
+    int count = classTemplateRepository.findAll().size();
+
     ClassTemplate ct = classTemplateRepository.save(this.classTemplate);
     ct = classTemplateRepository.findOne(ct.getId());
 
@@ -68,7 +74,7 @@ public class CoursesTest {
 
     classTemplateRepository.delete(ct);
     List<ClassTemplate> result = classTemplateRepository.findAll();
-    assertThat(result.isEmpty(), is(true));
+    assertThat(result.size(), is(count));
 
   }
 }

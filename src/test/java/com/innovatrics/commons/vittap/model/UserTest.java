@@ -38,6 +38,8 @@ public class UserTest {
   @Test
   public void testUserCRUD() {
 
+    int count = userRepository.findAll().size();
+
     User user = userRepository.save(this.user);
     User user2 = userRepository.findOne(user.getId());
 
@@ -47,7 +49,7 @@ public class UserTest {
     userRepository.delete(user2);
     List<User> result = userRepository.findAll();
 
-    assertThat(result.isEmpty(), is(true));
+    assertThat(result.size(), is(count));
 
   }
 
