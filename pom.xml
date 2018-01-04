@@ -6,7 +6,7 @@
 	<groupId>vittap</groupId>
 	<artifactId>vittap-web</artifactId>
 	<version>0.0.1</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>vittap</name>
 	<description>spring bootsrap with zk framework</description>
@@ -93,6 +93,11 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
     </dependencies>

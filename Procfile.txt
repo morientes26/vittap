@@ -1,1 +1,1 @@
-web java -Dserver.port=  -jar target/vittap-web-0.0.1.jar --spring.profiles.active=stage
+java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar --spring.profiles.active=stage
