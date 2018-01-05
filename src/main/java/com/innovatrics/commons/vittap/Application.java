@@ -64,18 +64,18 @@ public class Application {
 
 	//FIXME: for this puprose will be use FLYWAY libs instead
 	// https://flywaydb.org/
-//	@Bean
-//	InitializingBean initDbData() {
-//		return () -> {
-//			if (this.isEmptyDB())
-//				userRepository.save(
-//								new User("test",
-//												"test",
-//												"test",
-//												LevelOfAccess.ADMIN)
-//				);
-//		};
-//	}
+	@Bean
+	InitializingBean initDbData() {
+		return () -> {
+			if (this.isEmptyDB())
+				userRepository.save(
+								new User("test",
+												"test",
+												"test",
+												LevelOfAccess.ADMIN)
+				);
+		};
+	}
 
 	private boolean isEmptyDB(){
 		return userRepository.findAll().isEmpty();
