@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name="\"user\"") // special case of table because 'user' word is reserved by hibernate
 public class User {
 
   @Id
