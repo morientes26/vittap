@@ -36,6 +36,8 @@ public class ClassVisit {
 
         return visits;//visits.toArray(new ClassVisit[classType.length]);
     }
+
+    public ClassVisit(){}
     
     public ClassVisit(ClassCategory classType, int number) {
         this.classType = classType;

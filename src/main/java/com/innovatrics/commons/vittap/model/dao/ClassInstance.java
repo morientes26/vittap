@@ -28,6 +28,8 @@ public class ClassInstance extends OccurrenceContent {
     @JoinColumn(name="class_id", nullable=false)
     private Class clazz;
 
+    public ClassInstance(){}
+
     public ClassInstance(LocalDateTime trueTime) {
         this.trueTime = trueTime;
         this.status = ClassInstanceStatus.CREATED;

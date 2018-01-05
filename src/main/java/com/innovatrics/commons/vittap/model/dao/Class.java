@@ -37,6 +37,7 @@ public class Class {
     @OneToMany(mappedBy = "clazz")
     private List<ClassInstance> instances; // result of Event Schedule
 
+    public Class(){}
 
     public Class(Schedule schedule, ClassTemplate event)
     {

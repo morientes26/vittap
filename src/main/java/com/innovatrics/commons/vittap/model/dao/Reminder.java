@@ -18,6 +18,8 @@ public class Reminder extends OccurrenceContent {
     private String name;
     private String details;
 
+    public Reminder(){}
+
     public Reminder(String name, String details) {
         this.name = name;
         this.details = details;

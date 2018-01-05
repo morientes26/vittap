@@ -19,6 +19,8 @@ public class Skill {
     @JoinColumn(name="attendant_id", nullable=false)
     private Attendant attendant;
 
+    public Skill(){}
+
     public Skill(ClassCategory cathegory, Level level) {
         this.category = cathegory;
         this.level = level;

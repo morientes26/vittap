@@ -43,6 +43,7 @@ public class Attendant {
         this.user = user;
     }
 
+    public Attendant(){}
 
     public Attendant(PersonalData personalData, String additionalData/* , ProgramInstance[] programs */) {
         this.personalData = personalData;

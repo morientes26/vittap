@@ -13,6 +13,8 @@ public class PersonalData {
 
     private String name;
 
+    public PersonalData(){}
+
     public PersonalData(String name) {
         this.name = name;
     }

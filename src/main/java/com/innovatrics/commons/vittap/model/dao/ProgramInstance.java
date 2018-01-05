@@ -16,7 +16,9 @@ public class ProgramInstance extends OccurrenceContent {
     @ManyToOne
     @JoinColumn(name="program_id", nullable=false)
     private Program program;
-    
+
+    public ProgramInstance(){}
+
     public ProgramInstance(LocalDateTime trueTime, ProgramInstanceStatus status) {
         this.trueTime = trueTime;
         this.status = status;

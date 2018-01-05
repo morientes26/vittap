@@ -15,6 +15,8 @@ public class NotificationSettings {
 
     private NotificationType type;
 
+    public NotificationSettings(){}
+
     public NotificationSettings(NotificationType type){
         this.type = type;
     }
