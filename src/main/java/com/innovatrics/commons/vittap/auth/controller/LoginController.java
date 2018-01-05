@@ -28,6 +28,12 @@ public class LoginController extends SelectorComposer<Component> {
   @WireVariable("authenticationServiceImpl")
   AuthenticationService authService;
 
+  public void doAfterCompose(Component comp) throws Exception {
+    super.doAfterCompose(comp);
+    if (!authService.getUserCredential().isAnonymous())
+      Executions.sendRedirect("/index.zul");
+  }
+
   @Listen("onClick=#login; onOK=#loginWin")
   public void doLogin(){
     String nm = account.getValue();

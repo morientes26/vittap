@@ -3,7 +3,7 @@ package com.innovatrics.commons.vittap.auth.service;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by  ??_?¬ morientes on 02/01/2018.
+ * Base authentication service interface
  */
 @Service
 public interface AuthenticationService {

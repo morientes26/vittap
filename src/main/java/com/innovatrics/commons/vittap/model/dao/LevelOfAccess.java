@@ -4,5 +4,6 @@ public enum LevelOfAccess {
     ADMIN,
     SECRETARY,
     TEACHER,
-    PUPIL
+    PUPIL,
+    ANONYMOUS,  // not login user, can only view some information
 }

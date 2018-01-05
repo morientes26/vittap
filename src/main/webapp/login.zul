@@ -6,7 +6,7 @@
         <vlayout>
             <window id="loginWin"
                     apply="com.innovatrics.commons.vittap.auth.controller.LoginController"
-                    title="VittaP (login)" border="normal" hflex="min">
+                    title="${labels.login.title}" border="normal" hflex="min">
                 <vbox hflex="min" align="center">
                     <grid hflex="min">
                         <columns>
@@ -15,18 +15,18 @@
                         </columns>
                         <rows>
                             <row>
-                                Login name:
+                                ${labels.login.name} :
                                 <textbox id="account" width="200px" />
                             </row>
                             <row>
-                                Password :
+                                ${labels.login.password} :
                                 <textbox id="password" type="password"
                                          width="200px" />
                             </row>
                         </rows>
                     </grid>
                     <label id="message" sclass="warn" value="&#160;" />
-                    <button id="login" label="Login" />
+                    <button id="login" label="${labels.login.button.login}" />
 
                 </vbox>
             </window>

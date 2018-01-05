@@ -9,7 +9,10 @@ import org.zkoss.zk.ui.Sessions;
 
 import java.io.Serializable;
 
-
+/**
+ * Implementation of basic user authentication.
+ * User will get userCredencial after login.
+ */
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService, Serializable {
 

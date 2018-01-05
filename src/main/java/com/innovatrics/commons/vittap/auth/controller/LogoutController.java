@@ -8,18 +8,16 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
-
+/**
+ * LogoutController without template.
+ * After redirect site to this controller, user will be logout and
+ * redirect to login page.
+ */
 @VariableResolver(DelegatingVariableResolver.class)
 public class LogoutController extends SelectorComposer<Component> {
 
   @WireVariable("authenticationServiceImpl")
   AuthenticationService authService;
-//
-//  @Listen("onClick=#logout")
-//  public void doLogout(){
-//    authService.logout();
-//    Executions.sendRedirect("/login.zul");
-//  }
 
   public void doAfterCompose(Component comp) throws Exception {
     super.doAfterCompose(comp);

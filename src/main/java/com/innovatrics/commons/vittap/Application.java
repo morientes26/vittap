@@ -3,6 +3,11 @@ package com.innovatrics.commons.vittap;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.innovatrics.commons.vittap.model.dao.LevelOfAccess;
+import com.innovatrics.commons.vittap.model.dao.User;
+import com.innovatrics.commons.vittap.model.repository.UserRepository;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
@@ -20,17 +25,11 @@ import org.zkoss.zk.ui.http.HttpSessionListener;
 @EnableAutoConfiguration
 public class Application {
 
+	@Autowired
+	private UserRepository userRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-	}
-
-	/*
-	 * plain URL...
-	 */
-	@RequestMapping("/test")
-	@ResponseBody
-	String home() {
-		return "hi!";
 	}
 
 	/*
@@ -60,6 +59,26 @@ public class Application {
 	@Bean
 	public HttpSessionListener httpSessionListener() {
 		return new HttpSessionListener();
+	}
+
+
+	//FIXME: for this puprose will be use FLYWAY libs instead
+	// https://flywaydb.org/
+	@Bean
+	InitializingBean initDbData() {
+		return () -> {
+			if (this.isEmptyDB())
+				userRepository.save(
+								new User("test",
+												"test",
+												"test",
+												LevelOfAccess.ADMIN)
+				);
+		};
+	}
+
+	private boolean isEmptyDB(){
+		return userRepository.findAll().isEmpty();
 	}
 
 }

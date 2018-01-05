@@ -28,6 +28,15 @@ public class User {
   )
   Set<Notification> notifications = new HashSet<>();
 
+  public User(){
+  }
+
+  public User(String login, String name, String password, LevelOfAccess levelOfAccess){
+    this.login = login;
+    this.name = name;
+    this.password = password;
+    this.levelOfAccess = levelOfAccess;
+  }
 
   public long getId() {
     return id;
