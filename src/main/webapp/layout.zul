@@ -3,7 +3,7 @@
     <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
     <borderlayout hflex="1" vflex="1">
         <north border="none">
-            <include src="/header-admin.zul"/>
+            <include src="/header.zul"/>
         </north>
         <center id="mainContent"
                 autoscroll="true" border="none" self="@insert(content)"

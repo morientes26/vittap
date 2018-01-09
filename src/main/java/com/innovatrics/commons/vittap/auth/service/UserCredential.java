@@ -3,7 +3,9 @@ package com.innovatrics.commons.vittap.auth.service;
 import com.innovatrics.commons.vittap.model.dao.LevelOfAccess;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UserCredential implements Serializable{
@@ -12,11 +14,12 @@ public class UserCredential implements Serializable{
   String account;
   String name;
 
-  Set<String> roles = new HashSet<String>();
+  List<String> roles = new ArrayList<>();
 
-  public UserCredential(String account, String name) {
+  public UserCredential(String account, String name, List<String> roles) {
     this.account = account;
     this.name = name;
+    this.roles = roles;
   }
 
   public UserCredential() {
@@ -53,4 +56,7 @@ public class UserCredential implements Serializable{
     roles.add(role);
   }
 
+  public List<String> getRoles() {
+    return roles;
+  }
 }

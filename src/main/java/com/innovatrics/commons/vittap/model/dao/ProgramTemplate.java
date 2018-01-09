@@ -84,6 +84,7 @@ public class ProgramTemplate {
 //        this.classVisit = classVisit;
 //    }
 
+    //note: For ZK8 is neccessery to add immutable annotation for Date type
     @Immutable
     public Date getDateOfIssue() {
         return dateOfIssue;

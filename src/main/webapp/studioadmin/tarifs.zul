@@ -5,73 +5,81 @@
     <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
 
 <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.ClassCategoryViewModel')"
-        title="${labels.classCategory.title}" width="100%" border="normal"
+        viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.TarifViewModel')"
+        title="${labels.tarif.title}" width="100%" border="normal"
         validationMessages="@id('vmsgs')"
-        form="@id('fx') @load(vm.selectedClassCategory) @save(vm.selectedClassCategory, before='submit')
+        form="@id('fx') @load(vm.selected) @save(vm.selected, before='submit')
         @validator('com.innovatrics.commons.vittap.core.studioadmin.validator.DefaultValidator')">
 
-    <hbox align="center" style="width:300px;">
-        ${labels.classCategory.search.title}:
+    <hbox align="center" style="width:100%;">
+        ${labels.programTemplate.search.title}:
         <textbox value="@bind(vm.keyword)" hflex="3"/>
         <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
     </hbox>
-    <listbox height="100%" model="@bind(vm.classCategoryList)" emptyMessage="${labels.classCategory.emptymessages}"
-             selectedItem="@bind(vm.selectedClassCategory)" mold="paging" pageSize="5"
+    <listbox width="100%" height="100%" model="@bind(vm.tarifList)" emptyMessage="${labels.selected.emptymessages}"
+             selectedItem="@bind(vm.selected)" mold="paging" pageSize="5"
              style="margin-top:10px">
         <listhead sizable="true">
-            <listheader label="${labels.classCategory.id}" hflex="1"/>
-            <listheader label="${labels.classCategory.name}" hflex="2"/>
-            <listheader label="${labels.classCategory.description}" hflex="5"/>
-            <listheader label="${labels.classCategory.accessRestriction}" hflex="1"/>
-            <listheader label="${labels.classCategory.attendanceRequired}" hflex="1"/>
+            <listheader label="${labels.tarif.id}" hflex="1"/>
+            <listheader label="${labels.tarif.name}" hflex="2"/>
+            <listheader label="${labels.tarif.description}" hflex="5"/>
+            <listheader label="${labels.tarif.value}" hflex="1"/>
+            <listheader label="${labels.tarif.dateOfIssue}" hflex="1"/>
         </listhead>
         <template name="model">
             <listitem>
                 <listcell label="@bind(each.id)" ></listcell>
                 <listcell label="@bind(each.name)" ></listcell>
                 <listcell label="@bind(each.description)" ></listcell>
-                <listcell label="@bind(each.accessRestriction)" ></listcell>
-                <listcell label="@bind(each.attendanceRequired)" ></listcell>
+                <listcell label="@bind(each.value)" ></listcell>
+                <listcell label="@bind(each.dateOfIssue)
+                                 @converter('formatedDate',format='yyyy/MM/dd')" ></listcell>
+
             </listitem>
         </template>
     </listbox>
-    <hbox style="margin-top:20px;width:300px;">
+    <hbox style="margin-top:20px;width:100%;">
         <groupbox title="@bind(empty fx.id ?
-        labels.classCategory.create.label : labels.classCategory.update.label)">
+        labels.tarif.create.label : labels.tarif.update.label)">
 
-            <hlayout>
+            <hlayout style="width:100%;">
                 <label value="@load(vmsgs['name'])" sclass="error"/>
             </hlayout>
             <hlayout>
-                <span hflex="1">${labels.classCategory.name} :</span>
-                <textbox hflex="3" value="@bind(fx.name)"
-                         cols="40"/>
+                <span hflex="1">${labels.tarif.name} :</span>
+                <textbox hflex="3" cols="40" id="name"
+                         value="@bind(fx.name)" />
             </hlayout>
 
             <hlayout>
                 <label value="@load(vmsgs['description'])" sclass="error"/>
             </hlayout>
             <hlayout>
-                <span hflex="1">${labels.classCategory.description} :</span>
-                <textbox hflex="3" value="@bind(fx.description)"
-                         cols="40"/>
+                <span hflex="1">${labels.tarif.description} :</span>
+                <textbox hflex="3" cols="40" id="description"
+                         value="@bind(fx.description)" />
             </hlayout>
 
             <hlayout>
-                <label value="@load(vmsgs['accessRestriction'])" sclass="error"/>
+                <label value="@load(vmsgs['dateOfIssue'])" sclass="error"/>
             </hlayout>
             <hlayout>
-                <checkbox label="${labels.classCategory.accessRestriction}"
-                          hflex="4" checked="@bind(fx.accessRestriction)"/>
+                <span hflex="1">${labels.tarif.dateOfIssue} :</span>
+                <datebox hflex="3"  id="dateOfIssue"
+                         value="@bind(fx.dateOfIssue) @converter=('org.zkoss.zkplus.databind.DateFormatConverter')"
+                         format="yyyy/MM/dd"/>
             </hlayout>
 
             <hlayout>
-                <label value="@load(vmsgs['attendanceRequired'])" sclass="error"/>
+                <label value="@load(vmsgs['value'])" sclass="error"/>
             </hlayout>
             <hlayout>
-                <checkbox label="${labels.classCategory.attendanceRequired}"
-                          hflex="4" checked="@bind(fx.attendanceRequired)"/>
+                <span hflex="1">${labels.tarif.value} :</span>
+                <doublebox hflex="3"  id="value" value="@bind(fx.value)"/>
+            </hlayout>
+
+            <hlayout>
+                <label value="@load(vmsgs['value'])" sclass="error"/>
             </hlayout>
 
             <separator />

@@ -3,8 +3,11 @@ package com.innovatrics.commons.vittap.auth.controller;
 import com.innovatrics.commons.vittap.auth.service.AuthenticationService;
 import com.innovatrics.commons.vittap.auth.service.UserCredential;
 
+import com.innovatrics.commons.vittap.model.dao.LevelOfAccess;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.metainfo.ComponentInfo;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
@@ -28,10 +31,10 @@ public class LoginController extends SelectorComposer<Component> {
   @WireVariable("authenticationServiceImpl")
   AuthenticationService authService;
 
-  public void doAfterCompose(Component comp) throws Exception {
-    super.doAfterCompose(comp);
-    if (!authService.getUserCredential().isAnonymous())
-      Executions.sendRedirect("/index.zul");
+  public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo){
+    ComponentInfo result = super.doBeforeCompose(page, parent, compInfo);
+    authorization(authService.getUserCredential());
+    return result;
   }
 
   @Listen("onClick=#login; onOK=#loginWin")
@@ -43,11 +46,41 @@ public class LoginController extends SelectorComposer<Component> {
       message.setValue("Account or password are not correct.");
       return;
     }
-    UserCredential cre= authService.getUserCredential();
-    message.setValue("Welcome, "+cre.getName());
+    UserCredential credential = authService.getUserCredential();
+    message.setValue("Welcome, " + credential.getName());
     message.setSclass("");
 
-    Executions.sendRedirect("/index.zul");
+    authorization(credential);
 
+  }
+
+  private void authorization(UserCredential credential){
+
+    // anonymous is going to login page
+    if(credential==null || credential.isAnonymous()){
+      return;
+    }
+
+    if(credential.hasRole(LevelOfAccess.ADMIN.name())){
+      Executions.sendRedirect("/index.zul");
+      return;
+    }
+
+    if(credential.hasRole(LevelOfAccess.PUPIL.name())){
+      Executions.sendRedirect("/index.zul");
+      return;
+    }
+
+    if(credential.hasRole(LevelOfAccess.TEACHER.name())){
+      Executions.sendRedirect("/home.zul");
+      return;
+    }
+
+    if(credential.hasRole(LevelOfAccess.SECRETARY.name())){
+      Executions.sendRedirect("/index.zul");
+      return;
+    }
+
+    throw new IllegalStateException();
   }
 }

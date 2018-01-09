@@ -1,118 +1,13 @@
 <zk>
-<?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" ?>
-<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
-<window self="@define(content)" apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.ProgramTemplateViewModel')"
-        title="${labels.programTemplate.title}" width="100%" border="normal"
-        validationMessages="@id('vmsgs')"
-        form="@id('fx') @load(vm.selectedProgramTemplate) @save(vm.selectedProgramTemplate, before='submit')
-        @validator('com.innovatrics.commons.vittap.core.studioadmin.mvvm.FormValidator')">
+    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" args="ADMIN" ?>
+    <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
+    <window self="@define(content)"
+            title="${labels.programs.title}" width="100%" border="normal">
 
-    <hbox align="center" style="width:300px;">
-        ${labels.programTemplate.search.title}:
-        <textbox value="@bind(vm.keyword)" hflex="3"/>
-        <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
-    </hbox>
-    <listbox height="100%" model="@bind(vm.programTemplateList)" emptyMessage="${labels.programTemplate.emptymessages}"
-             selectedItem="@bind(vm.selectedProgramTemplate)" mold="paging" pageSize="5"
-             style="margin-top:10px">
-        <listhead sizable="true">
-            <listheader label="${labels.programTemplate.id}" hflex="1"/>
-            <listheader label="${labels.programTemplate.name}" hflex="2"/>
-            <listheader label="${labels.programTemplate.description}" hflex="5"/>
-            <listheader label="${labels.programTemplate.tarif}" hflex="1"/>
-            <listheader label="${labels.programTemplate.dateOfIssue}" hflex="1"/>
-            <listheader label="${labels.programTemplate.active}" hflex="1"/>
-        </listhead>
-        <template name="model">
-            <listitem>
-                <listcell label="@bind(each.id)" ></listcell>
-                <listcell label="@bind(each.name)" ></listcell>
-                <listcell label="@bind(each.description)" ></listcell>
-                <listcell label="@bind(each.tarif.name)" ></listcell>
-                <listcell label="@bind(each.dateOfIssue)
-                                 @converter('formatedDate',format='yyyy/MM/dd')" ></listcell>
-                <listcell label="@bind(each.active)" ></listcell>
-            </listitem>
-        </template>
-    </listbox>
-    <hbox style="margin-top:20px;width:300px;">
-        <groupbox title="@bind(empty vm.selectedProgramTemplate.id ?
-        labels.programTemplate.create.label : labels.programTemplate.update.label)">
+        <hbox align="center" style="width:300px;">
+            <button label="${labels.programs.button.tarifs}" href="/studioadmin/tarifs.zul" hflex="1"/>
+            <button label="${labels.programs.button.templates}" href="/studioadmin/program_templates.zul" hflex="1"/>
+        </hbox>
 
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.name} :</span>
-                <textbox hflex="3" cols="40" id="name"
-                         value="@bind(fx.name)" />
-            </hlayout>
-
-            <hlayout>
-                <label value="@load(vmsgs['name'])" sclass="error"/>
-            </hlayout>
-
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.description} :</span>
-                <textbox hflex="3" cols="40" id="description"
-                         value="@bind(fx.description)" />
-            </hlayout>
-
-            <hlayout>
-                <label value="@load(vmsgs['description'])" sclass="error"/>
-            </hlayout>
-
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.dateOfIssue} :</span>
-                <datebox id="dateOfIssue"
-                         value="@bind(fx.dateOfIssue) @converter=('org.zkoss.zkplus.databind.DateFormatConverter')"
-                         format="yyyy/MM/dd"/>
-            </hlayout>
-
-            <hlayout>
-                <label value="@load(vmsgs['dateOfIssue'])" sclass="error"/>
-            </hlayout>
-
-            <hlayout>
-                <checkbox hflex="3" id="active" label="${labels.programTemplate.active}"
-                          checked="@bind(fx.active)"/>
-            </hlayout>
-
-            <hlayout>
-                <label value="@load(vmsgs['active'])" sclass="error"/>
-            </hlayout>
-
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.tarif} :</span>
-                <combobox id="tarif" cols="34"
-                          model="@load(vm.listTarif)" selectedItem="@bind(fx.tarif)">
-                    <template name="model" var="tarif">
-                        <comboitem label="@load(tarif.name)" value="@load(tarif.id)"/>
-                    </template>
-                </combobox>
-            </hlayout>
-
-            <hlayout>
-                <label value="@load(vmsgs['tarif'])" sclass="error"/>
-            </hlayout>
-
-            <hlayout>
-                <label visible="@load(empty vmsgs)"
-                       value="@load(empty vmsgs ? labels.form.success.submit : '', before='submit')" />
-            </hlayout>
-
-
-            <hlayout>
-                <button label="@load(empty vm.selectedProgramTemplate.id ? labels.button.create : labels.button.update)"
-                        onClick="@command('submit')"
-                        hflex="1" />
-
-                <button label="${labels.button.delete}" onClick="@command('delete')"
-                        disabled="@load(empty vm.selectedProgramTemplate.id)"
-                        hflex="1"/>
-
-                <button hflex="1" label="${labels.button.clear}" onClick="@command('clear')" />
-            </hlayout>
-        </groupbox>
-    </hbox>
-
-</window>
+    </window>
 </zk>

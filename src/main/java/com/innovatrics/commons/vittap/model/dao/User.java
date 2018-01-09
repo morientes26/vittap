@@ -18,7 +18,8 @@ public class User {
 
   private String name;
 
-  private LevelOfAccess levelOfAccess;
+  @OneToOne
+  private Role role;
 
 
   @ManyToMany(cascade = {CascadeType.ALL})
@@ -32,23 +33,15 @@ public class User {
   public User(){
   }
 
-  public User(String login, String name, String password, LevelOfAccess levelOfAccess){
+  public User(String login, String name, String password, Role role){
     this.login = login;
     this.name = name;
     this.password = password;
-    this.levelOfAccess = levelOfAccess;
+    this.role = role;
   }
 
   public long getId() {
     return id;
-  }
-
-  public LevelOfAccess getLevelOfAccess() {
-    return levelOfAccess;
-  }
-
-  public void setLevelOfAccess(LevelOfAccess levelOfAccess) {
-    this.levelOfAccess = levelOfAccess;
   }
 
   public Set<Notification> getNotifications() {
@@ -81,5 +74,13 @@ public class User {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Role getRole() {
+    return role;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
   }
 }

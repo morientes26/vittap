@@ -1,10 +1,15 @@
 <zk>
-<?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" ?>
-<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
+    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" args="ADMIN" ?>
+    <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
+    <?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+    <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
+
 <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
         viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.ClassTemplateViewModel')"
         title="${labels.classTemplate.title}" width="100%" border="normal"
-        validationMessages="@id('vmsgs')">
+        validationMessages="@id('vmsgs')"
+        form="@id('fx') @load(vm.selectedClassTemplate) @save(vm.selectedClassTemplate, before='submit')
+        @validator('com.innovatrics.commons.vittap.core.studioadmin.validator.DefaultValidator)">
 
     <hbox align="center" style="width:300px;">
         ${labels.classTemplate.search.title}:
@@ -36,67 +41,91 @@
         </template>
     </listbox>
     <hbox style="margin-top:20px;width:300px;">
-        <vbox>
-            <hlayout visible="@bind(empty vm.selectedClassTemplate.id)" hflex="1">
-                ${labels.classTemplate.create.label} <label value="@bind(vm.selectedClassTemplate.id)"/>
-            </hlayout>
+        <groupbox title="@bind(empty vm.selectedClassTemplate.id ?
+        labels.room.create.label : labels.room.update.label)">
 
-            <hlayout visible="@bind(not empty vm.selectedClassTemplate.id)" hflex="1">
-                ${labels.classTemplate.update.label} <label value="@bind(vm.selectedClassTemplate.id)"/>
+            <hlayout>
+                <label value="@load(vmsgs['name'])" sclass="error"/>
             </hlayout>
-
             <hlayout>
                 <span hflex="1">${labels.classTemplate.name} :</span>
                 <textbox hflex="3" cols="40" id="name"
-                         value="@bind(vm.selectedClassTemplate.name) @validator('beanValidator')" />
-                <label value="@load(vmsgs[name])" sclass="error"/>
+                         value="@bind(fx.name) @validator('beanValidator')" />
+            </hlayout>
+
+            <hlayout>
+                <label value="@load(vmsgs['description'])" sclass="error"/>
             </hlayout>
             <hlayout>
                 <span hflex="1">${labels.classTemplate.description} :</span>
                 <textbox hflex="3" cols="40" id="description"
-                         value="@bind(vm.selectedClassTemplate.description)" />
-                <label value="@load(vmsgs[description])" sclass="error"/>
+                         value="@bind(fx.description)" />
+            </hlayout>
+
+            <hlayout>
+                <label value="@load(vmsgs['duration'])" sclass="error"/>
             </hlayout>
             <hlayout>
                 <span hflex="1">${labels.classTemplate.duration} :</span>
                 <spinner hflex="3" id="duration"
-                         value="@bind(vm.selectedClassTemplate.duration)"
-                         format=",###" constraint="no empty,min 0"  />
-                <label value="@load(vmsgs[duration])" sclass="error"/>
+                         value="@bind(fx.duration)"
+                         format=",###" />
+            </hlayout>
+
+            <hlayout>
+                <label value="@load(vmsgs['capacity'])" sclass="error"/>
             </hlayout>
             <hlayout>
                 <span hflex="1">${labels.classTemplate.capacity} :</span>
                 <spinner hflex="3" id="capacity"
-                         value="@bind(vm.selectedClassTemplate.capacity)"
-                         format=",###" constraint="no empty,min 0"  />
-                <label value="@load(vmsgs[capacity])" sclass="error"/>
+                         value="@bind(fx.capacity)"
+                         format=",###" />
+            </hlayout>
+
+            <hlayout>
+                <label value="@load(vmsgs['level'])" sclass="error"/>
             </hlayout>
             <hlayout>
                 <span hflex="1">${labels.classTemplate.requiredLevel} :</span>
                 <combobox id="level" cols="34"
-                          model="@load(vm.listLevel)" selectedItem="@bind(vm.selectedClassTemplate.requiredLevel)">
+                          model="@load(vm.listLevel)" selectedItem="@bind(fx.requiredLevel)">
                     <template name="model" var="level">
                         <comboitem label="@load(level.name)" value="@load(level.id)"/>
                     </template>
                 </combobox>
             </hlayout>
+
+            <hlayout>
+                <label value="@load(vmsgs['type'])" sclass="error"/>
+            </hlayout>
             <hlayout>
                 <span hflex="1">${labels.classTemplate.type} :</span>
                 <combobox id="type" cols="34"
-                          model="@load(vm.listClassCategory)" selectedItem="@bind(vm.selectedClassTemplate.type)">
+                          model="@load(vm.listClassCategory)" selectedItem="@bind(fx.type)">
                     <template name="model" var="type">
                         <comboitem label="@load(type.name)" value="@load(type)"/>
                     </template>
                 </combobox>
             </hlayout>
+
+            <separator />
+
             <hlayout>
-                <button hflex="1" label="@load(empty vm.selectedClassTemplate.id ? labels.button.create : labels.button.update)"
-                        onClick="@command('save', before='save')"/>
-                <button hflex="1" label="${labels.button.delete}" onClick="@command('delete')"
-                        disabled="@load(empty vm.selectedClassTemplate.id)" />
+                <label visible="@load(empty vmsgs)"
+                       value="@load(empty vmsgs ? labels.form.success.submit : '', before='submit')" />
+            </hlayout>
+            <hlayout>
+                <button label="@load(empty vm.selectedClassTemplate.id ? labels.button.create : labels.button.update)"
+                        onClick="@command('submit')"
+                        hflex="1" />
+
+                <button label="${labels.button.delete}" onClick="@command('delete')"
+                        disabled="@load(empty vm.selectedClassTemplate.id)"
+                        hflex="1"/>
+
                 <button hflex="1" label="${labels.button.clear}" onClick="@command('clear')" />
             </hlayout>
-        </vbox>
+        </groupbox>
     </hbox>
 
 </window>

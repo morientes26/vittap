@@ -35,7 +35,7 @@ public class RoomViewModel {
 
   @Command
   @NotifyChange({"roomList", "selectedRoom"})
-  public void save(){
+  public void submit(){
     service.save(selectedRoom);
     log.info("Save room {}", selectedRoom);
     //FIXME: component has to refresh by its self without redirect

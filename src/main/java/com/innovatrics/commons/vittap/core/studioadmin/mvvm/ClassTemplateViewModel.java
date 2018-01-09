@@ -33,8 +33,6 @@ public class ClassTemplateViewModel {
   private List<Level> listLevel;
   private Level selectedLevel;
 
-  private ClassTemplateValidator classTemplateValidator;
-
   @WireVariable("classTemplateService")
   private ClassTemplateService service;
 
@@ -52,7 +50,7 @@ public class ClassTemplateViewModel {
 
   @Command
   @NotifyChange({"classTemplateList", "selectedClassTemplate"})
-  public void save(){
+  public void submit(){
     service.save(selectedClassTemplate);
     log.info("Save classTemplate {}", selectedClassTemplate);
     //FIXME: component has to refresh by its self without redirect
@@ -82,7 +80,6 @@ public class ClassTemplateViewModel {
     selectedClassTemplate = new ClassTemplate();
     selectedClassCategory = new ClassCategory();
     listLevel = levelRepository.findAll();
-    classTemplateValidator = new ClassTemplateValidator();
   }
 
 
@@ -150,11 +147,4 @@ public class ClassTemplateViewModel {
     this.selectedLevel = selectedLevel;
   }
 
-  public ClassTemplateValidator getClassTemplateValidator() {
-    return classTemplateValidator;
-  }
-
-  public void setClassTemplateValidator(ClassTemplateValidator classTemplateValidator) {
-    this.classTemplateValidator = classTemplateValidator;
-  }
 }

@@ -2,12 +2,15 @@ package com.innovatrics.commons.vittap.auth.service;
 
 import com.innovatrics.commons.vittap.model.dao.User;
 import com.innovatrics.commons.vittap.model.repository.UserRepository;
+import com.sun.tools.classfile.Opcode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Implementation of basic user authentication.
@@ -28,14 +31,18 @@ public class AuthenticationServiceImpl implements AuthenticationService, Seriali
     }
 
     Session sess = Sessions.getCurrent();
-    UserCredential cre = new UserCredential(user.getLogin(),user.getName());
+    UserCredential cre = new UserCredential(
+            user.getLogin(),
+            user.getName(),
+            Arrays.asList(user.getRole().getName())
+    );
+
     //just in case for this demo.
     if(cre.isAnonymous()){
       return false;
     }
     sess.setAttribute("userCredential",cre);
 
-    //TODO handle the role here for authorization
     return true;
   }
 

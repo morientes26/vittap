@@ -1,11 +1,9 @@
 package com.innovatrics.commons.vittap.model.init;
 
 
-import com.innovatrics.commons.vittap.model.dao.ClassCategory;
-import com.innovatrics.commons.vittap.model.dao.LevelOfAccess;
-import com.innovatrics.commons.vittap.model.dao.Tarif;
-import com.innovatrics.commons.vittap.model.dao.User;
+import com.innovatrics.commons.vittap.model.dao.*;
 import com.innovatrics.commons.vittap.model.repository.ClassCategoryRepository;
+import com.innovatrics.commons.vittap.model.repository.RoleRepository;
 import com.innovatrics.commons.vittap.model.repository.TarifRepository;
 import com.innovatrics.commons.vittap.model.repository.UserRepository;
 import org.springframework.beans.factory.InitializingBean;
@@ -28,25 +26,34 @@ public class Initiator  {
   private TarifRepository tarifRepository;
 
 
+  @Autowired
+  private RoleRepository roleRepository;
 
   //FIXME: for this puprose will be use FLYWAY libs instead
   // https://flywaydb.org/
   @Bean
   InitializingBean initDbData() {
     return () -> {
-      importUsers();
+      importUsersAndRoles();
       importClassCategories();
       importTarifs();
     };
   }
 
-  private void importUsers(){
+  private void importUsersAndRoles(){
     if (!this.isEmptyDB())
       return;
 
-    userRepository.save(
-            new User("test","test","test", LevelOfAccess.ADMIN)
-    );
+    Role admin = roleRepository.save(new Role(LevelOfAccess.ADMIN.name(),"Administrator"));
+    Role pupil = roleRepository.save(new Role(LevelOfAccess.PUPIL.name(),"Pupil"));
+    Role teacher = roleRepository.save(new Role(LevelOfAccess.TEACHER.name(),"Teacher"));
+    Role secretary = roleRepository.save(new Role(LevelOfAccess.SECRETARY.name(),"Secretary"));
+
+    userRepository.save(new User("admin","admin","test", admin));
+    userRepository.save(new User("pupil","pupil","test", pupil));
+    userRepository.save(new User("teacher","teacher","test", teacher));
+    userRepository.save(new User("secretary","secretary","test", secretary));
+
   }
 
   private void importClassCategories(){

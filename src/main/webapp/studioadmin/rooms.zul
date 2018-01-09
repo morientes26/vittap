@@ -1,9 +1,16 @@
 <zk>
-<?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" ?>
-<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
+
+    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" args="ADMIN" ?>
+    <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
+    <?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+    <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
+
 <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
         viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.RoomViewModel')"
-        title="${labels.room.title}" width="100%" border="normal">
+        title="${labels.room.title}" width="100%" border="normal"
+        validationMessages="@id('vmsgs')"
+        form="@id('fx') @load(vm.selectedRoom) @save(vm.selectedRoom, before='submit')
+        @validator('com.innovatrics.commons.vittap.core.studioadmin.validator.DefaultValidator')">
 
     <hbox align="center" style="width:300px;">
         ${labels.room.search.title}:
@@ -27,32 +34,45 @@
         </template>
     </listbox>
     <hbox style="margin-top:20px;width:300px;">
-        <vbox>
-            <hlayout visible="@bind(empty vm.selectedRoom.id)" hflex="1">
-                ${labels.room.create.label} <label value="@bind(vm.selectedRoom.id)"/>
-            </hlayout>
-
-            <hlayout visible="@bind(not empty vm.selectedRoom.id)" hflex="1">
-                ${labels.room.update.label} <label value="@bind(vm.selectedRoom.id)"/>
-            </hlayout>
+        <groupbox title="@bind(empty fx.id ?
+        labels.room.create.label : labels.room.update.label)">
 
             <hlayout>
+                <label value="@load(vmsgs['name'])" sclass="error"/>
+            </hlayout>
+            <hlayout>
                 <span hflex="1">${labels.room.name} :</span>
-                <textbox hflex="3" constraint="no empty" value="@bind(vm.selectedRoom.name)"
+                <textbox hflex="3" value="@bind(fx.name)"
                          cols="40"/>
+            </hlayout>
+            <hlayout>
+                <label value="@load(vmsgs['description'])" sclass="error"/>
             </hlayout>
             <hlayout>
                 <span hflex="1">${labels.room.description} :</span>
-                <textbox hflex="3" value="@bind(vm.selectedRoom.description)"
+                <textbox hflex="3" value="@bind(fx.description)"
                          cols="40"/>
             </hlayout>
+
+            <separator />
+
             <hlayout>
-                <button hflex="1" label="${labels.button.save}" onClick="@command('save')"/>
-                <button hflex="1" label="${labels.button.delete}" onClick="@command('delete')"
-                        disabled="@bind(empty vm.selectedRoom.id)"/>
+                <label visible="@load(empty vmsgs)"
+                       value="@load(empty vmsgs ? labels.form.success.submit : '', before='submit')" />
+            </hlayout>
+
+            <hlayout>
+                <button label="@load(empty fx.id ? labels.button.create : labels.button.update)"
+                        onClick="@command('submit')"
+                        hflex="1" />
+
+                <button label="${labels.button.delete}" onClick="@command('delete')"
+                        disabled="@load(empty fx.id)"
+                        hflex="1"/>
+
                 <button hflex="1" label="${labels.button.clear}" onClick="@command('clear')" />
             </hlayout>
-        </vbox>
+        </groupbox>
     </hbox>
 
 </window>

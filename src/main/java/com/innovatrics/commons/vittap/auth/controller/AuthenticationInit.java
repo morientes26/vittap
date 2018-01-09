@@ -24,13 +24,32 @@ public class AuthenticationInit implements Initiator {
 
   public void doInit(Page page, Map<String, Object> args) throws Exception {
 
-    //wire service manually by calling Selectors API
+    //note: wire service manually by calling Selectors API, becouse this is not Component
     Selectors.wireVariables(page, this, Selectors.newVariableResolvers(getClass(), null));
 
-    UserCredential cre = authService.getUserCredential();
-    if(cre==null || cre.isAnonymous()){
+    authorization(authService.getUserCredential(), args);
+
+  }
+
+  private void authorization(UserCredential credential, Map<String, Object> acceptRoles){
+    // anonymous
+    if(credential==null || credential.isAnonymous()){
       Executions.sendRedirect("/login.zul");
+      return;
     }
+
+    boolean access = false;
+    for (Object arg: acceptRoles.values()){
+      if (credential.hasRole((String)arg)) {
+        access = true;
+        break;
+      }
+    }
+
+    if (!access && !acceptRoles.values().isEmpty())
+      Executions.sendRedirect("/no-access.zul");
+
+
   }
 
 }

@@ -35,7 +35,7 @@ public class ClassCategoryViewModel {
 
   @Command
   @NotifyChange({"classCategoryList", "selectedClassCategory"})
-  public void save(){
+  public void submit(){
     service.save(selectedClassCategory);
     log.info("Save classCategory {}", selectedClassCategory);
     //FIXME: component has to refresh by its self without redirect

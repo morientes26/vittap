@@ -2,7 +2,9 @@ package com.innovatrics.commons.vittap.model;
 
 import com.innovatrics.commons.vittap.Application;
 import com.innovatrics.commons.vittap.model.dao.LevelOfAccess;
+import com.innovatrics.commons.vittap.model.dao.Role;
 import com.innovatrics.commons.vittap.model.dao.User;
+import com.innovatrics.commons.vittap.model.repository.RoleRepository;
 import com.innovatrics.commons.vittap.model.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,10 +33,14 @@ public class UserTest {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private RoleRepository roleRepository;
+
   @Before
   public void setUp() throws Exception {
     this.user = new User();
-    this.user.setLevelOfAccess(LevelOfAccess.ADMIN);
+    Role role = roleRepository.save(new Role(LevelOfAccess.ADMIN.name(),"test"));
+    this.user.setRole(role);
   }
 
   @Test
@@ -46,7 +52,7 @@ public class UserTest {
     User user2 = userRepository.findOne(user.getId());
 
     assertThat(user, instanceOf(User.class));
-    assertThat(user2.getLevelOfAccess(), is(LevelOfAccess.ADMIN));
+    assertThat(user2.getRole().getName(), is(LevelOfAccess.ADMIN.name()));
 
     userRepository.delete(user2);
     List<User> result = userRepository.findAll();

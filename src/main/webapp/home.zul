@@ -1,0 +1,10 @@
+<?link rel="stylesheet" type="text/css" href="/css/style.css" ?>
+<zk>
+    <div self="@define(content)"  width="100%"  align="center">
+
+        <hbox>
+            <label value="This can see not logged user ..." />
+        </hbox>
+
+    </div>
+</zk>

@@ -1,13 +1,11 @@
 <zk>
-    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" ?>
+    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" args="ADMIN" ?>
     <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
-    <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
-            viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.CoursesViewModel')"
-            title="${labels.courses.title}" width="100%" border="normal">
+    <window self="@define(content)" title="${labels.courses.title}" width="100%" border="normal">
 
         <hbox align="center" style="width:300px;">
             <button label="${labels.cources.button.category}" href="/studioadmin/categories.zul" hflex="1"/>
-            <button label="${labels.cources.button.template}" href="/studioadmin/templates.zul" hflex="1"/>
+            <button label="${labels.cources.button.template}" href="/studioadmin/class_templates.zul" hflex="1"/>
         </hbox>
 
     </window>

@@ -1,0 +1,9 @@
+<zk>
+    <window title="${labels.http.noaccess.title}" width="100%" border="normal">
+
+        <hbox align="center" style="width:300px;">
+            <label value="${labels.http.noaccess.message}" hflex="1"/>
+        </hbox>
+
+    </window>
+</zk>

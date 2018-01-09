@@ -1,5 +1,8 @@
 package com.innovatrics.commons.vittap.model.dao;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.zkoss.bind.annotation.Immutable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +15,7 @@ public class Tarif {
     @GeneratedValue
     private Long id;
 
+    @NotEmpty(message = "Name can not be null")
     private String name;
     private String description;
     private Double value; // pesos per hour // TODO:2017-01-13:mze: make it currency independent
@@ -65,6 +69,8 @@ public class Tarif {
         this.value = value;
     }
 
+    //note: For ZK8 is neccessery to add immutable annotation for Date type
+    @Immutable
     public Date getDateOfIssue() {
         return dateOfIssue;
     }
