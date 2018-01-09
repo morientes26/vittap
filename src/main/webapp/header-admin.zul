@@ -4,8 +4,8 @@
 
             <menupopup>
                 <menuitem label="${labels.menu.rooms}" href="/studioadmin/rooms.zul"/>
-                <menuitem label="${labels.menu.courses}" href="" />
-                <menuitem label="${labels.menu.programs}" href="" />
+                <menuitem label="${labels.menu.courses}" href="/studioadmin/courses.zul" />
+                <menuitem label="${labels.menu.programs}" href="/studioadmin/programs.zul" />
             </menupopup>
 
         </menu>

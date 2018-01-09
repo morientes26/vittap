@@ -1,5 +1,7 @@
 package com.innovatrics.commons.vittap.model.dao;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 
 /**
@@ -10,16 +12,20 @@ public class ClassTemplate {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
+
+    @NotEmpty(message = "Name can not be null")
     private String name;
     private String description;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     private ClassCategory type; // (class, custom)
 
     private Integer duration; // in minutes
     private int capacity; // optional : capacity override due to room restrictions or else
+
+    @OneToOne
     private Level requiredLevel; // optional
 
     public ClassTemplate() {
@@ -31,7 +37,7 @@ public class ClassTemplate {
         this.type = type;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

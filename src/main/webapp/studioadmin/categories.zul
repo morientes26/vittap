@@ -1,0 +1,71 @@
+<zk>
+<?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" ?>
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
+<window self="@define(content)" apply="org.zkoss.bind.BindComposer"
+        viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.ClassCategoryViewModel')"
+        title="${labels.classCategory.title}" width="100%" border="normal">
+
+    <hbox align="center" style="width:300px;">
+        ${labels.classCategory.search.title}:
+        <textbox value="@bind(vm.keyword)" hflex="3"/>
+        <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
+    </hbox>
+    <listbox height="100%" model="@bind(vm.classCategoryList)" emptyMessage="${labels.classCategory.emptymessages}"
+             selectedItem="@bind(vm.selectedClassCategory)" mold="paging" pageSize="5"
+             style="margin-top:10px">
+        <listhead sizable="true">
+            <listheader label="${labels.classCategory.id}" hflex="1"/>
+            <listheader label="${labels.classCategory.name}" hflex="2"/>
+            <listheader label="${labels.classCategory.description}" hflex="5"/>
+            <listheader label="${labels.classCategory.accessRestriction}" hflex="1"/>
+            <listheader label="${labels.classCategory.attendanceRequired}" hflex="1"/>
+        </listhead>
+        <template name="model">
+            <listitem>
+                <listcell label="@bind(each.id)" ></listcell>
+                <listcell label="@bind(each.name)" ></listcell>
+                <listcell label="@bind(each.description)" ></listcell>
+                <listcell label="@bind(each.accessRestriction)" ></listcell>
+                <listcell label="@bind(each.attendanceRequired)" ></listcell>
+            </listitem>
+        </template>
+    </listbox>
+    <hbox style="margin-top:20px;width:300px;">
+        <vbox>
+            <hlayout visible="@bind(empty vm.selectedClassCategory.id)" hflex="1">
+                ${labels.classCategory.create.label} <label value="@bind(vm.selectedClassCategory.id)"/>
+            </hlayout>
+
+            <hlayout visible="@bind(not empty vm.selectedClassCategory.id)" hflex="1">
+                ${labels.classCategory.update.label} <label value="@bind(vm.selectedClassCategory.id)"/>
+            </hlayout>
+
+            <hlayout>
+                <span hflex="1">${labels.classCategory.name} :</span>
+                <textbox hflex="3" constraint="no empty" value="@bind(vm.selectedClassCategory.name)"
+                         cols="40"/>
+            </hlayout>
+            <hlayout>
+                <span hflex="1">${labels.classCategory.description} :</span>
+                <textbox hflex="3" value="@bind(vm.selectedClassCategory.description)"
+                         cols="40"/>
+            </hlayout>
+            <hlayout>
+                <checkbox label="${labels.classCategory.accessRestriction}"
+                          hflex="4" checked="@bind(vm.selectedClassCategory.accessRestriction)"/>
+            </hlayout>
+            <hlayout>
+                <checkbox label="${labels.classCategory.attendanceRequired}"
+                          hflex="4" checked="@bind(vm.selectedClassCategory.attendanceRequired)"/>
+            </hlayout>
+            <hlayout>
+                <button hflex="1" label="${labels.button.save}" onClick="@command('save')"/>
+                <button hflex="1" label="${labels.button.delete}" onClick="@command('delete')"
+                        disabled="@bind(empty vm.selectedClassCategory.id)"/>
+                <button hflex="1" label="${labels.button.clear}" onClick="@command('clear')" />
+            </hlayout>
+        </vbox>
+    </hbox>
+
+</window>
+</zk>

@@ -1,5 +1,7 @@
 package com.innovatrics.commons.vittap.model.dao;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,8 +14,9 @@ public class ClassCategory {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
+    @NotEmpty(message = "Name can not be null")
     private String name;
     private String description;
     private boolean accessRestriction = false;
@@ -27,7 +30,18 @@ public class ClassCategory {
         this.description = description;
     }
 
-    public long getId() {
+    @Override
+    public String toString() {
+        return "ClassCategory{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", accessRestriction=" + accessRestriction +
+                ", attendanceRequired=" + attendanceRequired +
+                '}';
+    }
+
+    public Long getId() {
         return id;
     }
 

@@ -10,7 +10,7 @@ public class Tarif {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     private String name;
     private String description;
@@ -26,7 +26,18 @@ public class Tarif {
         this.dateOfIssue = dateOfIssue;
     }
 
-    public long getId() {
+    @Override
+    public String toString() {
+        return "Tarif{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", value=" + value +
+                ", dateOfIssue=" + dateOfIssue +
+                '}';
+    }
+
+    public Long getId() {
         return id;
     }
 

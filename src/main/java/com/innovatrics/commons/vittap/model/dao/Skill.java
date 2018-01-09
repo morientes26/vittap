@@ -13,6 +13,8 @@ public class Skill {
     @PrimaryKeyJoinColumn
     private ClassCategory category;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
     private Level level;
 
     @ManyToOne

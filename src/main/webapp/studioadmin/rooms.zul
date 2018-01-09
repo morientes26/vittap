@@ -5,10 +5,10 @@
         viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.RoomViewModel')"
         title="${labels.room.title}" width="100%" border="normal">
 
-    <hbox align="center">
+    <hbox align="center" style="width:300px;">
         ${labels.room.search.title}:
-        <textbox value="@bind(vm.keyword)" />
-        <button label="${labels.room.search.button}" onClick="@command('search')" />
+        <textbox value="@bind(vm.keyword)" hflex="3"/>
+        <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
     </hbox>
     <listbox height="100%" model="@bind(vm.roomList)" emptyMessage="${labels.room.emptymessages}"
              selectedItem="@bind(vm.selectedRoom)" mold="paging" pageSize="5"
@@ -26,28 +26,31 @@
             </listitem>
         </template>
     </listbox>
-    <hbox style="margin-top:20px;">
+    <hbox style="margin-top:20px;width:300px;">
         <vbox>
-            <hlayout visible="@bind(empty vm.selectedRoom.id)">
+            <hlayout visible="@bind(empty vm.selectedRoom.id)" hflex="1">
                 ${labels.room.create.label} <label value="@bind(vm.selectedRoom.id)"/>
             </hlayout>
-            <hlayout visible="@bind(not empty vm.selectedRoom.id)">
+
+            <hlayout visible="@bind(not empty vm.selectedRoom.id)" hflex="1">
                 ${labels.room.update.label} <label value="@bind(vm.selectedRoom.id)"/>
             </hlayout>
-            <hlayout>
-                ${labels.room.name} :
-                <textbox constraint="no empty" value="@bind(vm.selectedRoom.name)"/>
-                ${labels.room.description} :
-                <textbox value="@bind(vm.selectedRoom.description)" />
 
-                <span visible="@bind(empty vm.selectedRoom.id)">
-                    <button label="${labels.room.button.create}" onClick="@command('save')" />
-                </span>
-                <span visible="@bind(not empty vm.selectedRoom.id)">
-                    <button label="${labels.room.button.update}" onClick="@command('save')" />
-                    <button label="${labels.room.button.delete}" onClick="@command('delete')" />
-                    <button label="${labels.room.button.clear}" onClick="@command('clear')" />
-                </span>
+            <hlayout>
+                <span hflex="1">${labels.room.name} :</span>
+                <textbox hflex="3" constraint="no empty" value="@bind(vm.selectedRoom.name)"
+                         cols="40"/>
+            </hlayout>
+            <hlayout>
+                <span hflex="1">${labels.room.description} :</span>
+                <textbox hflex="3" value="@bind(vm.selectedRoom.description)"
+                         cols="40"/>
+            </hlayout>
+            <hlayout>
+                <button hflex="1" label="${labels.button.save}" onClick="@command('save')"/>
+                <button hflex="1" label="${labels.button.delete}" onClick="@command('delete')"
+                        disabled="@bind(empty vm.selectedRoom.id)"/>
+                <button hflex="1" label="${labels.button.clear}" onClick="@command('clear')" />
             </hlayout>
         </vbox>
     </hbox>

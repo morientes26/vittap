@@ -1,5 +1,7 @@
 package com.innovatrics.commons.vittap.model.dao;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ public class Room implements Serializable{
     @GeneratedValue
     private Long id;
 
+    @NotEmpty(message = "Name can not be null")
     private String name;
     private String description;
 

@@ -14,9 +14,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import java.util.List;
 
-/**
- * Created by  ??_?¬ morientes on 03/01/2018.
- */
+
 @VariableResolver(DelegatingVariableResolver.class)
 public class RoomViewModel {
 
@@ -26,19 +24,19 @@ public class RoomViewModel {
   private List<Room> roomList;
   private Room selectedRoom;
 
-  @WireVariable
-  private RoomService roomService;
+  @WireVariable("roomService")
+  private RoomService service;
 
   @Command
   @NotifyChange("roomList")
   public void search(){
-    roomList = roomService.findByNameOrDescription(keyword);
+    roomList = service.findByNameOrDescription(keyword);
   }
 
   @Command
-  @NotifyChange({"roomList", "room"})
+  @NotifyChange({"roomList", "selectedRoom"})
   public void save(){
-    roomService.save(selectedRoom);
+    service.save(selectedRoom);
     log.info("Save room {}", selectedRoom);
     //FIXME: component has to refresh by its self without redirect
     Executions.sendRedirect(null);
@@ -47,14 +45,14 @@ public class RoomViewModel {
   @Command
   @NotifyChange(".")
   public void delete(){
-    roomService.delete(selectedRoom);
+    service.delete(selectedRoom);
     log.info("Delete room {}", selectedRoom);
     //FIXME: component has to refresh by its self without redirect
     Executions.sendRedirect(null);
   }
 
   @Command
-  @NotifyChange({"roomList", "room"})
+  @NotifyChange({"roomList", "selectedRoom"})
   public void clear(){
     init();
   }
@@ -62,7 +60,7 @@ public class RoomViewModel {
   @Init
   public void init(){
     keyword = "";
-    roomList = roomService.getAll();
+    roomList = service.getAll();
     selectedRoom = new Room();
   }
 
@@ -82,12 +80,12 @@ public class RoomViewModel {
     this.selectedRoom = selectedRoom;
   }
 
-  public RoomService getRoomService() {
-    return roomService;
+  public RoomService getService() {
+    return service;
   }
 
-  public void setRoomService(RoomService roomService) {
-    this.roomService = roomService;
+  public void setService(RoomService service) {
+    this.service = service;
   }
 
   public String getKeyword() {
