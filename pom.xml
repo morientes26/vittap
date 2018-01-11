@@ -5,7 +5,7 @@
 
 	<groupId>vittap</groupId>
 	<artifactId>vittap-web</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>vittap</name>
@@ -103,7 +103,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-		<start-class>com.innovatrics.commons.vittap.Application</start-class>
+		<start-class>com.vitta_pilates.Application</start-class>
 		<java.version>1.8</java.version>
 		<zk.version>8.0.0</zk.version>
 		<zk-spring.version>3.1.1</zk-spring.version>

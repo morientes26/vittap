@@ -1,5 +1,5 @@
 <zk>
-    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" args="ADMIN" ?>
+    <?init class="com.vitta_pilates.auth.controller.AuthenticationInit" args="ADMIN" ?>
     <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
     <window self="@define(content)"
             title="${labels.programs.title}" width="100%" border="normal">

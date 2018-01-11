@@ -5,7 +5,7 @@
           pack="center" spacing="20px" style="background-image: url('/img/bg.jpg'); background-size: 100% 100%;">
         <vlayout>
             <window id="loginWin"
-                    apply="com.innovatrics.commons.vittap.auth.controller.LoginController"
+                    apply="com.vitta_pilates.auth.controller.LoginController"
                     title="${labels.login.title}" border="normal" hflex="min">
                 <vbox hflex="min" align="center">
                     <grid hflex="min">

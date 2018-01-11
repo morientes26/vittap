@@ -1,28 +1,37 @@
 <zk>
-    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" args="ADMIN" ?>
+    <?init class="com.vitta_pilates.auth.controller.AuthenticationInit" args="ADMIN" ?>
     <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
     <?link rel="stylesheet" type="text/css" href="/css/style.css"?>
     <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
 
 <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.ProgramTemplateViewModel')"
+        viewModel="@id('vm') @init('com.vitta_pilates.core.studioadmin.mvvm.ProgramTemplateViewModel')"
         title="${labels.programTemplate.title}" width="100%" border="normal"
         validationMessages="@id('vmsgs')"
         form="@id('fx') @load(vm.selectedProgramTemplate) @save(vm.selectedProgramTemplate, before='submit')
-        @validator('com.innovatrics.commons.vittap.core.studioadmin.validator.ProgramTemplateValidator')">
+        @validator('com.vitta_pilates.core.studioadmin.validator.ProgramTemplateValidator')">
 
     <hbox align="center" style="width:300px;">
         ${labels.programTemplate.search.title}:
         <textbox value="@bind(vm.keyword)" hflex="3"/>
         <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
     </hbox>
+    <zscript><![CDATA[
+    import java.util.Comparator;
+    Comparator cNameAsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(true, 1);
+    Comparator cNameDsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(false, 1);
+    Comparator cDescAsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(true, 2);
+    Comparator cDescDsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(false, 2);
+    ]]></zscript>
     <listbox height="100%" model="@bind(vm.programTemplateList)" emptyMessage="${labels.programTemplate.emptymessages}"
              selectedItem="@bind(vm.selectedProgramTemplate)" mold="paging" pageSize="5"
              style="margin-top:10px">
         <listhead sizable="true">
-            <listheader label="${labels.programTemplate.id}" hflex="1"/>
-            <listheader label="${labels.programTemplate.name}" hflex="2"/>
-            <listheader label="${labels.programTemplate.description}" hflex="5"/>
+            <listheader label="${labels.programTemplate.id}" hflex="1" sort="auto"/>
+            <listheader label="${labels.programTemplate.name}" hflex="2"
+                        sortAscending="${cNameAsc}"  sortDescending="${cNameDsc}"/>
+            <listheader label="${labels.programTemplate.description}" hflex="5"
+                        sortAscending="${cDescAsc}" sortDescending="${cDescDsc}"/>
             <listheader label="${labels.programTemplate.tarif}" hflex="1"/>
             <listheader label="${labels.programTemplate.dateOfIssue}" hflex="1"/>
             <listheader label="${labels.programTemplate.active}" hflex="1"/>
@@ -85,9 +94,10 @@
             <hlayout>
                 <span hflex="1">${labels.programTemplate.tarif} :</span>
                 <combobox id="tarif" cols="34"
-                          model="@load(vm.listTarif)" selectedItem="@bind(fx.tarif)">
-                    <template name="model" var="tarif">
-                        <comboitem label="@load(tarif.name)" value="@load(tarif.id)"/>
+                          model="@load(vm.listTarif)" selectedItem="@bind(fx.tarif)"
+                          selectedIndex="@{vm.listTarif.index}">
+                    <template name="model">
+                        <comboitem label="@bind(each.name)" value="@bind(each.id)"/>
                     </template>
                 </combobox>
             </hlayout>

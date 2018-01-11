@@ -1,5 +1,5 @@
 <?link rel="stylesheet" type="text/css" href="/css/style.css" ?>
-<?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" ?>
+<?init class="com.vitta_pilates.auth.controller.AuthenticationInit" ?>
 <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
 <zk>
 

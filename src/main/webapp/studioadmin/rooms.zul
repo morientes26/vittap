@@ -1,16 +1,16 @@
 <zk>
 
-    <?init class="com.innovatrics.commons.vittap.auth.controller.AuthenticationInit" args="ADMIN" ?>
+    <?init class="com.vitta_pilates.auth.controller.AuthenticationInit" args="ADMIN" ?>
     <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
     <?link rel="stylesheet" type="text/css" href="/css/style.css"?>
     <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
 
 <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
-        viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.studioadmin.mvvm.RoomViewModel')"
+        viewModel="@id('vm') @init('com.vitta_pilates.core.studioadmin.mvvm.RoomViewModel')"
         title="${labels.room.title}" width="100%" border="normal"
         validationMessages="@id('vmsgs')"
         form="@id('fx') @load(vm.selectedRoom) @save(vm.selectedRoom, before='submit')
-        @validator('com.innovatrics.commons.vittap.core.studioadmin.validator.DefaultValidator')">
+        @validator('com.vitta_pilates.core.studioadmin.validator.DefaultValidator')">
 
     <hbox align="center" style="width:300px;">
         ${labels.room.search.title}:

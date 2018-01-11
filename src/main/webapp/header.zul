@@ -1,5 +1,5 @@
 <div hflex="1" vflex="1" sclass="head" align="center"
-     apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.innovatrics.commons.vittap.core.MenuViewModel')">
+     apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.vitta_pilates.core.MenuViewModel')">
 
     <!-- menu for admin role -->
     <menubar autodrop="true" visible="@load(vm.admin)">
@@ -13,13 +13,10 @@
 
         </menu>
         <menu label="${labels.menu.finance}">
-
-        </menu>
-        <menu label="${labels.menu.events}">
-
-        </menu>
-        <menu label="${labels.menu.people}">
-
+            <menupopup>
+                <menuitem label="${labels.menu.closure}" href=""/>
+                <menuitem label="${labels.menu.balance}" href="" />
+            </menupopup>
         </menu>
         <menu label="${labels.menu.account}">
             <menupopup>
@@ -32,17 +29,15 @@
 
     <!-- menu for teacher role -->
     <menubar autodrop="true" visible="@load(vm.teacher)">
-        <menu label="${labels.menu.account}">
+        <menu label="${labels.menu.events}" />
+
+        <menu label="${labels.menu.people}">
             <menupopup>
-                <menuitem label="${labels.menu.profile}" href=""/>
-                <menuitem label="${labels.menu.settings}" href="" />
-                <menuitem label="${labels.menu.logout}" href="/logout.zul" />
+                <menuitem label="${labels.menu.pupils}" href=""/>
+                <menuitem label="${labels.menu.teachers}" href="" />
+                <menuitem label="${labels.menu.appusers}" href="" />
             </menupopup>
         </menu>
-    </menubar>
-
-    <!-- menu for pupil role -->
-    <menubar autodrop="true" visible="@load(vm.pupil)">
         <menu label="${labels.menu.account}">
             <menupopup>
                 <menuitem label="${labels.menu.profile}" href=""/>
@@ -54,6 +49,26 @@
 
     <!-- menu for secretary role -->
     <menubar autodrop="true" visible="@load(vm.secretary)">
+        <menu label="${labels.menu.events}" />
+
+        <menu label="${labels.menu.people}">
+            <menupopup>
+                <menuitem label="${labels.menu.pupils}" href=""/>
+                <menuitem label="${labels.menu.teachers}" href="" />
+                <menuitem label="${labels.menu.appusers}" href="" />
+            </menupopup>
+        </menu>
+        <menu label="${labels.menu.account}">
+            <menupopup>
+                <menuitem label="${labels.menu.profile}" href=""/>
+                <menuitem label="${labels.menu.settings}" href="" />
+                <menuitem label="${labels.menu.logout}" href="/logout.zul" />
+            </menupopup>
+        </menu>
+    </menubar>
+
+    <!-- menu for pupil role -->
+    <menubar autodrop="true" visible="@load(vm.pupil)">
         <menu label="${labels.menu.account}">
             <menupopup>
                 <menuitem label="${labels.menu.profile}" href=""/>
