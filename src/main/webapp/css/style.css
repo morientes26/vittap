@@ -25,3 +25,22 @@ body {
 .mt40 {
     margin-top: 40px;
 }
+.full {
+    width:100%;
+    display: block;
+    overflow: hidden;
+}
+
+input {
+    width: 100%;
+    box-sizing:border-box;
+}
+
+.grid-search {
+    display: grid;
+    grid-template-columns: 1fr 10fr 1fr;
+    grid-template-rows: auto auto;
+}
+.grid-search > div {
+    padding: 1em;
+}

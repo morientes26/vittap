@@ -4,7 +4,7 @@
     <window self="@define(content)"
             title="${labels.programs.title}" width="100%" border="normal">
 
-        <hbox align="center" style="width:300px;">
+        <hbox align="center" style="width:250px;">
             <button label="${labels.programs.button.tarifs}" href="/studioadmin/tarifs.zul" hflex="1"/>
             <button label="${labels.programs.button.templates}" href="/studioadmin/program_templates.zul" hflex="1"/>
         </hbox>

@@ -11,11 +11,11 @@
         form="@id('fx') @load(vm.selectedProgramTemplate) @save(vm.selectedProgramTemplate, before='submit')
         @validator('com.vitta_pilates.core.studioadmin.validator.ProgramTemplateValidator')">
 
-    <hbox align="center" style="width:300px;">
+    <div sclass="grid-search">
         ${labels.programTemplate.search.title}:
         <textbox value="@bind(vm.keyword)" hflex="3"/>
         <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
-    </hbox>
+    </div>
     <zscript><![CDATA[
     import java.util.Comparator;
     Comparator cNameAsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(true, 1);
@@ -23,22 +23,20 @@
     Comparator cDescAsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(true, 2);
     Comparator cDescDsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(false, 2);
     ]]></zscript>
-    <listbox height="100%" model="@bind(vm.programTemplateList)" emptyMessage="${labels.programTemplate.emptymessages}"
+    <listbox model="@bind(vm.programTemplateList)" emptyMessage="${labels.programTemplate.emptymessages}"
              selectedItem="@bind(vm.selectedProgramTemplate)" mold="paging" pageSize="5"
              style="margin-top:10px">
         <listhead sizable="true">
-            <listheader label="${labels.programTemplate.id}" hflex="1" sort="auto"/>
-            <listheader label="${labels.programTemplate.name}" hflex="2"
+            <listheader label="${labels.programTemplate.name}" width="20%"
                         sortAscending="${cNameAsc}"  sortDescending="${cNameDsc}"/>
-            <listheader label="${labels.programTemplate.description}" hflex="5"
+            <listheader label="${labels.programTemplate.description}" width="40%"
                         sortAscending="${cDescAsc}" sortDescending="${cDescDsc}"/>
-            <listheader label="${labels.programTemplate.tarif}" hflex="1"/>
-            <listheader label="${labels.programTemplate.dateOfIssue}" hflex="1"/>
-            <listheader label="${labels.programTemplate.active}" hflex="1"/>
+            <listheader label="${labels.programTemplate.tarif}" width="15%"/>
+            <listheader label="${labels.programTemplate.dateOfIssue}" width="15%"/>
+            <listheader label="${labels.programTemplate.active}" width="10%"/>
         </listhead>
         <template name="model">
             <listitem>
-                <listcell label="@bind(each.id)" ></listcell>
                 <listcell label="@bind(each.name)" ></listcell>
                 <listcell label="@bind(each.description)" ></listcell>
                 <listcell label="@bind(each.tarif.name)" ></listcell>
@@ -48,80 +46,76 @@
             </listitem>
         </template>
     </listbox>
-    <hbox style="margin-top:20px;width:300px;">
-        <groupbox title="@bind(empty fx.id ?
-        labels.programTemplate.create.label : labels.programTemplate.update.label)">
 
-            <hlayout>
-                <label value="@load(vmsgs['name'])" sclass="error"/>
-            </hlayout>
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.name} :</span>
-                <textbox hflex="3" cols="40" id="name"
-                         value="@bind(fx.name)" />
-            </hlayout>
+    <groupbox title="@bind(empty fx.id ?
+    labels.programTemplate.create.label : labels.programTemplate.update.label)">
 
-            <hlayout>
-                <label value="@load(vmsgs['description'])" sclass="error"/>
-            </hlayout>
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.description} :</span>
-                <textbox hflex="3" cols="40" id="description"
-                         value="@bind(fx.description)" />
-            </hlayout>
+        <div sclass="full">
+            <label value="@load(vmsgs['name'])" sclass="error"/>
+            <span>${labels.programTemplate.name} :</span>
+        </div>
+        <div sclass="full">
+            <textbox id="name" value="@bind(fx.name)" />
+        </div>
 
-            <hlayout>
-                <label value="@load(vmsgs['dateOfIssue'])" sclass="error"/>
-            </hlayout>
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.dateOfIssue} :</span>
-                <datebox hflex="3"  id="dateOfIssue"
-                         value="@bind(fx.dateOfIssue) @converter=('org.zkoss.zkplus.databind.DateFormatConverter')"
-                         format="yyyy/MM/dd"/>
-            </hlayout>
+        <div sclass="full">
+            <label value="@load(vmsgs['description'])" sclass="error"/>
+            <span>${labels.programTemplate.description} :</span>
+        </div>
+        <div sclass="full">
+            <textbox id="description" value="@bind(fx.description)" />
+        </div>
 
-            <hlayout>
-                <label value="@load(vmsgs['active'])" sclass="error"/>
-            </hlayout>
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.active} :</span>
-                <checkbox hflex="3"  id="active" checked="@bind(fx.active)"/>
-            </hlayout>
+        <div sclass="full">
+            <label value="@load(vmsgs['dateOfIssue'])" sclass="error"/>
+            <span>${labels.programTemplate.dateOfIssue} :</span>
+        </div>
+        <div sclass="full">
+            <datebox id="dateOfIssue"
+                     value="@bind(fx.dateOfIssue) @converter=('org.zkoss.zkplus.databind.DateFormatConverter')"
+                     format="yyyy/MM/dd"/>
+        </div>
 
-            <hlayout>
-                <label value="@load(vmsgs['tarif'])" sclass="error"/>
-            </hlayout>
-            <hlayout>
-                <span hflex="1">${labels.programTemplate.tarif} :</span>
-                <combobox id="tarif" cols="34"
-                          model="@load(vm.listTarif)" selectedItem="@bind(fx.tarif)"
-                          selectedIndex="@{vm.listTarif.index}">
-                    <template name="model">
-                        <comboitem label="@bind(each.name)" value="@bind(each.id)"/>
-                    </template>
-                </combobox>
-            </hlayout>
+        <div sclass="full">
+            <label value="@load(vmsgs['active'])" sclass="error"/>
+            <span>${labels.programTemplate.active} :</span>
+        </div>
+        <div sclass="full">
+            <checkbox id="active" checked="@bind(fx.active)"/>
+        </div>
 
-            <separator />
+        <div sclass="full">
+            <label value="@load(vmsgs['tarif'])" sclass="error"/>
+            <span>${labels.programTemplate.tarif} :</span>
+        </div>
+        <div sclass="full">
+            <combobox id="tarif"
+                      model="@load(vm.listTarif)" selectedItem="@bind(fx.tarif)"
+                      selectedIndex="@{vm.listTarif.index}">
+                <template name="model">
+                    <comboitem label="@bind(each.name)" value="@bind(each.id)"/>
+                </template>
+            </combobox>
+        </div>
 
-            <hlayout>
-                <label visible="@load(empty vmsgs)"
-                       value="@load(empty vmsgs ? labels.form.success.submit : '', before='submit')" />
-            </hlayout>
+        <separator />
 
-            <hlayout>
-                <button label="@load(empty fx.id ? labels.button.create : labels.button.update)"
-                        onClick="@command('submit')"
-                        hflex="1" />
+        <div>
+            <label visible="@load(empty vmsgs)"
+                   value="@load(empty vmsgs ? labels.form.success.submit : '', before='submit')" />
+        </div>
 
-                <button label="${labels.button.delete}" onClick="@command('delete')"
-                        disabled="@load(empty fx.id)"
-                        hflex="1"/>
+        <div>
+            <button label="@load(empty fx.id ? labels.button.create : labels.button.update)"
+                    onClick="@command('submit')"/>
 
-                <button hflex="1" label="${labels.button.clear}" onClick="@command('clear')" />
-            </hlayout>
-        </groupbox>
-    </hbox>
+            <button label="${labels.button.delete}" onClick="@command('delete')"
+                    disabled="@load(empty fx.id)"/>
+
+            <button label="${labels.button.clear}" onClick="@command('clear')" />
+        </div>
+    </groupbox>
+
 
 </window>
 </zk>

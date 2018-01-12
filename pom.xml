@@ -5,7 +5,7 @@
 
 	<groupId>vittap</groupId>
 	<artifactId>vittap-web</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<packaging>jar</packaging>
 
 	<name>vittap</name>

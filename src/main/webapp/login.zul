@@ -30,7 +30,7 @@
 
                 </vbox>
             </window>
-            (use test login name='test' and password='test' to login)
+            (use test login name='admin' and password='test' to login)
         </vlayout>
     </hbox>
 </zk>
