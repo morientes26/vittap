@@ -15,7 +15,6 @@ public class ClassInstance extends OccurrenceContent {
     private LocalDateTime trueTime; // (place in calendar)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
     private Attendant trueAttendingTeacher;
 
     @OneToMany(mappedBy = "classInstance")
@@ -34,9 +33,9 @@ public class ClassInstance extends OccurrenceContent {
         this.trueTime = trueTime;
         this.status = ClassInstanceStatus.CREATED;
     }
-    
 
-    
+
+
     public void execute(Attendant teacher, Attendant... pupils) {
         //this.attendance = new ClassroomAttendance(new Date(), teacher, pupils);
         this.trueAttendingTeacher = teacher;

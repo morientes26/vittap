@@ -30,7 +30,7 @@ public class TarifViewModel {
   @Command
   @NotifyChange("tarifList")
   public void search(){
-    tarifList = service.findByNameOrDescription(keyword);
+    tarifList = service.findByKeywords(keyword);
   }
 
   @Command

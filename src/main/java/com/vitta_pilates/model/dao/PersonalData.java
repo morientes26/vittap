@@ -9,9 +9,11 @@ public class PersonalData {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     private String name;
+
+    private String additionalData;
 
     public PersonalData(){}
 
@@ -19,12 +21,13 @@ public class PersonalData {
         this.name = name;
     }
 
-    public long getId() {
-        return id;
+    public PersonalData(String name, String additionalData) {
+        this.name = name;
+        this.additionalData = additionalData;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -33,5 +36,13 @@ public class PersonalData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAdditionalData() {
+        return additionalData;
+    }
+
+    public void setAdditionalData(String additionalData) {
+        this.additionalData = additionalData;
     }
 }

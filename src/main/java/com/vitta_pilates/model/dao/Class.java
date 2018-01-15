@@ -14,21 +14,17 @@ public class Class {
     private long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
     private Schedule schedule; // when
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
     private Room room; // optional : where (place, capacity)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
     private ClassTemplate event; // what
 
     private boolean active; // scheduled
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
     private Attendant conductingTeacher; // optional : enrolled teacher
 
     @OneToMany(mappedBy = "clazz")
@@ -36,6 +32,8 @@ public class Class {
 
     @OneToMany(mappedBy = "clazz")
     private List<ClassInstance> instances; // result of Event Schedule
+
+
 
     public Class(){}
 
@@ -49,6 +47,7 @@ public class Class {
         this.instances.add(event);
         return event;
     }
+
 
 
     public long getId() {

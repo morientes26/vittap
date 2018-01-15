@@ -15,15 +15,15 @@ public class Attendant {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private PersonalData personalData;
-    private String additionalData; //health data, working experience, ...
 
     @OneToMany(mappedBy = "attendant")
     private List<Program> programs = new ArrayList<>();
 
+    //note: I suggest move Skills to User or Personal Data
     @OneToMany(mappedBy = "attendant")
     private List<Skill> skills = new ArrayList<>();
 
@@ -32,31 +32,34 @@ public class Attendant {
 
     @ManyToOne
     @JoinColumn(name="class_id", nullable=false)
-    private com.vitta_pilates.model.dao.Class clazz;
+    private Class clazz;
 
     @ManyToOne
     @JoinColumn(name="class_instance_id", nullable=false)
     private ClassInstance classInstance;
 
 
+    //note: it should be in service layer together with persistance operation
     public void registerUser(User user) {
         this.user = user;
     }
 
     public Attendant(){}
 
-    public Attendant(PersonalData personalData, String additionalData/* , ProgramInstance[] programs */) {
+    public Attendant(PersonalData personalData/* , ProgramInstance[] programs */) {
         this.personalData = personalData;
-        this.additionalData = additionalData;
         
 //        this.skills.add(new Skill(Cathegory.MAT, Level.FIRSTCOMMER));
 //        this.skills.add(new Skill(Cathegory.SUSPENSUS, Level.FIRSTCOMMER));
 //        this.skills.add(new Skill(Cathegory.REFORMER, Level.FIRSTCOMMER));
     }
+
+    //note: it should be in service layer together with persistance operation
     public void buyCourse( Program program ) {
         this.programs.add(program);
     }
-    
+
+    //note: it should be in service layer together with persistance operation
     public void addSkill(Skill newSkill) {
         for (int i = 0; i < skills.size(); i++) {
             Skill s = skills.get(i);
@@ -64,7 +67,8 @@ public class Attendant {
                 skills.set(i, newSkill);
         }
     }
-    
+
+    //FIXME: It is better to use ORM approach than 3 for cycles
     public List<ClassInstance> listAllPupilAttendances(Map<String, com.vitta_pilates.model.dao.Class> managedEvents) {
         List<ClassInstance> result = new ArrayList<>();
         
@@ -85,7 +89,8 @@ public class Attendant {
         
         return result;
     }
-    
+
+    //FIXME: It is better to use ORM approach than 3 for cycles
     public List<ClassInstance> listAllTeacherAttendances(Map<String, com.vitta_pilates.model.dao.Class> managedEvents) {
         List<ClassInstance> result = new ArrayList<>();
         
@@ -106,7 +111,7 @@ public class Attendant {
     }
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -118,13 +123,6 @@ public class Attendant {
         this.personalData = personalData;
     }
 
-    public String getAdditionalData() {
-        return additionalData;
-    }
-
-    public void setAdditionalData(String additionalData) {
-        this.additionalData = additionalData;
-    }
 
     public List<Program> getPrograms() {
         return programs;
@@ -165,4 +163,6 @@ public class Attendant {
     public void setClassInstance(ClassInstance class_instance) {
         this.classInstance = class_instance;
     }
+
+
 }

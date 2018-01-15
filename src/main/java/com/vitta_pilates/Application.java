@@ -23,9 +23,6 @@ import org.zkoss.zk.ui.http.HttpSessionListener;
 @Import(Initiator.class)
 public class Application {
 
-	@Autowired
-	private UserRepository userRepository;
-
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}

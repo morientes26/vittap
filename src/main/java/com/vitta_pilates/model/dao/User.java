@@ -10,7 +10,7 @@ public class User {
 
   @Id
   @GeneratedValue
-  private long id;
+  private Long id;
 
   private String password;
 
@@ -40,7 +40,7 @@ public class User {
     this.role = role;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
@@ -83,4 +83,5 @@ public class User {
   public void setRole(Role role) {
     this.role = role;
   }
+
 }
