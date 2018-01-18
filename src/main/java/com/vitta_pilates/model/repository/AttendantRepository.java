@@ -13,8 +13,27 @@ import java.util.List;
 public interface AttendantRepository extends JpaRepository<Attendant, Long> {
 
   @Query("Select a from Attendant a " +
-          "where upper(a.personalData.name) LIKE upper(CONCAT('%',:keyword,'%')) " +
-          "OR upper(a.user.name) LIKE upper(CONCAT('%',:keyword,'%'))")
-  List<Attendant> findByName(@Param("keyword") String keyword);
+          "join a.personalData p " +
+          "where upper(p.name) LIKE upper(CONCAT('%',:keyword,'%'))")
+  List<Attendant> findAllByName(@Param("keyword") String keyword);
 
+
+//  @Query("Select a from Attendant a " +
+//          "join a.personalData p " +
+//          "join a.classInstance ci "+
+//          "join a.clazz c "+
+//          "where upper(p.name) LIKE upper(CONCAT('%',:keyword,'%'))")
+//  List<Attendant> findAllPupilByName(@Param("keyword") String keyword);
+
+  //todo: needs to implement sql query
+  @Query("Select a from Attendant a " +
+          "left join a.personalData p " +
+          "where p.active = true")
+  List<Attendant> findNonEnrolled();
+
+  //todo: needs to implement sql query
+  @Query("Select a from Attendant a " +
+          "left join a.personalData p " +
+          "where p.active = false")
+  List<Attendant> findOpenDepts();
 }

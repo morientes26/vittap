@@ -1,7 +1,10 @@
 package com.vitta_pilates.model.dao;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * scheduled Event (1 Created repeatable event in the schedule)
@@ -13,29 +16,25 @@ public class Class {
     @GeneratedValue
     private long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Schedule schedule; // when
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Room room; // optional : where (place, capacity)
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private ClassTemplate event; // what
 
     private boolean active; // scheduled
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Attendant conductingTeacher; // optional : enrolled teacher
 
-    @OneToMany(mappedBy = "clazz")
-    private List<Attendant> enrolledPupils; // optional : enrolled pupils
-
-    @OneToMany(mappedBy = "clazz")
+    @OneToMany(mappedBy = "clazz", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ClassInstance> instances; // result of Event Schedule
 
-
-
-    public Class(){}
+    public Class(){
+    }
 
     public Class(Schedule schedule, ClassTemplate event)
     {
@@ -44,11 +43,18 @@ public class Class {
     }
     
     public ClassInstance addEvent(ClassInstance event) {
+        if (instances == null)
+            this.instances = new ArrayList<>();
         this.instances.add(event);
         return event;
     }
 
-
+    @Override
+    public String toString() {
+        return "Class{" +
+                "id=" + id +
+                '}';
+    }
 
     public long getId() {
         return id;
@@ -94,13 +100,6 @@ public class Class {
         this.conductingTeacher = conductingTeacher;
     }
 
-    public List<Attendant> getEnrolledPupils() {
-        return enrolledPupils;
-    }
-
-    public void setEnrolledPupils(List<Attendant> enrolledPupils) {
-        this.enrolledPupils = enrolledPupils;
-    }
 
     public List<ClassInstance> getInstances() {
         return instances;

@@ -1,4 +1,4 @@
-package com.vitta_pilates.model;
+package com.vitta_pilates.model.dao;
 
 import com.vitta_pilates.Application;
 import com.vitta_pilates.model.dao.LevelOfAccess;
@@ -25,7 +25,7 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 public class UserTest {
 
   private User user;

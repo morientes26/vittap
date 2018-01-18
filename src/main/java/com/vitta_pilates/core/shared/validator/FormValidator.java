@@ -1,4 +1,4 @@
-package com.vitta_pilates.core.studioadmin.validator;
+package com.vitta_pilates.core.shared.validator;
 
 import org.springframework.util.StringUtils;
 import org.zkoss.bind.ValidationContext;

@@ -9,14 +9,13 @@
         title="${labels.classTemplate.title}" width="100%" border="normal"
         validationMessages="@id('vmsgs')"
         form="@id('fx') @load(vm.selectedClassTemplate) @save(vm.selectedClassTemplate, before='submit')
-        @validator('com.vitta_pilates.core.studioadmin.validator.DefaultValidator')">
+        @validator('com.vitta_pilates.core.shared.validator.DefaultValidator')">
 
     <div sclass="grid-search">
-        ${labels.classTemplate.search.title}:
-        <textbox value="@bind(vm.keyword)" hflex="3"/>
-        <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
+        <textbox value="@bind(vm.keyword)" hflex="3" placeholder="${labels.search.placeholder}"
+                 instant="true" onChange="@command('search')"/>
     </div>
-    <listbox model="@bind(vm.classTemplateList)" emptyMessage="${labels.classTemplate.emptymessages}"
+    <listbox model="@bind(vm.classTemplateList)" emptyMessage="${labels.info.emptymessages}"
              selectedItem="@bind(vm.selectedClassTemplate)" mold="paging" pageSize="5"
              style="margin-top:10px">
         <listhead sizable="true">

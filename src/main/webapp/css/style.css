@@ -13,12 +13,17 @@ body {
 .success {
     color:green;
 }
+.bold {
+    font-weight: bold;
+}
 
 .head {
     display: inline;
     float:left;
 }
-
+.mt10 {
+    margin-top: 10px;
+}
 .mt20 {
     margin-top: 20px;
 }
@@ -31,16 +36,16 @@ body {
     overflow: hidden;
 }
 
-input {
+.full input, .full textarea {
     width: 100%;
     box-sizing:border-box;
 }
 
-.grid-search {
+.grid-search, .grid-filter{
     display: grid;
     grid-template-columns: 1fr 10fr 1fr;
     grid-template-rows: auto auto;
 }
-.grid-search > div {
+.grid-search > div, .grid-filter > div{
     padding: 1em;
 }

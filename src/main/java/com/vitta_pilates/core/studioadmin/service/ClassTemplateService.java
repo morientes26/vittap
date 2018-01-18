@@ -1,5 +1,6 @@
 package com.vitta_pilates.core.studioadmin.service;
 
+import com.vitta_pilates.core.shared.service.EntityService;
 import com.vitta_pilates.model.dao.ClassTemplate;
 import com.vitta_pilates.model.repository.ClassTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class ClassTemplateService {
+public class ClassTemplateService extends EntityService<ClassTemplate> {
 
 	@Autowired
 	ClassTemplateRepository repository;

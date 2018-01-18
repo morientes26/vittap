@@ -12,9 +12,8 @@
         @validator('com.vitta_pilates.core.studioadmin.validator.ProgramTemplateValidator')">
 
     <div sclass="grid-search">
-        ${labels.programTemplate.search.title}:
-        <textbox value="@bind(vm.keyword)" hflex="3"/>
-        <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
+        <textbox value="@bind(vm.keyword)" hflex="3" placeholder="${labels.search.placeholder}"
+                 instant="true" onChange="@command('search')"/>
     </div>
     <zscript><![CDATA[
     import java.util.Comparator;
@@ -23,7 +22,7 @@
     Comparator cDescAsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(true, 2);
     Comparator cDescDsc = new com.vitta_pilates.model.comparator.ProgramTemplateComparator(false, 2);
     ]]></zscript>
-    <listbox model="@bind(vm.programTemplateList)" emptyMessage="${labels.programTemplate.emptymessages}"
+    <listbox model="@bind(vm.programTemplateList)" emptyMessage="${labels.info.emptymessages}"
              selectedItem="@bind(vm.selectedProgramTemplate)" mold="paging" pageSize="5"
              style="margin-top:10px">
         <listhead sizable="true">

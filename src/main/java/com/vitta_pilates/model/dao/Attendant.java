@@ -5,6 +5,7 @@ import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Through declared class types teachers can be listed as available
@@ -17,7 +18,7 @@ public class Attendant {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private PersonalData personalData;
 
     @OneToMany(mappedBy = "attendant")
@@ -27,16 +28,11 @@ public class Attendant {
     @OneToMany(mappedBy = "attendant")
     private List<Skill> skills = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private User user; // optional
 
-    @ManyToOne
-    @JoinColumn(name="class_id", nullable=false)
-    private Class clazz;
-
-    @ManyToOne
-    @JoinColumn(name="class_instance_id", nullable=false)
-    private ClassInstance classInstance;
+    @ManyToMany(mappedBy = "attendedPupils")
+    private Set<ClassInstance> classInstance;
 
 
     //note: it should be in service layer together with persistance operation
@@ -148,21 +144,11 @@ public class Attendant {
         this.user = user;
     }
 
-    public com.vitta_pilates.model.dao.Class getClazz() {
-        return clazz;
-    }
-
-    public void setClazz(com.vitta_pilates.model.dao.Class clazz) {
-        this.clazz = clazz;
-    }
-
-    public ClassInstance getClassInstance() {
+    public Set<ClassInstance> getClassInstance() {
         return classInstance;
     }
 
-    public void setClassInstance(ClassInstance class_instance) {
-        this.classInstance = class_instance;
+    public void setClassInstance(Set<ClassInstance> classInstance) {
+        this.classInstance = classInstance;
     }
-
-
 }

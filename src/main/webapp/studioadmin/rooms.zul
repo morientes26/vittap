@@ -10,16 +10,15 @@
         title="${labels.room.title}" width="100%" border="normal"
         validationMessages="@id('vmsgs')"
         form="@id('fx') @load(vm.selectedRoom) @save(vm.selectedRoom, before='submit')
-        @validator('com.vitta_pilates.core.studioadmin.validator.DefaultValidator')">
+        @validator('com.vitta_pilates.core.shared.validator.DefaultValidator')">
 
     <div sclass="grid-search">
-        ${labels.room.search.title}:
-        <textbox value="@bind(vm.keyword)" hflex="3"/>
-        <button label="${labels.search.button}" onClick="@command('search')" hflex="1"/>
+        <textbox value="@bind(vm.keyword)" hflex="3" placeholder="${labels.search.placeholder}"
+                 instant="true" onChange="@command('search')"/>
     </div>
-    <listbox height="100%" model="@bind(vm.roomList)" emptyMessage="${labels.room.emptymessages}"
+    <listbox height="100%" model="@bind(vm.roomList)" emptyMessage="${labels.info.emptymessages}"
              selectedItem="@bind(vm.selectedRoom)" mold="paging" pageSize="5"
-             style="margin-top:10px">
+             style="margin-top:10px;">
         <listhead sizable="true">
             <listheader label="${labels.room.name}" width="30%"/>
             <listheader label="${labels.room.description}" width="70%"/>
@@ -40,7 +39,7 @@
             <span>${labels.room.name} :</span>
         </div>
         <div sclass="full">
-            <textbox value="@bind(fx.name)" />
+            <textbox value="@bind(fx.name)"/>
         </div>
         <div sclass="full">
             <label value="@load(vmsgs['description'])" sclass="error"/>

@@ -39,6 +39,12 @@ public class Schedule {
     public Schedule() {
     }
 
+    public Schedule(Date startDate, Date endDate, ReccurenceType reccurenceType) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reccurenceType = reccurenceType;
+    }
+
     public long getId() {
         return id;
     }

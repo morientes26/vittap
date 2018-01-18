@@ -2,8 +2,7 @@ package com.vitta_pilates.model.dao;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class ClassInstance extends OccurrenceContent {
@@ -12,24 +11,31 @@ public class ClassInstance extends OccurrenceContent {
     @GeneratedValue
     private long id;
 
-    private LocalDateTime trueTime; // (place in calendar)
+    private Date trueTime; // (place in calendar)
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private Attendant trueAttendingTeacher;
 
-    @OneToMany(mappedBy = "classInstance")
-    private List<Attendant> attendedPupils;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "class_instance_attendent",
+            joinColumns = {@JoinColumn(name = "class_instance_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attendent_id")}
+    )
+    List<Attendant> attendedPupils = new ArrayList<>();
 
     /** Final teacher's salary is made of all finished events. After closing salary, events become 'payed' */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private ClassInstanceStatus status;
 
     @ManyToOne
-    @JoinColumn(name="class_id", nullable=false)
+    @JoinColumn(name="class_id")
     private Class clazz;
 
     public ClassInstance(){}
 
-    public ClassInstance(LocalDateTime trueTime) {
+    public ClassInstance(Date trueTime) {
         this.trueTime = trueTime;
         this.status = ClassInstanceStatus.CREATED;
     }
@@ -47,15 +53,23 @@ public class ClassInstance extends OccurrenceContent {
         // TODO:2017-03-09:mze: impl
     }
 
+    @Override
+    public String toString() {
+        return "ClassInstance{" +
+                "id=" + id +
+                ", trueTime=" + trueTime +
+                '}';
+    }
+
     public long getId() {
         return id;
     }
 
-    public LocalDateTime getTrueTime() {
+    public Date getTrueTime() {
         return trueTime;
     }
 
-    public void setTrueTime(LocalDateTime trueTime) {
+    public void setTrueTime(Date trueTime) {
         this.trueTime = trueTime;
     }
 
@@ -91,15 +105,4 @@ public class ClassInstance extends OccurrenceContent {
         this.clazz = clazz;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-    
-     //   sb.append("Date : ").append(TimeUtils.toString(trueTime.date)).append(" ").append(TimeUtils.toString(trueTime.time)).append('\n');
-        sb.append("\tAttendance [").append(trueAttendingTeacher.getPersonalData().getName()).append(" : ");
-        for (Attendant pupil : attendedPupils) {
-            sb.append(pupil.getPersonalData().getName()).append(", ");
-        }
-        return sb.append("]").toString();
-    }
 }

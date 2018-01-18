@@ -9,15 +9,14 @@
         title="${labels.tarif.title}" width="100%" border="normal"
         validationMessages="@id('vmsgs')"
         form="@id('fx') @load(vm.selected) @save(vm.selected, before='submit')
-        @validator('com.vitta_pilates.core.studioadmin.validator.DefaultValidator')">
+        @validator('com.vitta_pilates.core.shared.validator.DefaultValidator')">
 
     <div sclass="grid-search">
-        <div>${labels.programTemplate.search.title}:</div>
-        <div><textbox value="@bind(vm.keyword)" hflex="2"/></div>
-        <div><button label="${labels.search.button}" onClick="@command('search')" hflex="1"/></div>
+        <div><textbox value="@bind(vm.keyword)" hflex="2" placeholder="${labels.search.placeholder}"
+                      instant="true" onChange="@command('search')"/></div>
     </div>
 
-    <listbox model="@bind(vm.tarifList)" emptyMessage="${labels.selected.emptymessages}"
+    <listbox model="@bind(vm.tarifList)" emptyMessage="${labels.info.emptymessages}"
              selectedItem="@bind(vm.selected)" mold="paging" pageSize="5"
              style="margin-top:10px;">
         <listhead sizable="true">

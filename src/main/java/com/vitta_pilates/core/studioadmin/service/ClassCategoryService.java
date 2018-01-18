@@ -1,5 +1,6 @@
 package com.vitta_pilates.core.studioadmin.service;
 
+import com.vitta_pilates.core.shared.service.EntityService;
 import com.vitta_pilates.model.dao.ClassCategory;
 import com.vitta_pilates.model.repository.ClassCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class ClassCategoryService {
+public class ClassCategoryService extends EntityService<ClassCategory> {
 
 	@Autowired
 	ClassCategoryRepository repository;
