@@ -1,14 +1,17 @@
 package com.vitta_pilates.model.dao;
 
+import com.google.common.collect.Lists;
 import com.vitta_pilates.Application;
 import com.vitta_pilates.core.people.service.ClassService;
 import com.vitta_pilates.core.people.service.PupilService;
 import com.vitta_pilates.model.repository.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -16,10 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,12 +34,13 @@ public class PupilTest {
   Attendant attendant;
   List<Attendant> attendants = new ArrayList<>();
   Class clazz;
-
-  @Autowired
-  private PupilService pupilService;
+  Program program;
 
   @Autowired
   private AttendantRepository attendantRepository;
+
+  @Autowired
+  private PersonalDataRepository personalDataRepository;
 
   @Autowired
   private RoomRepository roomRepository;
@@ -51,16 +52,31 @@ public class PupilTest {
   private ClassInstanceRepository classInstanceRepository;
 
   @Autowired
+  private ProgramInstanceRepository programInstanceRepository;
+
+  @Autowired
   private ClassTemplateRepository classTemplateRepository;
 
   @Autowired
   private ClassCategoryRepository classCategoryRepository;
 
   @Autowired
+  private TarifRepository tarifRepository;
+
+  @Autowired
   private ClassRepository classRepository;
 
   @Autowired
+  private ProgramRepository programRepository;
+
+  @Autowired
+  private ProgramTemplateRepository programTemplateRepository;
+
+  @Autowired
   private ClassService classService;
+
+  @Autowired
+  private PupilService pupilService;
 
   @Before
   public void setUp() throws Exception {
@@ -102,16 +118,45 @@ public class PupilTest {
     classInstance.setClazz(clazz);
     classInstance.setAttendedPupils(attendants);
     classInstance = classInstanceRepository.save(classInstance);
-    attendantRepository.save(attendants);
+    attendants = attendantRepository.save(attendants);
+
+    List<ClassVisit> classVisit = new ArrayList<>();
+    Tarif tarif = tarifRepository.save(new Tarif("tarif1", "some tarif number 1",1.00, new Date()));
+    ProgramTemplate programTemplate = new ProgramTemplate(
+            "template",
+            "description of something",
+            tarif,
+            classVisit,
+            c.getTime(),
+            true);
+
+    programTemplate = programTemplateRepository.save(programTemplate);
+
+    this.program = new Program(schedule, programTemplate,  c.getTime(), 5.00);
+    programRepository.save(program);
   }
 
-  @Test
-  public void findPupilByKeyword() throws Exception {
-    String keywords = "data";
-    List<Attendant> all = attendantRepository.findAll();
-    List<Attendant> result = pupilService.findByKeywords(keywords);
-    assertThat(result.size(), is(all.size()));
-  }
+//  @After
+//  public void setDown() throws Exception {
+//    attendantRepository.deleteAll();
+//    //personalDataRepository.deleteAll();
+//    roomRepository.deleteAll();
+//    scheduleRepository.deleteAll();
+//    classInstanceRepository.deleteAll();
+//    programInstanceRepository.deleteAll();
+//    classTemplateRepository.deleteAll();
+//    classCategoryRepository.deleteAll();
+//    tarifRepository.deleteAll();
+//    classRepository.deleteAll();
+//  }
+
+//  @Test
+//  public void findPupilByKeyword() throws Exception {
+//    String keywords = "data";
+//    List<Attendant> all = attendantRepository.findAll();
+//    List<Attendant> result = pupilService.findByKeywords(keywords);
+//    assertThat(result.size(), is(all.size()));
+//  }
 
   @Test
   public void registerPupil() throws Exception {
@@ -146,6 +191,28 @@ public class PupilTest {
             pupil1.getId(),
             c.getTime(),
             new Date());
+    assertThat(result.isEmpty(), is(false));
+
+    result = pupilService.findClassInstanceByPupilAndPeriod(pupil1, 0);
+    assertThat(result.isEmpty(), is(false));
+  }
+
+  @Test
+  public void testGetAllProgramInstanceByAttendentAndDate() {
+
+    Calendar c = Calendar.getInstance();
+    c.setTime(new Date());
+    c.add(Calendar.HOUR, -48);
+
+    Attendant pupil1 = new Attendant(new PersonalData("test","test"));
+    pupil1 = attendantRepository.save(pupil1);
+    ProgramInstance programInstance = new ProgramInstance(c.getTime(), ProgramInstanceStatus.EXECUTED);
+    programInstance.setProgram(this.program);
+    programInstance.setAttendedPupils(Arrays.asList(pupil1));
+    programInstanceRepository.save(programInstance);
+
+    List<ProgramInstance> result = pupilService.findProgramInstanceByPupilAndPeriod(
+            pupil1, 0);
     assertThat(result.isEmpty(), is(false));
   }
 

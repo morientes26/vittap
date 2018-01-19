@@ -11,24 +11,18 @@ public class Program {
     @GeneratedValue
     private long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)
-    @PrimaryKeyJoinColumn
+    @OneToOne
     private ProgramTemplate programTemplate; // type
 
-    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)
-    @PrimaryKeyJoinColumn
+    @OneToOne
     private Schedule schedule; // validity : to generate/schedule ProgramInstances
 
     @OneToMany(mappedBy = "program")
-    private Set<ProgramInstance> instances;
+    private Set<ProgramInstance> programInstances;
 
     private Date dateOfIssue; // date when the program is given to a pupil
     private Double discount; // by default 0
     private boolean active; // scheduled
-
-    @ManyToOne
-    @JoinColumn(name="attendant_id", nullable=true)
-    private Attendant attendant;
 
     public Program(){}
 
@@ -37,6 +31,13 @@ public class Program {
         this.programTemplate = programTemplate;
         this.dateOfIssue = dateOfIssue;
         this.discount = discount;
+    }
+
+    @Override
+    public String toString() {
+        return "Program{" +
+                "id=" + id +
+                '}';
     }
 
     public long getId() {
@@ -59,12 +60,12 @@ public class Program {
         this.schedule = schedule;
     }
 
-    public Set<ProgramInstance> getInstances() {
-        return instances;
+    public Set<ProgramInstance> getProgramInstances() {
+        return programInstances;
     }
 
-    public void setInstances(Set<ProgramInstance> instances) {
-        this.instances = instances;
+    public void setProgramInstances(Set<ProgramInstance> programInstances) {
+        this.programInstances = programInstances;
     }
 
     public Date getDateOfIssue() {
@@ -91,11 +92,4 @@ public class Program {
         this.active = active;
     }
 
-    public Attendant getAttendant() {
-        return attendant;
-    }
-
-    public void setAttendant(Attendant attendant) {
-        this.attendant = attendant;
-    }
 }

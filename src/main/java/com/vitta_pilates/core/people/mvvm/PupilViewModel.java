@@ -1,10 +1,7 @@
 package com.vitta_pilates.core.people.mvvm;
 
 import com.vitta_pilates.core.people.service.PupilService;
-import com.vitta_pilates.model.dao.Attendant;
-import com.vitta_pilates.model.dao.ClassInstance;
-import com.vitta_pilates.model.dao.FilterData;
-import com.vitta_pilates.model.dao.PersonalData;
+import com.vitta_pilates.model.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.BindingParam;
@@ -13,13 +10,19 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
+import org.zkoss.zul.Tabpanel;
+import org.zkoss.zul.Tabs;
 
+import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.ZoneId;
+import java.util.*;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class PupilViewModel {
@@ -36,10 +39,15 @@ public class PupilViewModel {
   private List<Attendant> attendentList;
   private Attendant selected;
 
-  private int mounth = 1;
+  private int month = 0;
 
+  private boolean showOthertabs = false;
   private List<ClassInstance> pupilClassInstances;
   private ClassInstance selectedClassInstance;
+
+  private List<ProgramInstance> pupilProgramInstances;
+  private ProgramInstance selectedProgramInstance;
+
 
   @WireVariable("pupilService")
   private PupilService service;
@@ -52,6 +60,13 @@ public class PupilViewModel {
   }
 
   @Command
+  @NotifyChange({"pupilClassInstances", "selectedClassInstance", "month","showOthertabs"})
+  public void select(){
+    showOthertabs = true;
+    clearTabs();
+  }
+
+  @Command
   @NotifyChange({"selected", "attendentList"})
   public void submit(){
     service.save(selected);
@@ -60,9 +75,9 @@ public class PupilViewModel {
     Executions.sendRedirect(null);
   }
   @Command
-  @NotifyChange({"selected", "attendentList"})
+  @NotifyChange({"selected"})
   public void changeStatus(){
-    selected = service.changeStatus(selected);
+    service.changeStatus(selected);
     log.info("Change status pupil {}", selected);
   }
 
@@ -76,43 +91,74 @@ public class PupilViewModel {
   }
 
   @Command
-  @NotifyChange({"pupilClassInstances", "selectedClassInstance"})
+  @NotifyChange({"pupilClassInstances", "selectedClassInstance", "month"})
   public void calendarControlClassInstance(@BindingParam( "direction") String direction){
     if (direction.equals("left")){
-      log.debug("left");
-      mounth-=1;
-      pupilClassInstances = service.findClassInstanceByPupilAndPeriod(selected, mounth);
+      month-=1;
+      pupilClassInstances = service.findClassInstanceByPupilAndPeriod(selected, month);
+      selectedClassInstance = null;
     } else {
-      log.debug("right");
-      mounth+=1;
-      pupilClassInstances = service.findClassInstanceByPupilAndPeriod(selected, mounth);
+      month+=1;
+      pupilClassInstances = service.findClassInstanceByPupilAndPeriod(selected, month);
+      selectedClassInstance = null;
     }
   }
 
   @Command
-  @NotifyChange({"pupilClassInstances", "selectedClassInstance"})
+  @NotifyChange({"pupilProgramInstances", "selectedProgramInstance", "month"})
+  public void calendarControlProgramInstance(@BindingParam( "direction") String direction){
+    if (direction.equals("left")){
+      month-=1;
+      pupilProgramInstances = service.findProgramInstanceByPupilAndPeriod(selected, month);
+      selectedProgramInstance = null;
+    } else {
+      month+=1;
+      pupilProgramInstances = service.findProgramInstanceByPupilAndPeriod(selected, month);
+      selectedProgramInstance = null;
+    }
+  }
+
+  @Command
+  @NotifyChange({"pupilClassInstances", "selectedClassInstance",
+          "pupilProgramInstances", "selectedProgramInstance", "month"})
   public void updateTabsData () {
-    mounth = 1;
-    pupilClassInstances = pupilClassInstances = service.findClassInstanceByPupilAndPeriod(
-            selected, mounth);
+    month = 0;
+    pupilClassInstances = service.findClassInstanceByPupilAndPeriod(
+            selected, month);
+    pupilProgramInstances = service.findProgramInstanceByPupilAndPeriod(
+            selected, month);
     selectedClassInstance = new ClassInstance();
+    selectedProgramInstance = new ProgramInstance();
+  }
+
+  @Command
+  @NotifyChange(".")
+  public void clearForm () {
+    clear();
   }
 
 
   @Init
   public void init(){
     clear();
-    //fixme:
-    //pupilClassInstances = service.findClassInstanceByPupilAndPeriod(null,null);
-    //selectedClassInstance = new ClassInstance();
   }
 
   private void clear(){
     keyword = "";
     attendentList = service.getAll();
     selected = new Attendant(new PersonalData());
-    pupilClassInstances = new ArrayList<>();
-    mounth = 1;
+    pupilClassInstances = null;
+    pupilProgramInstances = null;
+    selectedClassInstance = null;
+    selectedProgramInstance = null;
+    month = 0;
+    showOthertabs = false;
+  }
+
+  private void clearTabs(){
+    month = 0;
+    pupilClassInstances = null;
+    selectedClassInstance = null;
   }
 
   public String getKeyword() {
@@ -177,5 +223,39 @@ public class PupilViewModel {
 
   public void setSelectedClassInstance(ClassInstance selectedClassInstance) {
     this.selectedClassInstance = selectedClassInstance;
+  }
+
+  public String getMonth() {
+
+    LocalDate fromDate = LocalDate.now().plusMonths( month ).with(firstDayOfMonth());
+    return Month.getName(fromDate.getMonth().getValue());
+  }
+
+  public void setMonth(int month) {
+    this.month = month;
+  }
+
+  public boolean isShowOthertabs() {
+    return showOthertabs;
+  }
+
+  public void setShowOthertabs(boolean showOthertabs) {
+    this.showOthertabs = showOthertabs;
+  }
+
+  public List<ProgramInstance> getPupilProgramInstances() {
+    return pupilProgramInstances;
+  }
+
+  public void setPupilProgramInstances(List<ProgramInstance> pupilProgramInstances) {
+    this.pupilProgramInstances = pupilProgramInstances;
+  }
+
+  public ProgramInstance getSelectedProgramInstance() {
+    return selectedProgramInstance;
+  }
+
+  public void setSelectedProgramInstance(ProgramInstance selectedProgramInstance) {
+    this.selectedProgramInstance = selectedProgramInstance;
   }
 }

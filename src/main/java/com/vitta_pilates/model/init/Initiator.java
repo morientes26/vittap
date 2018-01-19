@@ -1,6 +1,8 @@
 package com.vitta_pilates.model.init;
 
 
+import com.vitta_pilates.core.people.service.ClassService;
+import com.vitta_pilates.core.people.service.PupilService;
 import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.dao.Class;
 import com.vitta_pilates.model.repository.*;
@@ -10,9 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Configuration
@@ -48,8 +48,21 @@ public class Initiator  {
   @Autowired
   private ClassRepository classRepository;
 
+  @Autowired
+  private ProgramTemplateRepository programTemplateRepository;
+
+  @Autowired
+  private ProgramRepository programRepository;
+
+  @Autowired
+  private ProgramInstanceRepository programInstanceRepository;
+
+  @Autowired
+  private ClassService classService;
+
   private ClassCategory classCategory;
 
+  private List<Attendant> pupils;
   //FIXME: for this puprose will be use FLYWAY libs instead
   // https://flywaydb.org/
   @Bean
@@ -60,6 +73,7 @@ public class Initiator  {
       importTarifs();
       importAttendents();
       importClassInstance();
+      importProgramInstance();
     };
   }
 
@@ -96,20 +110,24 @@ public class Initiator  {
                     )
             )
     );
-    attendantRepository.save(attendants);
+    pupils = attendantRepository.save(attendants);
   }
 
   private void importClassInstance(){
-    Room room = new Room("room1", "desc room 1");
+    Room room = new Room("Room A", "desc room A");
     room = roomRepository.save(room);
 
     Schedule schedule = new Schedule(new Date(), new Date(), ReccurenceType.DAILY);
     schedule = scheduleRepository.save(schedule);
 
-    ClassTemplate classTemplate = new ClassTemplate("t 1","desc 1", classCategory);
+    ClassTemplate classTemplate = new ClassTemplate("template 1","desc 1", classCategory);
     classTemplate = classTemplateRepository.save(classTemplate);
 
-    ClassInstance classInstance = new ClassInstance( new Date());
+    Calendar c = Calendar.getInstance();
+    c.setTime(new Date());
+    c.add(Calendar.HOUR, -48);
+
+    ClassInstance classInstance = new ClassInstance( c.getTime());
 
     Class clazz = new Class(schedule, classTemplate);
     clazz.setActive(true);
@@ -118,7 +136,42 @@ public class Initiator  {
     clazz = classRepository.save(clazz);
 
     classInstance.setClazz(clazz);
+    classInstance.setAttendedPupils(pupils);
     classInstance = classInstanceRepository.save(classInstance);
+
+    Attendant teacher = pupils.get(0);
+
+    classService.executeInstance(classInstance, teacher, pupils.get(1), pupils.get(2), pupils.get(3));
+
+  }
+
+  private void importProgramInstance() {
+
+    Calendar c = Calendar.getInstance();
+    c.setTime(new Date());
+    c.add(Calendar.HOUR, -48);
+
+    List<ClassVisit> classVisit = new ArrayList<>();
+    Tarif tarif = tarifRepository.save(new Tarif("tarif A", "some tarif number A",1.00, new Date()));
+    ProgramTemplate programTemplate = new ProgramTemplate(
+            "template",
+            "description of something",
+            tarif,
+            classVisit,
+            c.getTime(),
+            true);
+
+    programTemplate = programTemplateRepository.save(programTemplate);
+    Schedule schedule = new Schedule(new Date(), new Date(), ReccurenceType.DAILY);
+    schedule = scheduleRepository.save(schedule);
+
+    Program program = new Program(schedule, programTemplate,  c.getTime(), 5.00);
+    programRepository.save(program);
+
+    ProgramInstance programInstance = new ProgramInstance(c.getTime(), ProgramInstanceStatus.EXECUTED);
+    programInstance.setProgram(program);
+    programInstance.setAttendedPupils(Arrays.asList(pupils.get(1)));
+    programInstanceRepository.save(programInstance);
   }
 
   private boolean isEmptyDB(){

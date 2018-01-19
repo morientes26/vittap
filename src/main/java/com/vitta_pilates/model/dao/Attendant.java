@@ -21,9 +21,6 @@ public class Attendant {
     @OneToOne(cascade = CascadeType.ALL)
     private PersonalData personalData;
 
-    @OneToMany(mappedBy = "attendant")
-    private List<Program> programs = new ArrayList<>();
-
     //note: I suggest move Skills to User or Personal Data
     @OneToMany(mappedBy = "attendant")
     private List<Skill> skills = new ArrayList<>();
@@ -32,7 +29,10 @@ public class Attendant {
     private User user; // optional
 
     @ManyToMany(mappedBy = "attendedPupils")
-    private Set<ClassInstance> classInstance;
+    private Set<ClassInstance> classInstances;
+
+    @ManyToMany(mappedBy = "attendedPupils")
+    private Set<ProgramInstance> programInstances;
 
 
     //note: it should be in service layer together with persistance operation
@@ -51,10 +51,10 @@ public class Attendant {
     }
 
     //note: it should be in service layer together with persistance operation
-    public void buyCourse( Program program ) {
-        this.programs.add(program);
-    }
-
+//    public void buyCourse( Program program ) {
+//        this.programs.add(program);
+//    }
+//
     //note: it should be in service layer together with persistance operation
     public void addSkill(Skill newSkill) {
         for (int i = 0; i < skills.size(); i++) {
@@ -106,6 +106,12 @@ public class Attendant {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Attendant{" +
+                "id=" + id +
+                '}';
+    }
 
     public Long getId() {
         return id;
@@ -117,15 +123,6 @@ public class Attendant {
 
     public void setPersonalData(PersonalData personalData) {
         this.personalData = personalData;
-    }
-
-
-    public List<Program> getPrograms() {
-        return programs;
-    }
-
-    public void setPrograms(List<Program> programs) {
-        this.programs = programs;
     }
 
     public List<Skill> getSkills() {
@@ -144,11 +141,19 @@ public class Attendant {
         this.user = user;
     }
 
-    public Set<ClassInstance> getClassInstance() {
-        return classInstance;
+    public Set<ClassInstance> getClassInstances() {
+        return classInstances;
     }
 
-    public void setClassInstance(Set<ClassInstance> classInstance) {
-        this.classInstance = classInstance;
+    public void setClassInstances(Set<ClassInstance> classInstances) {
+        this.classInstances = classInstances;
+    }
+
+    public Set<ProgramInstance> getProgramInstances() {
+        return programInstances;
+    }
+
+    public void setProgramInstances(Set<ProgramInstance> programInstances) {
+        this.programInstances = programInstances;
     }
 }

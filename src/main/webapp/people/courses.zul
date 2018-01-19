@@ -1,5 +1,71 @@
 <zk>
     <div id="courses">
-       <label value="tu bude list programov"></label>
+        <div sclass="pagination">
+            <!-- kalendarova paginacia" -->
+            <button label="${labels.control.left}"
+                    onClick="@command('calendarControlProgramInstance',direction='left')"/>
+
+            <label sclass="bold" value="@load(vm.month)" />
+
+            <button label="${labels.control.right}"
+                    onClick="@command('calendarControlProgramInstance',direction='right')" />
+
+            <button label="${labels.control.print}" style="float: right"/>
+            <button label="${labels.control.enroll}" style="float: right" />
+        </div>
+        <div sclass="list">
+            <listbox model="@load(vm.pupilProgramInstances)" emptyMessage="${labels.info.emptymessages}"
+                     selectedItem="@bind(vm.selectedProgramInstance)" mold="paging" pageSize="5"
+                     style="margin-top:10px">
+                <listhead sizable="true">
+                    <listheader label="${labels.id}" width="2%"/>
+                    <listheader label="${labels.pupil.classtype}" width="23%"/>
+                    <listheader label="${labels.pupil.payed}" width="25%"/>
+                    <listheader label="${labels.pupil.visit}" width="25%"/>
+                    <listheader label="${labels.pupil.notes}" width="25%"/>
+                </listhead>
+                <template name="model" var="ci">
+                    <listitem>
+                        <listcell label="@load(ciStatus.index+1)" ></listcell>
+                        <listcell label="@load(ci.program.programTemplate.name)" ></listcell>
+                        <listcell label="@load(ci.program.discount)" ></listcell>
+                        <listcell label="todo: active/suspended/cancelled" ></listcell>
+                        <listcell label="todo: notes" ></listcell>
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+
+        <separator/>
+
+        <div sclass="detail" visible="@load(not empty vm.selectedProgramInstance.trueTime)">
+
+            <div sclass="full">
+                <span> ... TODO ...</span>
+            </div>
+
+            <div sclass="full">
+                <label sclass="bold" value="${labels.pupil.startdate} :"/>
+                <label value="@load(vm.selectedProgramInstance.trueTime)" />
+                <label sclass="bold" value="${labels.pupil.stopdate} :"/>
+                <label value="@load(vm.selectedProgramInstance.trueTime)" />
+            </div>
+            <div sclass="full">
+                <label sclass="bold" value="${labels.pupil.classtype} :"/>
+                <label value="@load(vm.selectedProgramInstance.program.programTemplate.name)" />
+            </div>
+            <!--<div sclass="full">-->
+                <!--<label sclass="bold" value="${labels.pupil.prize} :"/>-->
+                <!--<label value="@load(vm.selectedProgramInstance.program.discount)" />-->
+            <!--</div>-->
+            <!--<div sclass="full">-->
+                <!--<label sclass="bold" value="${labels.pupil.status} :"/>-->
+                <!--<label value="todo: active/suspended/cancelled" />-->
+            <!--</div>-->
+            <div sclass="full">
+                <span> ... TODO ...</span>
+            </div>
+            <!-- todo ... -->
+        </div>
     </div>
 </zk>

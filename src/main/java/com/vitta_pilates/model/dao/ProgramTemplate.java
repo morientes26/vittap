@@ -25,9 +25,6 @@ public class ProgramTemplate implements Comparable<ProgramTemplate>{
     @OneToOne
     private Tarif tarif;
 
-    //@OneToMany(mappedBy = "programTemplate")
-    //private List<ClassVisit> classVisit; // singles, compounds, upd instances (since ddmmYY new cost)
-
     private Date dateOfIssue; // date when the program is created
     private boolean active = false; // available to assign
 

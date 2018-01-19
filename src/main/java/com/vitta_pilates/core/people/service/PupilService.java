@@ -4,22 +4,24 @@ import com.vitta_pilates.core.shared.service.EntityService;
 import com.vitta_pilates.model.dao.Attendant;
 import com.vitta_pilates.model.dao.ClassInstance;
 import com.vitta_pilates.model.dao.FilterData;
+import com.vitta_pilates.model.dao.ProgramInstance;
 import com.vitta_pilates.model.repository.AttendantRepository;
 import com.vitta_pilates.model.repository.ClassInstanceRepository;
+import com.vitta_pilates.model.repository.ProgramInstanceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Period;
-import java.util.Calendar;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @Service
 public class PupilService extends EntityService<Attendant> {
@@ -31,6 +33,9 @@ public class PupilService extends EntityService<Attendant> {
 
   @Autowired
   ClassInstanceRepository classInstanceRepository;
+
+  @Autowired
+  ProgramInstanceRepository programInstanceRepository;
 
   @Transactional
   public Attendant save(Attendant entity) {
@@ -56,7 +61,7 @@ public class PupilService extends EntityService<Attendant> {
     Attendant attendant = repository.findOne(entity.getId());
     attendant.getPersonalData().setActive(!entity.getPersonalData().isActive());
     repository.save(attendant);
-    entity.getPersonalData().setActive(attendant.getPersonalData().isActive());
+    entity.getPersonalData().setActive(!entity.getPersonalData().isActive());
     return entity;
   }
 
@@ -90,17 +95,37 @@ public class PupilService extends EntityService<Attendant> {
 
   public List<ClassInstance> findClassInstanceByPupilAndPeriod(
           Attendant pupil,
-          int mounth){
+          int month){
 
-    Calendar c = Calendar.getInstance();
-    c.setTime(new Date());
-    c.add(Calendar.MONTH, mounth);
+    LocalDate fromDate = LocalDate.now().plusMonths( month ).with(firstDayOfMonth());
+    LocalDate toDate = LocalDate.now().plusMonths( month ).with(lastDayOfMonth());
 
-    return classInstanceRepository.findByPupilAndDate(
+
+    List<ClassInstance> result = classInstanceRepository.findByPupilAndDate(
             pupil.getId(),
-            c.getTime(),
-            new Date()
+            Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+            Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
     );
+
+    return result;
+
+  }
+
+  public List<ProgramInstance> findProgramInstanceByPupilAndPeriod(
+          Attendant pupil,
+          int month){
+
+    LocalDate fromDate = LocalDate.now().plusMonths( month ).with(firstDayOfMonth());
+    LocalDate toDate = LocalDate.now().plusMonths( month ).with(lastDayOfMonth());
+
+
+    List<ProgramInstance> result = programInstanceRepository.findByPupilAndDate(
+            pupil.getId(),
+            Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+            Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+    );
+
+    return result;
 
   }
 

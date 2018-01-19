@@ -1,19 +1,17 @@
 <zk>
     <div id="classes">
-        <div sclass="control">
-            <!-- kontrolny riadok-->
-            <button label="${labels.control.print}" />
-            <button label="${labels.control.enroll}" />
-        </div>
         <div sclass="pagination">
             <!-- kalendarova paginacia" -->
             <button label="${labels.control.left}"
                     onClick="@command('calendarControlClassInstance',direction='left')"/>
 
-            <label sclass="bold" value="Mounth 1" />
+            <label sclass="bold" value="@load(vm.month)" />
 
             <button label="${labels.control.right}"
                     onClick="@command('calendarControlClassInstance',direction='right')" />
+
+            <button label="${labels.control.print}" style="float: right"/>
+            <button label="${labels.control.enroll}" style="float: right" />
         </div>
         <div sclass="list">
             <listbox model="@load(vm.pupilClassInstances)" emptyMessage="${labels.info.emptymessages}"
@@ -50,6 +48,9 @@
             <div sclass="full">
                 <label sclass="bold" value="${labels.pupil.classroom} :"/>
                 <label value="@load(vm.selectedClassInstance.clazz.room.name)" />
+            </div>
+            <div sclass="full">
+                <span> ... TODO ...</span>
             </div>
             <!-- todo ... -->
         </div>

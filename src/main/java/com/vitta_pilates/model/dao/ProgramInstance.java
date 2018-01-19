@@ -2,6 +2,9 @@ package com.vitta_pilates.model.dao;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 public class ProgramInstance extends OccurrenceContent {
@@ -10,29 +13,46 @@ public class ProgramInstance extends OccurrenceContent {
     @GeneratedValue
     private long id;
 
-    private LocalDateTime trueTime; // (place in calendar)
+    private Date trueTime; // (place in calendar)
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private ProgramInstanceStatus status;
 
     @ManyToOne
-    @JoinColumn(name="program_id", nullable=false)
     private Program program;
+
+    @ManyToMany
+    @JoinTable(
+            name = "program_instance_attendent",
+            joinColumns = {@JoinColumn(name = "program_instance_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attendent_id")}
+    )
+    List<Attendant> attendedPupils = new ArrayList<>();
 
     public ProgramInstance(){}
 
-    public ProgramInstance(LocalDateTime trueTime, ProgramInstanceStatus status) {
+    public ProgramInstance(Date trueTime, ProgramInstanceStatus status) {
         this.trueTime = trueTime;
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "ProgramInstance{" +
+                "id=" + id +
+                '}';
     }
 
     public long getId() {
         return id;
     }
 
-    public LocalDateTime getTrueTime() {
+    public Date getTrueTime() {
         return trueTime;
     }
 
-    public void setTrueTime(LocalDateTime trueTime) {
+    public void setTrueTime(Date trueTime) {
         this.trueTime = trueTime;
     }
 
@@ -50,5 +70,13 @@ public class ProgramInstance extends OccurrenceContent {
 
     public void setProgram(Program program) {
         this.program = program;
+    }
+
+    public List<Attendant> getAttendedPupils() {
+        return attendedPupils;
+    }
+
+    public void setAttendedPupils(List<Attendant> attendedPupils) {
+        this.attendedPupils = attendedPupils;
     }
 }
