@@ -1,6 +1,8 @@
 package com.vitta_pilates.core.studioadmin.mvvm;
 
+import com.vitta_pilates.core.shared.mvvm.BaseViewModel;
 import com.vitta_pilates.core.studioadmin.service.TarifService;
+import com.vitta_pilates.model.dao.Room;
 import com.vitta_pilates.model.dao.Tarif;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +47,7 @@ public class TarifViewModel {
   @Command
   @NotifyChange(".")
   public void delete(){
-    service.delete(selected);
-    log.info("Delete tarif {}", selected);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<Tarif>(service, selected).delete();
   }
 
   @Command

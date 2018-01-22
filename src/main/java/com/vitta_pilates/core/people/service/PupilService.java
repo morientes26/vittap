@@ -37,16 +37,38 @@ public class PupilService extends EntityService<Attendant> {
   @Autowired
   ProgramInstanceRepository programInstanceRepository;
 
+  @Override
   @Transactional
   public Attendant save(Attendant entity) {
     log.debug("Save entity Attendant {}", entity);
     return repository.save(entity);
   }
 
-  @Transactional
-  public void delete(Attendant entity) {
+  @Override
+  public boolean delete(Attendant entity) {
     log.debug("Delete entity Attendant{}", entity);
-    repository.delete(entity);
+    try {
+      repository.delete(entity);
+    } catch (Exception e) {
+      log.warn("Cannot delete item {}", entity);
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public Attendant findOne(long id) {
+    return repository.findOne(id);
+  }
+
+  @Override
+  public List<Attendant> getAll() {
+    return repository.findAll();
+  }
+
+  @Override
+  public List<Attendant> findByKeywords(String keyword) {
+    return repository.findAllByName(keyword);
   }
 
   @Transactional
@@ -63,18 +85,6 @@ public class PupilService extends EntityService<Attendant> {
     repository.save(attendant);
     entity.getPersonalData().setActive(!entity.getPersonalData().isActive());
     return entity;
-  }
-
-  public Attendant findOne(long id) {
-    return repository.findOne(id);
-  }
-
-  public List<Attendant> getAll() {
-    return repository.findAll();
-  }
-
-  public List<Attendant> findByKeywords(String keyword) {
-    return repository.findAllByName(keyword);
   }
 
   public List<Attendant> findByFilterAndKeywords(FilterData filterData, String keyword) {

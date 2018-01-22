@@ -28,9 +28,9 @@
                     <listitem>
                         <listcell label="@load(ciStatus.index+1)" ></listcell>
                         <listcell label="@load(ci.program.programTemplate.name)" ></listcell>
-                        <listcell label="@load(ci.program.discount)" ></listcell>
-                        <listcell label="todo: active/suspended/cancelled" ></listcell>
-                        <listcell label="todo: notes" ></listcell>
+                        <listcell label="todo: actual_visits (max vis.)" ></listcell>
+                        <listcell label="todo: payed (total prize)" ></listcell>
+                        <listcell label="@load(ci.notes)" ></listcell>
                     </listitem>
                 </template>
             </listbox>
@@ -41,31 +41,31 @@
         <div sclass="detail" visible="@load(not empty vm.selectedProgramInstance.trueTime)">
 
             <div sclass="full">
-                <span> ... TODO ...</span>
-            </div>
-
-            <div sclass="full">
                 <label sclass="bold" value="${labels.pupil.startdate} :"/>
                 <label value="@load(vm.selectedProgramInstance.trueTime)" />
-                <label sclass="bold" value="${labels.pupil.stopdate} :"/>
+                <label sclass="bold" value="${labels.pupil.enddate} :"/>
                 <label value="@load(vm.selectedProgramInstance.trueTime)" />
             </div>
             <div sclass="full">
                 <label sclass="bold" value="${labels.pupil.classtype} :"/>
                 <label value="@load(vm.selectedProgramInstance.program.programTemplate.name)" />
             </div>
-            <!--<div sclass="full">-->
-                <!--<label sclass="bold" value="${labels.pupil.prize} :"/>-->
-                <!--<label value="@load(vm.selectedProgramInstance.program.discount)" />-->
-            <!--</div>-->
-            <!--<div sclass="full">-->
-                <!--<label sclass="bold" value="${labels.pupil.status} :"/>-->
-                <!--<label value="todo: active/suspended/cancelled" />-->
-            <!--</div>-->
-            <div sclass="full">
-                <span> ... TODO ...</span>
+
+            <div >
+                <label sclass="bold" value="${labels.pupil.price} :"/>
+                <textbox value="todo: price" />
+                <label sclass="bold" value="${labels.pupil.payed} :"/>
+                <textbox value="todo: payed" />
+                <label sclass="bold" value="${labels.pupil.status.label} :"/>
+                <textbox value="todo: active/suspended/cancelled" />
             </div>
-            <!-- todo ... -->
+            <div sclass="full">
+                <label sclass="bold" value="${labels.pupil.notes} :"/>
+                <textbox rows="4" value="@load(vm.selectedProgramInstance.notes)" />
+            </div>
+            <div sclass="full">
+                <button label="${labels.button.save}" />
+            </div>
         </div>
     </div>
 </zk>

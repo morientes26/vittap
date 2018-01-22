@@ -47,4 +47,11 @@
     	<name>org.zkoss.web.preferred.locale</name>
     	<value>en</value>
 	</library-property>
+
+	<!-- define custom error page-->
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/sys/error.zul</location>
+	</error-page>
+
 </zk>

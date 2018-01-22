@@ -11,13 +11,14 @@ public class Schedule {
     @GeneratedValue
     private long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @OneToOne
     private NotificationSettings notificationSettings;
 
     private Date startDate;
     private Date endDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reccurenceType")
     private ReccurenceType reccurenceType;
     
     // daily

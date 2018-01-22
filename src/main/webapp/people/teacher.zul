@@ -3,7 +3,6 @@
     <?init class="org.zkoss.zk.ui.util.Composition" arg0="/layout.zul" ?>
     <?link rel="stylesheet" type="text/css" href="/css/style.css"?>
     <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
-    <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 
     <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
             viewModel="@id('vm') @init('com.vitta_pilates.core.people.mvvm.PupilViewModel')"
@@ -45,11 +44,12 @@
         </listbox>
 
         <separator />
-        <tabbox sclass="nav_tabs" id="tb" height="380px" onSelect="@command('updateTabsData')">
+
+        <tabbox id="tb" width="100%" height="380px" mold="accordion" onSelect="@command('updateTabsData')">
             <tabs>
-                <tab selected="@bind(vm.showOthertabs)" label="@bind(empty fx.id ? labels.pupil.register.label : c:cat(labels.pupil.selected,fx.personalData.name))" />
+                <tab selected="@bind(vm.showOthertabs)" label="@bind(empty fx.id ? labels.pupil.register.label : fx.personalData.name)" />
                 <tab disabled="@bind(!vm.showOthertabs)" label="${labels.pupil.courses.tab}" />
-                <tab id="tab-classes" disabled="@bind(!vm.showOthertabs)" label="${labels.pupil.classes.tab}" />
+                <tab disabled="@bind(!vm.showOthertabs)" label="${labels.pupil.classes.tab}" />
             </tabs>
             <tabpanels>
                 <tabpanel>
@@ -90,9 +90,6 @@
                     <separator/>
                     <button label="@load(empty fx.id ? labels.button.register : labels.button.update)"
                             onClick="@command('submit')"/>
-
-                    <!--<button label="${labels.button.delete}" onClick="@command('delete')"-->
-                            <!--disabled="@load(empty fx.id)"/>-->
 
                     <button label="${labels.button.clear}" onClick="@command('clearForm')"/>
                 </tabpanel>

@@ -22,6 +22,8 @@ public class ProgramInstance extends OccurrenceContent {
     @ManyToOne
     private Program program;
 
+    private String notes;
+
     @ManyToMany
     @JoinTable(
             name = "program_instance_attendent",
@@ -78,5 +80,13 @@ public class ProgramInstance extends OccurrenceContent {
 
     public void setAttendedPupils(List<Attendant> attendedPupils) {
         this.attendedPupils = attendedPupils;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

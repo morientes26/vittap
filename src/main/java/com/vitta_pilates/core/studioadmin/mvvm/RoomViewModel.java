@@ -1,7 +1,9 @@
 package com.vitta_pilates.core.studioadmin.mvvm;
 
+import com.vitta_pilates.core.shared.mvvm.BaseViewModel;
 import com.vitta_pilates.core.studioadmin.service.RoomService;
 import com.vitta_pilates.model.dao.Room;
+import com.vitta_pilates.model.dao.Tarif;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.Command;
@@ -45,10 +47,7 @@ public class RoomViewModel {
   @Command
   @NotifyChange(".")
   public void delete(){
-    service.delete(selectedRoom);
-    log.info("Delete room {}", selectedRoom);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<Room>(service, selectedRoom).delete();
   }
 
   @Command

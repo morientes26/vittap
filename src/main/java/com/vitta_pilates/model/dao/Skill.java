@@ -9,12 +9,10 @@ public class Skill {
     @GeneratedValue
     private long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @OneToOne
     private ClassCategory category;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @OneToOne
     private Level level;
 
     @ManyToOne

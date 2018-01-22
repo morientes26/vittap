@@ -4,6 +4,7 @@ package com.vitta_pilates.core.shared.service;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.persistence.Entity;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -12,24 +13,23 @@ import java.util.List;
 public abstract class EntityService <T>{
 
   @Transactional
-  T save(T entity){
+  public T save(T entity){
     throw new NotImplementedException();
   }
 
-  @Transactional
-  void delete(T entity){
+  public boolean delete(T entity){
     throw new NotImplementedException();
   }
 
-  T findOne(long id){
+  public T findOne(long id){
     throw new NotImplementedException();
   }
 
-  List<T> getAll(){
+  public List<T> getAll(){
     throw new NotImplementedException();
   }
 
-  List<T> findByKeywords(String keyword){
+  public List<T> findByKeywords(String keyword){
     throw new NotImplementedException();
   }
 }

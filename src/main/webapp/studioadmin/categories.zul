@@ -77,7 +77,8 @@
                     onClick="@command('submit')"/>
 
             <button label="${labels.button.delete}" onClick="@command('delete')"
-                    disabled="@load(empty fx.id)"/>
+                    disabled="@load(empty fx.id)">
+            </button>
 
             <button label="${labels.button.clear}" onClick="@command('clear')" />
         </div>

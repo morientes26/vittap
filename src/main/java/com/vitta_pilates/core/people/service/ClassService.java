@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class ClassService extends EntityService<Attendant> {
+public class ClassService extends EntityService<com.vitta_pilates.model.dao.Class> {
 
   private final Logger log = LoggerFactory.getLogger(ClassService.class);
 
@@ -30,10 +30,15 @@ public class ClassService extends EntityService<Attendant> {
     return repository.save(entity);
   }
 
-  @Transactional
-  public void delete(com.vitta_pilates.model.dao.Class entity) {
+  public boolean delete(com.vitta_pilates.model.dao.Class entity) {
     log.debug("Delete entity Class{}", entity);
-    repository.delete(entity);
+    try {
+      repository.delete(entity);
+    } catch (Exception e) {
+      log.warn("Cannot delete item {}", entity);
+      return false;
+    }
+    return true;
   }
 
   @Transactional

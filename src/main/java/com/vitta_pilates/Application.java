@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 import org.zkoss.zk.ui.http.DHtmlLayoutServlet;
 import org.zkoss.zk.ui.http.HttpSessionListener;
@@ -20,6 +22,7 @@ import org.zkoss.zk.ui.http.HttpSessionListener;
 @Configuration
 @ComponentScan("com.vitta_pilates")
 @EnableAutoConfiguration
+@EnableTransactionManagement
 @Import(Initiator.class)
 public class Application {
 
@@ -56,5 +59,9 @@ public class Application {
 		return new HttpSessionListener();
 	}
 
+//	@Bean
+//	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+//		return new PersistenceExceptionTranslationPostProcessor();
+//	}
 
 }

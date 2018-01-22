@@ -1,0 +1,11 @@
+<?link rel="stylesheet" type="text/css" href="/css/style.css" ?>
+<zk>
+
+    <div  width="100%" style="margin-top:50px" align="center">
+
+        <window title="Error ${requestScope['javax.servlet.error.status_code']}">
+            Cause: ${requestScope['javax.servlet.error.message']}
+        </window>
+
+    </div>
+</zk>

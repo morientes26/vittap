@@ -1,5 +1,6 @@
 package com.vitta_pilates.core.studioadmin.mvvm;
 
+import com.vitta_pilates.core.shared.mvvm.BaseViewModel;
 import com.vitta_pilates.core.studioadmin.service.ProgramTemplateService;
 import com.vitta_pilates.model.dao.ProgramTemplate;
 import com.vitta_pilates.model.dao.Tarif;
@@ -53,10 +54,7 @@ public class ProgramTemplateViewModel {
   @Command
   @NotifyChange(".")
   public void delete(){
-    service.delete(selectedProgramTemplate);
-    log.info("Delete programTemplate {}", selectedProgramTemplate);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<ProgramTemplate>(service, selectedProgramTemplate).delete();
   }
 
   @Command

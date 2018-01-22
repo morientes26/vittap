@@ -1,5 +1,6 @@
 package com.vitta_pilates.core.studioadmin.mvvm;
 
+import com.vitta_pilates.core.shared.mvvm.BaseViewModel;
 import com.vitta_pilates.core.studioadmin.service.ClassCategoryService;
 import com.vitta_pilates.core.studioadmin.service.ClassTemplateService;
 import com.vitta_pilates.model.dao.ClassCategory;
@@ -60,10 +61,7 @@ public class ClassTemplateViewModel {
   @Command
   @NotifyChange(".")
   public void delete(){
-    service.delete(selectedClassTemplate);
-    log.info("Delete classTemplate {}", selectedClassTemplate);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<ClassTemplate>(service, selectedClassTemplate).delete();
   }
 
   @Command
@@ -81,6 +79,10 @@ public class ClassTemplateViewModel {
     selectedClassCategory = new ClassCategory();
     listLevel = levelRepository.findAll();
   }
+
+//  public ClassTemplateViewModel(EntityService<ClassTemplate> service, Entity selectedClassTemplate){
+//    super(service, selectedClassTemplate);
+//  }
 
 
   public String getKeyword() {

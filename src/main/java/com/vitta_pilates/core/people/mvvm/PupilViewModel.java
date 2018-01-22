@@ -1,6 +1,7 @@
 package com.vitta_pilates.core.people.mvvm;
 
 import com.vitta_pilates.core.people.service.PupilService;
+import com.vitta_pilates.core.shared.mvvm.BaseViewModel;
 import com.vitta_pilates.model.dao.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,19 +11,16 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
-import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
-import org.zkoss.zul.Tabpanel;
-import org.zkoss.zul.Tabs;
+import org.zkoss.zul.Messagebox;
 
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
-import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class PupilViewModel {
@@ -84,10 +82,7 @@ public class PupilViewModel {
   @Command
   @NotifyChange(".")
   public void delete(){
-    service.delete(selected);
-    log.info("Delete pupil {}", selected);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<Attendant>(service, selected).delete();
   }
 
   @Command

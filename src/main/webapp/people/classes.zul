@@ -19,8 +19,8 @@
                      style="margin-top:10px">
                 <listhead sizable="true">
                     <listheader label="${labels.id}" width="2%"/>
-                    <listheader label="${labels.pupil.classdate}" width="58%"/>
-                    <listheader label="${labels.pupil.classtype}" width="20%"/>
+                    <listheader label="${labels.pupil.classdate}" width="18%"/>
+                    <listheader label="${labels.pupil.classtype}" width="60%"/>
                     <listheader label="${labels.pupil.classstatus}" width="20%"/>
                 </listhead>
                 <template name="model" var="ci">
@@ -50,9 +50,15 @@
                 <label value="@load(vm.selectedClassInstance.clazz.room.name)" />
             </div>
             <div sclass="full">
-                <span> ... TODO ...</span>
+                <label sclass="bold" value="${labels.pupil.schedule} :"/>
+                <label value="@load(vm.selectedClassInstance.clazz.schedule.startDate)" />
+                <span> - </span>
+                <label value="@load(vm.selectedClassInstance.clazz.schedule.endDate)" />
             </div>
-            <!-- todo ... -->
+            <div sclass="full">
+                <label sclass="bold" value="${labels.pupil.reccurence} :"/>
+                <label value="@load(vm.selectedClassInstance.clazz.schedule.reccurenceType.name)" />
+            </div>
         </div>
     </div>
 </zk>

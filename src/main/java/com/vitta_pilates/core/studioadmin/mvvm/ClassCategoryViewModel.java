@@ -1,5 +1,6 @@
 package com.vitta_pilates.core.studioadmin.mvvm;
 
+import com.vitta_pilates.core.shared.mvvm.BaseViewModel;
 import com.vitta_pilates.core.studioadmin.service.ClassCategoryService;
 import com.vitta_pilates.model.dao.ClassCategory;
 import org.slf4j.Logger;
@@ -43,15 +44,6 @@ public class ClassCategoryViewModel {
   }
 
   @Command
-  @NotifyChange(".")
-  public void delete(){
-    service.delete(selectedClassCategory);
-    log.info("Delete classCategory {}", selectedClassCategory);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
-  }
-
-  @Command
   @NotifyChange({"classCategoryList", "selectedClassCategory"})
   public void clear(){
     init();
@@ -62,6 +54,14 @@ public class ClassCategoryViewModel {
     keyword = "";
     classCategoryList = service.getAll();
     selectedClassCategory = new ClassCategory();
+  }
+
+  @Command
+  @NotifyChange(".")
+  public void delete() {
+
+    new BaseViewModel<ClassCategory>(service, selectedClassCategory).delete();
+
   }
 
   public String getKeyword() {

@@ -17,7 +17,7 @@ public class Class {
     private long id;
 
     @OneToOne
-    private Schedule schedule; // when
+    private Schedule schedule; // when vsetko cez kalendar
 
     @OneToOne
     private Room room; // optional : where (place, capacity)
