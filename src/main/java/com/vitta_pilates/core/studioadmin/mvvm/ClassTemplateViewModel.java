@@ -52,10 +52,7 @@ public class ClassTemplateViewModel {
   @Command
   @NotifyChange({"classTemplateList", "selectedClassTemplate"})
   public void submit(){
-    service.save(selectedClassTemplate);
-    log.info("Save classTemplate {}", selectedClassTemplate);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<ClassTemplate>(service, selectedClassTemplate).submit();
   }
 
   @Command

@@ -6,6 +6,7 @@ import com.vitta_pilates.model.repository.LevelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -19,35 +20,8 @@ public class LevelService extends EntityService<Level> {
 	@Autowired
 	LevelRepository repository;
 
-  @Override
-  public Level save(Level entity) {
-    return repository.save(entity);
-  }
-
-  @Override
-  public boolean delete(Level entity) {
-    try {
-      repository.delete(entity);
-    } catch (Exception e) {
-      log.warn("Cannot delete item {}", entity);
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-  public Level findOne(long id) {
-    return repository.findOne(id);
-  }
-
-  @Override
-	public List<Level> getAll(){
-		return repository.findAll();
-	}
-
-  @Override
-  public List<Level> findByKeywords(String keyword) {
-	  throw new NotImplementedException();
+  public LevelService(JpaRepository repository) {
+    super(repository);
   }
 
 }

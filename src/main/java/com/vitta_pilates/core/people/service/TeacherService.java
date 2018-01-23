@@ -1,17 +1,13 @@
 package com.vitta_pilates.core.people.service;
 
 import com.vitta_pilates.core.shared.service.EntityService;
-import com.vitta_pilates.model.dao.Attendant;
-import com.vitta_pilates.model.dao.ClassInstance;
-import com.vitta_pilates.model.dao.FilterData;
-import com.vitta_pilates.model.dao.ProgramInstance;
+import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.repository.AttendantRepository;
 import com.vitta_pilates.model.repository.ClassInstanceRepository;
 import com.vitta_pilates.model.repository.ProgramInstanceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,9 +21,9 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @Service
-public class PupilService extends EntityService<Attendant> {
+public class TeacherService extends EntityService<Attendant> {
 
-  private final Logger log = LoggerFactory.getLogger(PupilService.class);
+  private final Logger log = LoggerFactory.getLogger(TeacherService.class);
 
   @Autowired
   AttendantRepository repository;
@@ -38,17 +34,18 @@ public class PupilService extends EntityService<Attendant> {
   @Autowired
   ProgramInstanceRepository programInstanceRepository;
 
-  public PupilService(AttendantRepository repository){
+  public TeacherService(AttendantRepository repository){
     super(repository);
   }
 
   @Transactional
   public Attendant register(Attendant attendant){
-    log.debug("Register pupil {}", attendant);
-    attendant.setPupil(true);
+    log.debug("Register tacher {}", attendant);
+    attendant.setPupil(false);
     return repository.save(attendant);
   }
 
+  //TODO: merging with pupilService
   @Transactional
   public Attendant changeStatus(Attendant entity) {
     log.debug("Change status entity Attendant {}", entity);
@@ -59,23 +56,22 @@ public class PupilService extends EntityService<Attendant> {
     return entity;
   }
 
-  public List<Attendant> findByFilterAndKeywords(FilterData filterData, String keyword) {
+  public List<Attendant> findByFilterAndKeywords(FilterTeacherData filterData, String keyword) {
 
     checkNotNull(filterData);
 
     switch (filterData) {
 
-      case ALL: return repository.findAllPupilsByName(keyword);
+      case ALL: return repository.findAllTeachersByName(keyword);
 
-      case NON_ENROLLED: return repository.findNonEnrolled();
+      case PENDING_SALARIES: return repository.findPendingSalaries();
 
-      case OPEN_DEBTS: return repository.findOpenDepts();
     }
 
-    return repository.findAllPupilsByName(keyword);
+    return repository.findAllTeachersByName(keyword);
   }
 
-  public List<ClassInstance> findClassInstanceByPupilAndPeriod(
+  public List<ClassInstance> findClassInstanceByPeriod(
           Attendant pupil,
           int month){
 
@@ -83,7 +79,7 @@ public class PupilService extends EntityService<Attendant> {
     LocalDate toDate = LocalDate.now().plusMonths( month ).with(lastDayOfMonth());
 
 
-    List<ClassInstance> result = classInstanceRepository.findByPupilAndDate(
+    List<ClassInstance> result = classInstanceRepository.findByTeacherAndDate(
             pupil.getId(),
             Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
             Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -93,27 +89,21 @@ public class PupilService extends EntityService<Attendant> {
 
   }
 
-  public List<ProgramInstance> findProgramInstanceByPupilAndPeriod(
+  public List<ProgramInstance> findProgramInstanceByPeriod(
           Attendant pupil,
-          int month){
+          int month) {
 
-    LocalDate fromDate = LocalDate.now().plusMonths( month ).with(firstDayOfMonth());
-    LocalDate toDate = LocalDate.now().plusMonths( month ).with(lastDayOfMonth());
+    LocalDate fromDate = LocalDate.now().plusMonths(month).with(firstDayOfMonth());
+    LocalDate toDate = LocalDate.now().plusMonths(month).with(lastDayOfMonth());
 
 
-    List<ProgramInstance> result = programInstanceRepository.findByPupilAndDate(
+    List<ProgramInstance> result = programInstanceRepository.findByTeacherAndDate(
             pupil.getId(),
             Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
             Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
     );
 
     return result;
-
   }
-
-  public ClassInstance findClassInstanceByOne(Long id){
-      return classInstanceRepository.findOne(id);
-  }
-
 
 }

@@ -6,6 +6,7 @@ import com.vitta_pilates.model.repository.ProgramTemplateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,30 +20,8 @@ public class ProgramTemplateService extends EntityService<ProgramTemplate>{
 	@Autowired
 	ProgramTemplateRepository repository;
 
-	@Override
-	@Transactional
-	public ProgramTemplate save(ProgramTemplate programTemplate){
-		return repository.save(programTemplate);
-	}
-
-	@Override
-	public boolean delete(ProgramTemplate programTemplate){
-
-		try {
-			repository.delete(programTemplate);
-		} catch (Exception e) {
-			log.warn("Cannot delete item {}", programTemplate);
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public ProgramTemplate findOne(long id){ return repository.findOne(id); }
-
-	@Override
-	public List<ProgramTemplate> getAll(){
-		return repository.findAll();
+	public ProgramTemplateService(JpaRepository repository) {
+		super(repository);
 	}
 
 	public List<ProgramTemplate> findByNameOrDescription(String keyword){

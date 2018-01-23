@@ -3,8 +3,12 @@ package com.vitta_pilates;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.vitta_pilates.conf.ServiceInitializer;
+import com.vitta_pilates.core.people.service.ClassService;
+import com.vitta_pilates.core.people.service.PupilService;
+import com.vitta_pilates.core.studioadmin.service.*;
 import com.vitta_pilates.model.init.Initiator;
-import com.vitta_pilates.model.repository.UserRepository;
+import com.vitta_pilates.model.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -23,7 +27,10 @@ import org.zkoss.zk.ui.http.HttpSessionListener;
 @ComponentScan("com.vitta_pilates")
 @EnableAutoConfiguration
 @EnableTransactionManagement
-@Import(Initiator.class)
+@Import({
+				Initiator.class,
+				ServiceInitializer.class
+})
 public class Application {
 
 	public static void main(String[] args) {
@@ -53,15 +60,10 @@ public class Application {
 		reg.setInitParameters(params);
 		return reg;
 	}
-	
+
 	@Bean
 	public HttpSessionListener httpSessionListener() {
 		return new HttpSessionListener();
 	}
-
-//	@Bean
-//	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-//		return new PersistenceExceptionTranslationPostProcessor();
-//	}
 
 }

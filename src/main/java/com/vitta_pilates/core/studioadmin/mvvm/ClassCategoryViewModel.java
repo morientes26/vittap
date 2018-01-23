@@ -37,10 +37,13 @@ public class ClassCategoryViewModel {
   @Command
   @NotifyChange({"classCategoryList", "selectedClassCategory"})
   public void submit(){
-    service.save(selectedClassCategory);
-    log.info("Save classCategory {}", selectedClassCategory);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<ClassCategory>(service, selectedClassCategory).submit();
+  }
+
+  @Command
+  @NotifyChange(".")
+  public void delete() {
+    new BaseViewModel<ClassCategory>(service, selectedClassCategory).delete();
   }
 
   @Command
@@ -56,13 +59,6 @@ public class ClassCategoryViewModel {
     selectedClassCategory = new ClassCategory();
   }
 
-  @Command
-  @NotifyChange(".")
-  public void delete() {
-
-    new BaseViewModel<ClassCategory>(service, selectedClassCategory).delete();
-
-  }
 
   public String getKeyword() {
     return keyword;

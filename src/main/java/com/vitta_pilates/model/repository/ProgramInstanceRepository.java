@@ -22,4 +22,13 @@ public interface ProgramInstanceRepository extends JpaRepository<ProgramInstance
             @Param("fromD") Date fromD,
             @Param("toD") Date toD);
 
+    //todo
+    @Query("SELECT ci from ProgramInstance ci " +
+            "JOIN ci.trueAttendingTeacher a " +
+            "WHERE a.id in :attendent " +
+            "AND ci.trueTime BETWEEN :fromD AND :toD")
+    List<ProgramInstance> findByTeacherAndDate(
+            @Param("attendent") Long attendant,
+            @Param("fromD") Date fromD,
+            @Param("toD") Date toD);
 }

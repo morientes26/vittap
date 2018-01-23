@@ -1,0 +1,64 @@
+<zk>
+    <div id="classes">
+        <div sclass="pagination">
+            <!-- kalendarova paginacia" -->
+            <button label="${labels.control.left}"
+                    onClick="@command('calendarControlClassInstance',direction='left')"/>
+
+            <label sclass="bold" value="@load(vm.month)" />
+
+            <button label="${labels.control.right}"
+                    onClick="@command('calendarControlClassInstance',direction='right')" />
+
+            <button label="${labels.control.print}" style="float: right"/>
+            <button label="${labels.control.enroll}" style="float: right" />
+        </div>
+        <div sclass="list">
+            <listbox model="@load(vm.teacherClassInstances)" emptyMessage="${labels.info.emptymessages}"
+                     selectedItem="@bind(vm.selectedClassInstance)" mold="paging" pageSize="5"
+                     style="margin-top:10px">
+                <listhead sizable="true">
+                    <listheader label="${labels.id}" width="2%"/>
+                    <listheader label="${labels.teacher.classdate}" width="18%"/>
+                    <listheader label="${labels.teacher.classtype}" width="60%"/>
+                    <listheader label="${labels.teacher.classstatus}" width="20%"/>
+                </listhead>
+                <template name="model" var="ci">
+                    <listitem>
+                        <listcell label="@load(ciStatus.index+1)" ></listcell>
+                        <listcell label="@load(ci.trueTime)" ></listcell>
+                        <listcell label="@load(ci.clazz.event.type.name)" ></listcell>
+                        <listcell label="todo: own/recuperated" ></listcell>
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+
+        <separator/>
+
+        <div sclass="detail" visible="@load(not empty vm.selectedClassInstance.trueTime)">
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.classdate} :"/>
+                <label value="@load(vm.selectedClassInstance.trueTime)" />
+            </div>
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.classtype} :"/>
+                <label value="@load(vm.selectedClassInstance.clazz.event.type.name)" />
+            </div>
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.classroom} :"/>
+                <label value="@load(vm.selectedClassInstance.clazz.room.name)" />
+            </div>
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.schedule} :"/>
+                <label value="@load(vm.selectedClassInstance.clazz.schedule.startDate)" />
+                <span> - </span>
+                <label value="@load(vm.selectedClassInstance.clazz.schedule.endDate)" />
+            </div>
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.reccurence} :"/>
+                <label value="@load(vm.selectedClassInstance.clazz.schedule.reccurenceType.name)" />
+            </div>
+        </div>
+    </div>
+</zk>

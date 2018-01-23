@@ -32,6 +32,9 @@ public class ProgramInstance extends OccurrenceContent {
     )
     List<Attendant> attendedPupils = new ArrayList<>();
 
+    @OneToOne
+    private Attendant trueAttendingTeacher;
+
     public ProgramInstance(){}
 
     public ProgramInstance(Date trueTime, ProgramInstanceStatus status) {
@@ -88,5 +91,13 @@ public class ProgramInstance extends OccurrenceContent {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Attendant getTrueAttendingTeacher() {
+        return trueAttendingTeacher;
+    }
+
+    public void setTrueAttendingTeacher(Attendant trueAttendingTeacher) {
+        this.trueAttendingTeacher = trueAttendingTeacher;
     }
 }

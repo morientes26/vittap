@@ -5,14 +5,14 @@
     <?link rel="icon" type="image/x-icon" href="/img/favicon.ico"?>
 
     <window self="@define(content)" apply="org.zkoss.bind.BindComposer"
-            viewModel="@id('vm') @init('com.vitta_pilates.core.people.mvvm.PupilViewModel')"
-            title="${labels.pupil.title}" width="100%" border="normal"
+            viewModel="@id('vm') @init('com.vitta_pilates.core.people.mvvm.TeacherViewModel')"
+            title="${labels.teacher.title}" width="100%" border="normal"
             validationMessages="@id('vmsgs')"
             form="@id('fx') @load(vm.selected) @save(vm.selected, before='submit')
-        @validator('com.vitta_pilates.core.people.validator.PupilValidator')">
+        @validator('com.vitta_pilates.core.people.validator.TeacherValidator')">
 
         <div sclass="grid-filter">
-            ${labels.pupil.filter.title}:
+            ${labels.teacher.filter.title}:
             <combobox id="filter"
                       onChange="@command('search')"
                       model="@load(vm.listFilter)" selectedItem="@bind(vm.filter)">
@@ -31,14 +31,14 @@
                  style="margin-top:10px" onSelect="@command('select')">
             <listhead sizable="true">
                 <listheader label="${labels.id}" width="2%"/>
-                <listheader label="${labels.pupil.name}" width="78%"/>
-                <listheader label="${labels.pupil.status.label}" width="20%"/>
+                <listheader label="${labels.teacher.name}" width="78%"/>
+                <listheader label="${labels.teacher.status.label}" width="20%"/>
             </listhead>
-            <template name="model" var="pupil">
+            <template name="model" var="teacher">
                 <listitem>
-                    <listcell label="@bind(pupilStatus.index+1)" ></listcell>
-                    <listcell label="@bind(pupil.personalData.name)" ></listcell>
-                    <listcell label="@bind(pupil.personalData.active ? labels.pupil.status.active : labels.pupil.status.suspend)" ></listcell>
+                    <listcell label="@bind(teacherStatus.index+1)" ></listcell>
+                    <listcell label="@bind(teacher.personalData.name)" ></listcell>
+                    <listcell label="@bind(teacher.personalData.active ? labels.teacher.status.active : labels.pupil.status.suspend)" ></listcell>
                 </listitem>
             </template>
         </listbox>
@@ -47,28 +47,28 @@
 
         <tabbox id="tb" width="100%" height="380px" mold="accordion" onSelect="@command('updateTabsData')">
             <tabs>
-                <tab selected="@bind(vm.showOthertabs)" label="@bind(empty fx.id ? labels.pupil.register.label : fx.personalData.name)" />
-                <tab disabled="@bind(!vm.showOthertabs)" label="${labels.pupil.courses.tab}" />
-                <tab disabled="@bind(!vm.showOthertabs)" label="${labels.pupil.classes.tab}" />
+                <tab selected="@bind(vm.showOthertabs)" label="@bind(empty fx.id ? labels.teacher.register.label : fx.personalData.name)" />
+                <tab disabled="@bind(!vm.showOthertabs)" label="${labels.teacher.courses.tab}" />
+                <tab disabled="@bind(!vm.showOthertabs)" label="${labels.teacher.classes.tab}" />
             </tabs>
             <tabpanels>
                 <tabpanel>
                         <div sclass="full">
                             <label value="@load(vmsgs['personalData.name'])" sclass="error"/>
-                            <span>${labels.pupil.name} :</span>
+                            <span>${labels.teacher.name} :</span>
                         </div>
                         <div sclass="full">
                             <textbox value="@bind(fx.personalData.name)"/>
                         </div>
                         <div sclass="full">
                             <label value="@load(vmsgs['personalData.additionalData'])" sclass="error"/>
-                            <span>${labels.pupil.additionalData} :</span>
+                            <span>${labels.teacher.additionalData} :</span>
                         </div>
                         <div sclass="full">
                             <textbox rows="6" value="@bind(fx.personalData.additionalData)"/>
                         </div>
                         <div>
-                            <span>${labels.pupil.status.change}</span>
+                            <span>${labels.teacher.status.change}</span>
 
                             <zscript><![CDATA[
                                     activeList = new Boolean[] {true, false};
@@ -76,15 +76,15 @@
                             </zscript>
                             <radiogroup id="active" selectedItem="@bind(fx.personalData.active)" model="@load(activeList)">
                             <template name="model">
-                                <radio label="@load(each ? labels.pupil.status.active : labels.pupil.status.suspend)" value="@load(each)"></radio>
+                                <radio label="@load(each ? labels.teacher.status.active : labels.teacher.status.suspend)" value="@load(each)"></radio>
                             </template>
                             </radiogroup>
 
                         </div>
                         <div sclass="mt10">
-                            <span>${labels.pupil.skills.label} :</span>
+                            <span>${labels.teacher.skills.label} :</span>
                             <textbox value="todo in next iteration"/>
-                            <span>${labels.pupil.opendebt.label} :</span>
+                            <span>${labels.teacher.opendebt.label} :</span>
                             <textbox value="todo in next iteration"/>
                         </div>
                     <separator/>
@@ -94,10 +94,10 @@
                     <button label="${labels.button.clear}" onClick="@command('clearForm')"/>
                 </tabpanel>
                 <tabpanel>
-                    <include src="/people/courses.zul" />
+                    <include src="/people/coursesTeacher.zul" />
                 </tabpanel>
                 <tabpanel>
-                    <include src="/people/classes.zul" />
+                    <include src="/people/classesTeacher.zul" />
                 </tabpanel>
             </tabpanels>
         </tabbox>

@@ -14,9 +14,15 @@ public interface AttendantRepository extends JpaRepository<Attendant, Long> {
 
   @Query("Select a from Attendant a " +
           "join a.personalData p " +
-          "where upper(p.name) LIKE upper(CONCAT('%',:keyword,'%'))")
-  List<Attendant> findAllByName(@Param("keyword") String keyword);
+          "where upper(p.name) LIKE upper(CONCAT('%',:keyword,'%')) " +
+          "and a.pupil = true")
+  List<Attendant> findAllPupilsByName(@Param("keyword") String keyword);
 
+  @Query("Select a from Attendant a " +
+          "join a.personalData p " +
+          "where upper(p.name) LIKE upper(CONCAT('%',:keyword,'%')) " +
+          "and a.pupil = false")
+  List<Attendant> findAllTeachersByName(@Param("keyword") String keyword);
 
 //  @Query("Select a from Attendant a " +
 //          "join a.personalData p " +
@@ -28,12 +34,21 @@ public interface AttendantRepository extends JpaRepository<Attendant, Long> {
   //todo: needs to implement sql query
   @Query("Select a from Attendant a " +
           "left join a.personalData p " +
-          "where p.active = true")
+          "where p.active = true " +
+          "and a.pupil = true")
   List<Attendant> findNonEnrolled();
 
   //todo: needs to implement sql query
   @Query("Select a from Attendant a " +
           "left join a.personalData p " +
-          "where p.active = false")
+          "where p.active = false " +
+          "and a.pupil = true")
   List<Attendant> findOpenDepts();
+
+  //todo: needs to implement sql query
+  @Query("Select a from Attendant a " +
+          "left join a.personalData p " +
+          "where p.active = false " +
+          "and a.pupil = false")
+  List<Attendant> findPendingSalaries();
 }

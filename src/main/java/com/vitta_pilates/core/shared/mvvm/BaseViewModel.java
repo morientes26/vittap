@@ -4,12 +4,9 @@ import com.vitta_pilates.core.shared.component.MessageBox;
 import com.vitta_pilates.core.shared.service.EntityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 
-import javax.persistence.Entity;
-
+import java.util.List;
 
 public class BaseViewModel<T> {
 
@@ -23,8 +20,13 @@ public class BaseViewModel<T> {
     this.entity = entity;
   }
 
-  @Command
-  @NotifyChange(".")
+  public void submit(){
+    service.save(entity);
+    log.info("Save tarif {}", entity);
+    //FIXME: component has to refresh by its self without redirect
+    Executions.sendRedirect(null);
+  }
+
   public void delete(){
     new MessageBox.MessageBoxBuilder().setDefaultConfirmDialog(() -> {
       if (service.delete(entity)) {

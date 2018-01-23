@@ -1,0 +1,71 @@
+<zk>
+    <div id="courses">
+        <div sclass="pagination">
+            <!-- kalendarova paginacia" -->
+            <button label="${labels.control.left}"
+                    onClick="@command('calendarControlProgramInstance',direction='left')"/>
+
+            <label sclass="bold" value="@load(vm.month)" />
+
+            <button label="${labels.control.right}"
+                    onClick="@command('calendarControlProgramInstance',direction='right')" />
+
+            <button label="${labels.control.print}" style="float: right"/>
+            <button label="${labels.control.enroll}" style="float: right" />
+        </div>
+        <div sclass="list">
+            <listbox model="@load(vm.teacherProgramInstances)" emptyMessage="${labels.info.emptymessages}"
+                     selectedItem="@bind(vm.selectedProgramInstance)" mold="paging" pageSize="5"
+                     style="margin-top:10px">
+                <listhead sizable="true">
+                    <listheader label="${labels.id}" width="2%"/>
+                    <listheader label="${labels.teacher.classtype}" width="23%"/>
+                    <listheader label="${labels.teacher.payed}" width="25%"/>
+                    <listheader label="${labels.teacher.visit}" width="25%"/>
+                    <listheader label="${labels.teacher.notes}" width="25%"/>
+                </listhead>
+                <template name="model" var="ci">
+                    <listitem>
+                        <listcell label="@load(ciStatus.index+1)" ></listcell>
+                        <listcell label="@load(ci.program.programTemplate.name)" ></listcell>
+                        <listcell label="todo: actual_visits (max vis.)" ></listcell>
+                        <listcell label="todo: payed (total prize)" ></listcell>
+                        <listcell label="@load(ci.notes)" ></listcell>
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+
+        <separator/>
+
+        <div sclass="detail" visible="@load(not empty vm.selectedProgramInstance.trueTime)">
+
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.startdate} :"/>
+                <label value="@load(vm.selectedProgramInstance.trueTime)" />
+                <label sclass="bold" value="${labels.teacher.enddate} :"/>
+                <label value="@load(vm.selectedProgramInstance.trueTime)" />
+            </div>
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.classtype} :"/>
+                <label value="@load(vm.selectedProgramInstance.program.programTemplate.name)" />
+            </div>
+
+            <div >
+                <label sclass="bold" value="${labels.teacher.commision} :"/>
+                <textbox value="todo: price" />
+                <label sclass="bold" value="${labels.teacher.payed} :"/>
+                <textbox value="todo: payed" />
+                <label sclass="bold" value="${labels.teacher.status.label} :"/>
+                <textbox value="todo: active/suspended/cancelled" />
+            </div>
+            <div sclass="full">
+                <label sclass="bold" value="${labels.teacher.notes} :"/>
+                <textbox rows="4" value="@load(vm.selectedProgramInstance.notes)" />
+            </div>
+            <div sclass="full">
+                <button label="${labels.button.save}" />
+            </div>
+        </div>
+    </div>
+</zk>

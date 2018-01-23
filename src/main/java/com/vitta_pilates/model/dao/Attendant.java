@@ -34,6 +34,8 @@ public class Attendant {
     @ManyToMany(mappedBy = "attendedPupils")
     private Set<ProgramInstance> programInstances;
 
+    private boolean pupil = true;
+
 
     //note: it should be in service layer together with persistance operation
     public void registerUser(User user) {
@@ -155,5 +157,13 @@ public class Attendant {
 
     public void setProgramInstances(Set<ProgramInstance> programInstances) {
         this.programInstances = programInstances;
+    }
+
+    public boolean isPupil() {
+        return pupil;
+    }
+
+    public void setPupil(boolean pupil) {
+        this.pupil = pupil;
     }
 }

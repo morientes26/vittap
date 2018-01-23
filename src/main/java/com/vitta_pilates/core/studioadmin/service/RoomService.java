@@ -6,6 +6,7 @@ import com.vitta_pilates.model.repository.RoomRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,29 +20,8 @@ public class RoomService extends EntityService<Room> {
 	@Autowired
 	RoomRepository repository;
 
-	@Transactional
-	public Room save(Room room){
-		return repository.save(room);
-	}
-
-	@Override
-	public boolean delete(Room room){
-
-		try {
-			repository.delete(room);
-		} catch (Exception e) {
-			log.warn("Cannot delete item {}", room);
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public Room findOne(long id){ return repository.findOne(id); }
-
-	@Override
-	public List<Room> getAll(){
-		return repository.findAll();
+	public RoomService(JpaRepository repository) {
+		super(repository);
 	}
 
 	public List<Room> findByNameOrDescription(String keyword){

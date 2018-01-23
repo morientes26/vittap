@@ -31,17 +31,14 @@ public class TarifViewModel {
 
   @Command
   @NotifyChange("tarifList")
-  public void search(){
+  public void search() {
     tarifList = service.findByKeywords(keyword);
   }
 
   @Command
   @NotifyChange({"tarifList", "selected"})
   public void submit(){
-    service.save(selected);
-    log.info("Save tarif {}", selected);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<Tarif>(service, selected).submit();
   }
 
   @Command

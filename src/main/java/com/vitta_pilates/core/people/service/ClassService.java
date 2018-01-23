@@ -8,6 +8,7 @@ import com.vitta_pilates.model.repository.ClassRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,21 +25,8 @@ public class ClassService extends EntityService<com.vitta_pilates.model.dao.Clas
   @Autowired
   ClassInstanceRepository classInstanceRepository;
 
-  @Transactional
-  public com.vitta_pilates.model.dao.Class save(com.vitta_pilates.model.dao.Class entity) {
-    log.debug("Save entity Class {}", entity);
-    return repository.save(entity);
-  }
-
-  public boolean delete(com.vitta_pilates.model.dao.Class entity) {
-    log.debug("Delete entity Class{}", entity);
-    try {
-      repository.delete(entity);
-    } catch (Exception e) {
-      log.warn("Cannot delete item {}", entity);
-      return false;
-    }
-    return true;
+  public ClassService(JpaRepository repository) {
+    super(repository);
   }
 
   @Transactional
@@ -47,13 +35,4 @@ public class ClassService extends EntityService<com.vitta_pilates.model.dao.Clas
     instance.execute(teacher, pupils);
     return classInstanceRepository.save(instance);
   }
-
-  public com.vitta_pilates.model.dao.Class findOne(long id) {
-    return repository.findOne(id);
-  }
-
-  public List<com.vitta_pilates.model.dao.Class> getAll() {
-    return repository.findAll();
-  }
-
 }

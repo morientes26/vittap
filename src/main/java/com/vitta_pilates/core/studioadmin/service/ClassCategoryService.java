@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,29 +23,8 @@ public class ClassCategoryService extends EntityService<ClassCategory> {
 	@Autowired
 	ClassCategoryRepository repository;
 
-	@Override
-	@Transactional
-	public ClassCategory save(ClassCategory category){
-		return repository.save(category);
-	}
-
-  @Override
-  public boolean delete(ClassCategory category){
-    try {
-      repository.delete(category);
-    } catch (Exception e) {
-      log.warn("Cannot delete item {}", category);
-      return false;
-    }
-    return true;
-  }
-
-  @Override
-	public ClassCategory findOne(long id){ return repository.findOne(id); }
-
-  @Override
-	public List<ClassCategory> getAll(){
-		return repository.findAll();
+	public ClassCategoryService(JpaRepository repository) {
+		super(repository);
 	}
 
 	public List<ClassCategory> findByNameOrDescription(String keyword){

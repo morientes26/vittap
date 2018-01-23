@@ -45,10 +45,7 @@ public class ProgramTemplateViewModel {
   @Command
   @NotifyChange({"programTemplateList", "selectedProgramTemplate"})
   public void submit(){
-    service.save(selectedProgramTemplate);
-    log.info("Save programTemplate {}", selectedProgramTemplate);
-    //FIXME: component has to refresh by its self without redirect
-    Executions.sendRedirect(null);
+    new BaseViewModel<ProgramTemplate>(service, selectedProgramTemplate).submit();
   }
 
   @Command

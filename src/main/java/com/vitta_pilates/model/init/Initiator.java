@@ -140,6 +140,8 @@ public class Initiator  {
     classInstance = classInstanceRepository.save(classInstance);
 
     Attendant teacher = pupils.get(0);
+    teacher.setPupil(false);
+    pupils.set(0, attendantRepository.save(teacher));
 
     classService.executeInstance(classInstance, teacher, pupils.get(1), pupils.get(2), pupils.get(3));
 
@@ -171,6 +173,7 @@ public class Initiator  {
     ProgramInstance programInstance = new ProgramInstance(c.getTime(), ProgramInstanceStatus.EXECUTED);
     programInstance.setProgram(program);
     programInstance.setAttendedPupils(Arrays.asList(pupils.get(1)));
+    programInstance.setTrueAttendingTeacher(pupils.get(0));
     programInstanceRepository.save(programInstance);
   }
 

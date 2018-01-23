@@ -1,10 +1,9 @@
 package com.vitta_pilates.core.shared.service;
 
 
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.persistence.Entity;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -12,24 +11,33 @@ import java.util.List;
 //note: has problem with autowired dependency in spring
 public abstract class EntityService <T>{
 
+  JpaRepository repository;
+
+  public EntityService(JpaRepository repository){
+    this.repository = repository;
+  }
+
   @Transactional
   public T save(T entity){
-    throw new NotImplementedException();
+    return (T)repository.save(entity);
   }
 
   public boolean delete(T entity){
-    throw new NotImplementedException();
+    try {
+      repository.delete(entity);
+    } catch (Exception e) {
+      return false;
+    }
+    return true;
   }
 
   public T findOne(long id){
-    throw new NotImplementedException();
+
+    return (T)repository.findOne(id);
   }
 
   public List<T> getAll(){
-    throw new NotImplementedException();
+    return (List<T>)repository.findAll();
   }
 
-  public List<T> findByKeywords(String keyword){
-    throw new NotImplementedException();
-  }
 }
