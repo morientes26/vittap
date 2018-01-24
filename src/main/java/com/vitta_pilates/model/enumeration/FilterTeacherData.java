@@ -1,4 +1,4 @@
-package com.vitta_pilates.model.dao;
+package com.vitta_pilates.model.enumeration;
 
 import org.zkoss.util.resource.Labels;
 

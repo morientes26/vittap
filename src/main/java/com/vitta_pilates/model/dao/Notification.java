@@ -1,5 +1,7 @@
 package com.vitta_pilates.model.dao;
 
+import com.vitta_pilates.model.enumeration.NotificationType;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;

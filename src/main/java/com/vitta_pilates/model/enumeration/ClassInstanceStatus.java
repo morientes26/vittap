@@ -1,4 +1,4 @@
-package com.vitta_pilates.model.dao;
+package com.vitta_pilates.model.enumeration;
 
 public enum ClassInstanceStatus {
     CREATED/**new occurrence scheduled*/, 

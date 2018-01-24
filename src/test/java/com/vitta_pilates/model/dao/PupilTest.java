@@ -1,24 +1,19 @@
 package com.vitta_pilates.model.dao;
 
-import com.google.common.collect.Lists;
 import com.vitta_pilates.Application;
 import com.vitta_pilates.core.people.service.ClassService;
 import com.vitta_pilates.core.people.service.PupilService;
+import com.vitta_pilates.model.enumeration.ClassInstanceStatus;
+import com.vitta_pilates.model.enumeration.ReccurenceType;
 import com.vitta_pilates.model.repository.*;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -103,9 +98,9 @@ public class PupilTest {
     ClassTemplate classTemplate = new ClassTemplate("t 1","desc 1", classCategory);
     classTemplate = classTemplateRepository.save(classTemplate);
 
-    Calendar c = Calendar.getInstance();
+    java.util.Calendar c = java.util.Calendar.getInstance();
     c.setTime(new Date());
-    c.add(Calendar.HOUR, -48);
+    c.add(java.util.Calendar.HOUR, -48);
 
     ClassInstance classInstance = new ClassInstance( c.getTime());
 
@@ -183,9 +178,9 @@ public class PupilTest {
     Attendant pupil1 = attendants.get(1);
     ClassInstance ci = classService.executeInstance(this.clazz.getInstances().get(0), attendant, pupil1);
 
-    Calendar c = Calendar.getInstance();
+    java.util.Calendar c = java.util.Calendar.getInstance();
     c.setTime(new Date());
-    c.add(Calendar.MONTH, -1);
+    c.add(java.util.Calendar.MONTH, -1);
 
     List<ClassInstance> result = classInstanceRepository.findByPupilAndDate(
             pupil1.getId(),
@@ -200,9 +195,9 @@ public class PupilTest {
   @Test
   public void testGetAllProgramInstanceByAttendentAndDate() {
 
-    Calendar c = Calendar.getInstance();
+    java.util.Calendar c = java.util.Calendar.getInstance();
     c.setTime(new Date());
-    c.add(Calendar.HOUR, -48);
+    c.add(java.util.Calendar.HOUR, -48);
 
     Attendant pupil1 = new Attendant(new PersonalData("test","test"));
     pupil1 = attendantRepository.save(pupil1);

@@ -1,6 +1,6 @@
 package com.vitta_pilates.auth.service;
 
-import com.vitta_pilates.model.dao.LevelOfAccess;
+import com.vitta_pilates.model.enumeration.LevelOfAccess;
 
 import java.io.Serializable;
 import java.util.ArrayList;

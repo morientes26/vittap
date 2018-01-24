@@ -2,17 +2,18 @@ package com.vitta_pilates.model.init;
 
 
 import com.vitta_pilates.core.people.service.ClassService;
-import com.vitta_pilates.core.people.service.PupilService;
 import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.dao.Class;
+import com.vitta_pilates.model.enumeration.LevelOfAccess;
+import com.vitta_pilates.model.enumeration.ReccurenceType;
 import com.vitta_pilates.model.repository.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Calendar;
 import java.util.stream.IntStream;
 
 @Configuration

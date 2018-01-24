@@ -2,6 +2,7 @@ package com.vitta_pilates.core.people.service;
 
 import com.vitta_pilates.core.shared.service.EntityService;
 import com.vitta_pilates.model.dao.*;
+import com.vitta_pilates.model.enumeration.FilterTeacherData;
 import com.vitta_pilates.model.repository.AttendantRepository;
 import com.vitta_pilates.model.repository.ClassInstanceRepository;
 import com.vitta_pilates.model.repository.ProgramInstanceRepository;

@@ -3,7 +3,7 @@ package com.vitta_pilates.auth.controller;
 import com.vitta_pilates.auth.service.AuthenticationService;
 import com.vitta_pilates.auth.service.UserCredential;
 
-import com.vitta_pilates.model.dao.LevelOfAccess;
+import com.vitta_pilates.model.enumeration.LevelOfAccess;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;

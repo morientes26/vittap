@@ -1,9 +1,7 @@
 package com.vitta_pilates.model.dao;
 
 import com.vitta_pilates.Application;
-import com.vitta_pilates.model.dao.LevelOfAccess;
-import com.vitta_pilates.model.dao.Role;
-import com.vitta_pilates.model.dao.User;
+import com.vitta_pilates.model.enumeration.LevelOfAccess;
 import com.vitta_pilates.model.repository.RoleRepository;
 import com.vitta_pilates.model.repository.UserRepository;
 import org.junit.Before;

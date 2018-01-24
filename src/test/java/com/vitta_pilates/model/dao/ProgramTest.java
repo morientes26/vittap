@@ -1,7 +1,7 @@
 package com.vitta_pilates.model.dao;
 
 import com.vitta_pilates.Application;
-import com.vitta_pilates.model.dao.*;
+import com.vitta_pilates.model.enumeration.ReccurenceType;
 import com.vitta_pilates.model.repository.ProgramRepository;
 import com.vitta_pilates.model.repository.TarifRepository;
 import org.junit.Before;

@@ -3,7 +3,7 @@ package com.vitta_pilates.core.people.service;
 import com.vitta_pilates.core.shared.service.EntityService;
 import com.vitta_pilates.model.dao.Attendant;
 import com.vitta_pilates.model.dao.ClassInstance;
-import com.vitta_pilates.model.dao.FilterData;
+import com.vitta_pilates.model.enumeration.FilterData;
 import com.vitta_pilates.model.dao.ProgramInstance;
 import com.vitta_pilates.model.repository.AttendantRepository;
 import com.vitta_pilates.model.repository.ClassInstanceRepository;
@@ -11,7 +11,6 @@ import com.vitta_pilates.model.repository.ProgramInstanceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

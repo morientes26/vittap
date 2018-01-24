@@ -1,7 +1,8 @@
 package com.vitta_pilates.model.dao;
 
+import com.vitta_pilates.model.enumeration.ClassInstanceStatus;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity

@@ -1,5 +1,9 @@
 package com.vitta_pilates.model.dao;
 
+import com.vitta_pilates.model.enumeration.DayOfWeek;
+import com.vitta_pilates.model.enumeration.Month;
+import com.vitta_pilates.model.enumeration.ReccurenceType;
+
 import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Date;

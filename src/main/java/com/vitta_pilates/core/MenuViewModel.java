@@ -2,7 +2,7 @@ package com.vitta_pilates.core;
 
 import com.vitta_pilates.auth.service.AuthenticationService;
 import com.vitta_pilates.auth.service.UserCredential;
-import com.vitta_pilates.model.dao.LevelOfAccess;
+import com.vitta_pilates.model.enumeration.LevelOfAccess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.Init;

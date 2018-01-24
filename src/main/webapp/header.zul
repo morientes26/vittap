@@ -29,7 +29,11 @@
 
     <!-- menu for teacher role -->
     <menubar autodrop="true" visible="@load(vm.teacher)">
-        <menu label="${labels.menu.events}" />
+        <menu label="${labels.menu.events}">
+            <menupopup>
+                <menuitem label="${labels.menu.events}" href="/event/calendar.zul"/>
+            </menupopup>
+        </menu>
 
         <menu label="${labels.menu.people}">
             <menupopup>

@@ -4,6 +4,7 @@
     <hbox self="@define(content)" vflex="1" hflex="1" align="center"
           pack="center" spacing="20px" style="background-image: url('/img/bg.jpg'); background-size: 100% 100%;">
         <vlayout>
+
             <window id="loginWin"
                     apply="com.vitta_pilates.auth.controller.LoginController"
                     title="${labels.login.title}" border="normal" hflex="min">
@@ -30,7 +31,11 @@
 
                 </vbox>
             </window>
-            (use test login name='admin' and password='test' to login)
+
+            <div align="right">
+                <!-- fixme: getting from pom.xml -->
+                <label value="version. 0.2.2" />
+            </div>
         </vlayout>
     </hbox>
 </zk>

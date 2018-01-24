@@ -2,8 +2,8 @@ package com.vitta_pilates.model.dao;
 
 import com.vitta_pilates.Application;
 import com.vitta_pilates.core.people.service.ClassService;
-import com.vitta_pilates.core.people.service.PupilService;
 import com.vitta_pilates.core.people.service.TeacherService;
+import com.vitta_pilates.model.enumeration.ReccurenceType;
 import com.vitta_pilates.model.repository.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,9 +97,9 @@ public class TeacherTest {
     ClassTemplate classTemplate = new ClassTemplate("t 1","desc 1", classCategory);
     classTemplate = classTemplateRepository.save(classTemplate);
 
-    Calendar c = Calendar.getInstance();
+    java.util.Calendar c = java.util.Calendar.getInstance();
     c.setTime(new Date());
-    c.add(Calendar.HOUR, -48);
+    c.add(java.util.Calendar.HOUR, -48);
 
     ClassInstance classInstance = new ClassInstance( c.getTime());
 
@@ -138,9 +138,9 @@ public class TeacherTest {
     Attendant pupil1 = attendants.get(1);
     ClassInstance ci = classService.executeInstance(this.clazz.getInstances().get(0), teacher, pupil1);
 
-    Calendar c = Calendar.getInstance();
+    java.util.Calendar c = java.util.Calendar.getInstance();
     c.setTime(new Date());
-    c.add(Calendar.MONTH, -1);
+    c.add(java.util.Calendar.MONTH, -1);
 
     List<ClassInstance> result = classInstanceRepository.findByTeacherAndDate(
             teacher.getId(),
@@ -155,9 +155,9 @@ public class TeacherTest {
   @Test
   public void testGetAllProgramInstanceByTeacherAndDate() {
 
-    Calendar c = Calendar.getInstance();
+    java.util.Calendar c = java.util.Calendar.getInstance();
     c.setTime(new Date());
-    c.add(Calendar.HOUR, -48);
+    c.add(java.util.Calendar.HOUR, -48);
 
     Attendant teacher = new Attendant(new PersonalData("test","test"));
     teacher = attendantRepository.save(teacher);
