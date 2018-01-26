@@ -8,7 +8,21 @@
             viewModel="@id('vm') @init('com.vitta_pilates.core.event.mvvm.CalendarViewModel')"
             title="${labels.event.title}" width="100%" border="normal">
 
-        <hlayout width="100%" height="100%" sclass="filter-panel">
+        <hlayout sclass="tab-panel">
+
+            <label value="${labels.event.tabs.value} :" />
+            <a href="/" label="${labels.event.tab.tree}" /> /
+            <a href="/" label="${labels.event.tab.week}" />
+            <combobox id="filterS" placeholder="${labels.event.filter.show}"
+                      onChange="@command('search')"
+                      model="@load(vm.listFilterShow)" selectedItem="@bind(vm.filterType)">
+                <template name="model">
+                    <comboitem label="@bind(each)" value="@bind(each)"/>
+                </template>
+            </combobox>
+        </hlayout>
+
+        <hlayout sclass="filter-panel">
 
                 <combobox id="filter" placeholder="${labels.event.filter.type}"
                           onChange="@command('search')"
@@ -24,23 +38,23 @@
         </hlayout>
 
         <hlayout sclass="control-panel">
-                <button label="${labels.control.left}"
+                <button label="${labels.control.left}" height="40px"
                         onClick="@command('left',direction='left')"/>
 
-                <label sclass="bold" value="15 - 22 Jan" />
-
-                <button label="${labels.control.right}"
+                <vlayout>
+                    <label sclass="bold" value="15 - 22 Jan" />
+                    <label value="Week 3" />
+                </vlayout>
+                <button label="Today 26.01.2018" height="40px" />
+                <button label="${labels.control.right}" height="40px"
                         onClick="@command('right',direction='right')" />
-
-                <button label="Today 23.01.2018" style="float: right"/>
-
         </hlayout>
 
         <separator/>
 
-        <hlayout width="100%" height="100%" sclass="calendar">
-            <vlayout sclass="calendar-column">
-                <div><label sclass="calendar-title" value="@load(vm.calendar.header[0])"/></div>
+        <hlayout spacing="0" width="100%" height="100%" sclass="calendar">
+            <vlayout spacing="0" sclass="calendar-column-time">
+                <label sclass="calendar-title" value="@load(vm.calendar.header[0])"/>
                 <zk forEach="${vm.calendar.time}">
                     <div forEach="${each}" sclass="calendar-row">
                         <label value="${each}"/>
@@ -48,113 +62,38 @@
                 </zk>
             </vlayout>
 
-            <vlayout sclass="calendar-column">
-                <div><label sclass="calendar-title" value="@load(vm.calendar.header[1])"/></div>
-                <zk forEach="${vm.calendar.hours[0]}" >
+            <vlayout spacing="0" sclass="calendar-column">
+                <label sclass="calendar-title" value="@load(vm.calendar.header[1])"/>
+                <zk forEach="${vm.calendar.hours[0]}">
                     <div forEach="${each}" sclass="calendar-row">
-                        <span if="${each.active==false}" onClick="@command('select', id=self.getAttribute('event'))">
-                            <custom-attributes event="${each.id}"/>.
-                        </span>
-                        <label sclass="calendar-event" onClick="@command('select', id=self.getAttribute('event'))"
-                               if="${each.active}" value="${each.name}" style="background-color:${each.color}">
-                            <custom-attributes event="${each.id}"/>
-                        </label>
+                        <include src="/event/row.zul" />
                     </div>
                 </zk>
             </vlayout>
 
-            <vlayout sclass="calendar-column">
-            <div><label sclass="calendar-title" value="@load(vm.calendar.header[2])"/></div>
+            <vlayout spacing="0" sclass="calendar-column">
+            <label sclass="calendar-title" value="@load(vm.calendar.header[2])"/>
                 <zk forEach="${vm.calendar.hours[1]}">
                     <div forEach="${each}" sclass="calendar-row">
-                        <span if="${each.active==false}" onClick="@command('select', id=self.getAttribute('event'))">
-                            <custom-attributes event="${each.id}"/>.
-                        </span>
-                        <label sclass="calendar-event" onClick="@command('select', id=self.getAttribute('event'))"
-                               if="${each.active}" value="${each.name}" style="background-color:${each.color}">
-                            <custom-attributes event="${each.id}"/>
-                        </label>
+                        <include src="/event/row.zul" />
                     </div>
                 </zk>
             </vlayout>
 
-            <vlayout sclass="calendar-column">
-            <div><label sclass="calendar-title" value="@load(vm.calendar.header[3])"/></div>
+            <vlayout spacing="0" sclass="calendar-column">
+            <label sclass="calendar-title" value="@load(vm.calendar.header[3])"/>
                 <zk forEach="${vm.calendar.hours[2]}">
                     <div forEach="${each}" sclass="calendar-row">
-                        <span if="${each.active==false}" onClick="@command('select', id=self.getAttribute('event'))">
-                            <custom-attributes event="${each.id}"/>.
-                        </span>
-                        <label sclass="calendar-event" onClick="@command('select', id=self.getAttribute('event'))"
-                               if="${each.active}" value="${each.name}" style="background-color:${each.color}">
-                            <custom-attributes event="${each.id}"/>
-                        </label>
+                        <include src="/event/row.zul" />
                     </div>
                 </zk>
             </vlayout>
 
-            <vlayout sclass="calendar-column">
-                <div><label sclass="calendar-title" value="@load(vm.calendar.header[4])"/></div>
-                <zk forEach="${vm.calendar.hours[3]}">
-                    <div forEach="${each}" sclass="calendar-row">
-                        <span if="${each.active==false}" onClick="@command('select', id=self.getAttribute('event'))">
-                            <custom-attributes event="${each.id}"/>.
-                        </span>
-                        <label sclass="calendar-event" onClick="@command('select', id=self.getAttribute('event'))"
-                               if="${each.active}" value="${each.name}" style="background-color:${each.color}">
-                            <custom-attributes event="${each.id}"/>
-                        </label>
-                    </div>
-                </zk>
-            </vlayout>
-
-            <vlayout sclass="calendar-column">
-                <div><label sclass="calendar-title" value="@load(vm.calendar.header[5])"/></div>
-                <zk forEach="${vm.calendar.hours[4]}">
-                    <div forEach="${each}" sclass="calendar-row">
-                        <span if="${each.active==false}" onClick="@command('select', id=self.getAttribute('event'))">
-                            <custom-attributes event="${each.id}"/>.
-                        </span>
-                        <label sclass="calendar-event" onClick="@command('select', id=self.getAttribute('event'))"
-                               if="${each.active}" value="${each.name}" style="background-color:${each.color}">
-                            <custom-attributes event="${each.id}"/>
-                        </label>
-                    </div>
-                </zk>
-            </vlayout>
-
-            <vlayout sclass="calendar-column">
-                <div><label sclass="calendar-title" value="@load(vm.calendar.header[6])"/></div>
-                <zk forEach="${vm.calendar.hours[5]}">
-                    <div forEach="${each}" sclass="calendar-row">
-                        <span if="${each.active==false}" onClick="@command('select', id=self.getAttribute('event'))">
-                            <custom-attributes event="${each.id}"/>.
-                        </span>
-                        <label sclass="calendar-event" onClick="@command('select', id=self.getAttribute('event'))"
-                               if="${each.active}" value="${each.name}" style="background-color:${each.color}">
-                            <custom-attributes event="${each.id}"/>
-                        </label>
-                    </div>
-                </zk>
-            </vlayout>
-
-            <vlayout sclass="calendar-column">
-                <div><label sclass="calendar-title" value="@load(vm.calendar.header[7])"/></div>
-                <zk forEach="${vm.calendar.hours[6]}">
-                    <div forEach="${each}" sclass="calendar-row">
-                        <span if="${each.active==false}" onClick="@command('select', id=self.getAttribute('event'))">
-                            <custom-attributes event="${each.id}"/>.
-                        </span>
-                        <label sclass="calendar-event" onClick="@command('select', id=self.getAttribute('event'))"
-                               if="${each.active}" value="${each.name}" style="background-color:${each.color}">
-                            <custom-attributes event="${each.id}"/>
-                        </label>
-                    </div>
-                </zk>
-            </vlayout>
 
         </hlayout>
 
+        <label value="clict to event id: "/>
+        <label value="@bind(vm.clickId)"/>
 
     </window>
 </zk>

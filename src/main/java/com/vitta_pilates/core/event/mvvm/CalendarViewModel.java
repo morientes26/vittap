@@ -1,14 +1,14 @@
 package com.vitta_pilates.core.event.mvvm;
 
 
-import com.vitta_pilates.core.shared.component.MessageBox;
+import com.vitta_pilates.model.dao.Box;
 import com.vitta_pilates.model.dao.Calendar;
-import com.vitta_pilates.model.dao.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
@@ -23,34 +23,39 @@ public class CalendarViewModel {
   private final Logger log = LoggerFactory.getLogger(CalendarViewModel.class);
 
   private Calendar calendar;
-  private Event selected;
+  private Box selected;
 
-  private List<String> listFilterType = Arrays.asList("type 1", "type 2", "type 3");
+  private List<String> listFilterType = Arrays.asList("Teacher", "ClassType");
+  private List<String> listFilterShow = Arrays.asList("ClassType","Empty Seats Class", "Empty Seats Course");
   private String filterType;
   private String filterValue;
 
+  private String clickId = "";
+
   @Command(value = "select")
+  @NotifyChange("clickId")
   public void select(@BindingParam("id") String id){
     checkNotNull(id);
+    clickId = id;
 
-    selected = findEventById(id);
-    if (selected.active) {
-      log.info("select event : {}", findEventById(id).getName());
-      new MessageBox.MessageBoxBuilder("Info",
-              "You have clicked on the event '"+selected.getName()+" with ID: "+selected.getId())
-              .createMessageBox();
-    } else {
-      log.info(findEventById(id).getId());
-      new MessageBox.MessageBoxBuilder("Info",
-              "You have clicked here, but there is no event yet. ID of box is: "+selected.getId())
-              .createMessageBox();
-    }
+//    selected = findEventById(id);
+//    if (selected.active) {
+//      log.info("select event : {}", findEventById(id).getName());
+//      new MessageBox.MessageBoxBuilder("Info",
+//              "You have clicked on the event '"+selected.getName()+" with ID: "+selected.getId())
+//              .createMessageBox();
+//    } else {
+//      log.info(findEventById(id).getId());
+//      new MessageBox.MessageBoxBuilder("Info",
+//              "You have clicked here, but there is no event yet. ID of box is: "+selected.getId())
+//              .createMessageBox();
+//    }
   }
 
   @Init
   public void init(){
 
-    this.calendar = new Calendar(7, 24);
+    this.calendar = new Calendar(7, 26);
   }
 
   public Calendar getCalendar() {
@@ -89,16 +94,28 @@ public class CalendarViewModel {
     this.filterValue = filterValue;
   }
 
-  public Event getSelected() {
+  public Box getSelected() {
     return selected;
   }
 
-  public void setSelected(Event selected) {
+  public void setSelected(Box selected) {
     this.selected = selected;
   }
 
+  public List<String> getListFilterShow() {
+    return listFilterShow;
+  }
+
+  public String getClickId() {
+    return clickId;
+  }
+
+  public void setClickId(String clickId) {
+    this.clickId = clickId;
+  }
+
   //FIXME: refactor this nonseance
-  private Event findEventById(String id){
+  private Box findEventById(String id){
     String[] ident = id.split("_");
     return calendar.getHours()[Integer.valueOf(ident[0])][Integer.valueOf(ident[1])];
   }

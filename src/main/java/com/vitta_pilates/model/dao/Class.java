@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * scheduled Event (1 Created repeatable event in the schedule)
+ * scheduled Box (1 Created repeatable event in the schedule)
  */
 @Entity
 public class Class {
@@ -31,7 +31,7 @@ public class Class {
     private Attendant conductingTeacher; // optional : enrolled teacher
 
     @OneToMany(mappedBy = "clazz", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<ClassInstance> instances; // result of Event Schedule
+    private List<ClassInstance> instances; // result of Box Schedule
 
     public Class(){
     }

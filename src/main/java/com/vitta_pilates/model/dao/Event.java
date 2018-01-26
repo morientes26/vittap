@@ -1,22 +1,30 @@
 package com.vitta_pilates.model.dao;
 
-public class Event {
 
+public class Event {
   private String id;
   private String name;
   private String color;
-  public  boolean active;
+  private int count;
+  private String img;
+  private boolean active;
 
   public Event(String id){
     this.id = id;
     this.active = false;
   }
 
-  public Event(String id, String name, String color){
+  public Event(String id, String name, String color, int count, String img){
     this.id = id;
     this.name = name;
     this.color = color;
+    this.count = count;
+    this.img = img;
     this.active = true;
+  }
+
+  public void setId(String id){
+    this.id = id;
   }
 
   public String getId() {
@@ -39,11 +47,24 @@ public class Event {
     this.color = color;
   }
 
+  public int getCount() {
+    return count;
+  }
+
+  public void setCount(int count) {
+    this.count = count;
+  }
+
+  public String getImg() {
+    return img;
+  }
+
+  public void setImg(String img) {
+    this.img = img;
+  }
+
   public boolean isActive() {
     return active;
   }
 
-  public void setActive(boolean active) {
-    this.active = active;
-  }
 }

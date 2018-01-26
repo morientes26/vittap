@@ -56,37 +56,46 @@ body {
 }
 
 .calendar {
-    width: 100%;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
 }
 
 .calendar-title{
     font-weight: bold;
-    border-bottom: 2px solid darkgray;
 }
-
-.calendar-column{
+.calendar-column-time{
     display: inline-block;
     background-color: aliceblue;
+    text-align: center;
+    width: 50px;
+}
+.calendar-column{
+    display: inline-block;
+    background-color: white;
     width: 100%;
-    padding: 5px;
     text-align: center;
 }
 
 .calendar-row{
-    height: 10px;
-    margin-top:-1px;
+    border: 1px solid black;
 }
 
 .calendar-event {
     border: 0px;
     background-color: darkgray;
 }
-
+.calendar-event-image{
+    width:15px;
+}
+.tab-panel{
+    text-align: left;
+    width:320px;
+}
 .filter-panel{
-    text-align: center;
+    text-align: left;
+    width:320px;
 }
 .control-panel{
-    text-align: center;
+    text-align: left;
+    width:320px;
 }
