@@ -31,7 +31,7 @@
     <menubar autodrop="true" visible="@load(vm.teacher)">
         <menu label="${labels.menu.events}">
             <menupopup>
-                <menuitem label="${labels.menu.events}" href="/event/calendar.zul"/>
+                <menuitem label="${labels.menu.events}" href="/event-calendar"/>
             </menupopup>
         </menu>
 

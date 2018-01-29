@@ -27,7 +27,7 @@
                     <listitem>
                         <listcell label="@load(ciStatus.index+1)" ></listcell>
                         <listcell label="@load(ci.trueTime)" ></listcell>
-                        <listcell label="@load(ci.clazz.box.type.name)" ></listcell>
+                        <listcell label="@load(ci.clazz.event.type.name)" ></listcell>
                         <listcell label="todo: own/recuperated" ></listcell>
                     </listitem>
                 </template>
@@ -43,7 +43,7 @@
             </div>
             <div sclass="full">
                 <label sclass="bold" value="${labels.pupil.classtype} :"/>
-                <label value="@load(vm.selectedClassInstance.clazz.box.type.name)" />
+                <label value="@load(vm.selectedClassInstance.clazz.event.type.name)" />
             </div>
             <div sclass="full">
                 <label sclass="bold" value="${labels.pupil.classroom} :"/>

@@ -44,8 +44,8 @@
         </listbox>
 
         <separator />
-
-        <tabbox id="tb" width="100%" height="380px" mold="accordion" onSelect="@command('updateTabsData')">
+                                    <!-- mold="accordion" -->
+        <tabbox id="tb" width="100%" height="380px"  onSelect="@command('updateTabsData')">
             <tabs>
                 <tab selected="@bind(vm.showOthertabs)" label="@bind(empty fx.id ? labels.teacher.register.label : fx.personalData.name)" />
                 <tab disabled="@bind(!vm.showOthertabs)" label="${labels.teacher.courses.tab}" />

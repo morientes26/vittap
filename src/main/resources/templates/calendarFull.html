@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Calendar</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel='stylesheet' href='/static/css/fullcalendar.min.css' />
+    <script src='/static/js/lib/jquery.min.js'></script>
+    <script src='/static/js/lib/moment.min.js'></script>
+    <script src='/static/js/fullcalendar.min.js'></script>
+</head>
+<body>
+
+<div class="tab-panel">
+    <label title="Show">Show</label>
+    <select id="filterS" title="Show">
+        <option selected="selected">Class Type</option>
+        <option>Empty Seats Class</option>
+        <option>Empty Seats Course</option>
+    </select>
+
+    <label title="Filter by Type">Filter by Type</label>
+    <select id="filter" title="filter By Type">
+        <option selected="selected">By All</option>
+        <option>Teacher</option>
+        <option>Class Type</option>
+    </select>
+
+    <input type="text" placeholder="Filter by value" />
+</div>
+
+<br/>
+
+<div id="calendar"></div>
+<div>You can add event by clicking to a cell.</div>
+<button id="add">Try to add TEST event by click</button>
+</body>
+<script>
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            businessHours: {
+                dow: [ 1, 2, 3, 4, 5, 6 ], // Monday - Sanday
+                start: '09:00', // a start time (10am in this example)
+                end: '22:00', // an end time (6pm in this example)
+            },
+            hiddenDays: [ 0 ],
+            firstDay: 1,
+            minTime:"09:00",
+            maxTIme:"22:00",
+            timezone: 'local',
+            allDaySlot: false,
+            defaultView: 'agendaThreeDay',
+            editable: true,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaThreeDay,agendaDay'
+            },
+            eventLimit: true,
+            views: {
+                agendaThreeDay: {
+                    type: 'agenda',
+                    duration: { days: 3 },
+                    buttonText: '3 day',
+                    eventLimit: 3
+                }
+            },
+            selectable: true,
+            events: "/calendarData",  // read json data from controller
+
+            eventClick: function(calEvent, jsEvent, view) {
+
+                alert('Event: ' + calEvent.title);
+
+                // change the border color just for fun
+                $(this).css('border-color', 'red');
+
+            },
+            eventRender: function(event, el) {
+                // render the timezone offset below the event title
+                if (event.id=="1" || event.id=="7"|| event.id=="9" || event.id=="16") {
+                    el.find('.fc-title').after(
+                        $('<img class="image" src="/static/img/empty.png"/>')
+                    );
+                }
+                if (event.id=="3" || event.id=="10" || event.id=="15") {
+                    el.find('.fc-title').after(
+                        $('<img class="image" src="/static/img/full.png"/>')
+                    );
+                }
+                if (event.count!="0") {
+                    el.find('.fc-title').after(
+                        $('<span />').text(+event.count)
+                    );
+                }
+            },
+            select: function (start, end, jsEvent, view) {
+                var abc = prompt('Enter Title of event');
+                var newEvent = new Object();
+                newEvent.title = abc;
+                newEvent.start = moment(start).format();
+                newEvent.end = moment(start.clone().add(1,'hour')).format();
+                newEvent.allDay = false;
+                $('#calendar').fullCalendar('renderEvent', newEvent);
+            },
+        });
+
+        //---
+
+        $("#add").bind('click',  function() {
+
+            var newEvent = new Object();
+
+            newEvent.title = "some text";
+            newEvent.start = '2018-01-29T19:30:00';
+            newEvent.end = '2018-01-29T20:00:00';
+            newEvent.allDay = false;
+
+            $('#calendar').fullCalendar('renderEvent', newEvent);
+
+        });
+
+    });
+</script>
+<style type='text/css'>
+
+    body {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 14px;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    }
+
+    #calendar {
+        /*width: 900px;*/
+        width: 100%;
+        margin: 0 auto;
+    }
+    .image{
+        height:13px;
+        float:left;
+    }
+
+</style>
+</html>
