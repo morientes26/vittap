@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.IntStream;
 
+@Deprecated
 public class Calendar {
 
   private int colums;
@@ -38,14 +39,14 @@ public class Calendar {
 
     hours_idx = new int[]{25, 26, 27};
 
-    setEvent(parseDate("2018-01-25 10:00"), new Box(Arrays.asList(new Event("", "B3(2)", "#D6EAF8", 2, "/img/some.png"),new Event("","A1(2)", "#D6EAF8", 2, "/img/some.png"))));
-    setEvent(parseDate("2018-01-25 13:30"), new Box(Arrays.asList(new Event("","B3(2)", "#D6EAF8", 0, "/img/empty.png"))));
-    setEvent(parseDate("2018-01-25 15:00"), new Box(Arrays.asList(new Event("","B0(2)", "#FADBD8", 3, "/img/some.png"))));
-    setEvent(parseDate("2018-01-25 18:30"), new Box(Arrays.asList(new Event("","B3(1)", "#FAE5D3", 10, "/img/full.png"))));
-    setEvent(parseDate("2018-01-26 12:00"), new Box(Arrays.asList(new Event("","A1(1)", "#FADBD8", 2, "/img/some.png"),new Event("","A2(3)", "#D6EAF8", 4, "/img/some.png"))));
-    setEvent(parseDate("2018-01-26 09:00"), new Box(Arrays.asList(new Event("","D1", "#FADBD8", 4, "/img/some.png"))));
-    setEvent(parseDate("2018-01-27 17:00"), new Box(Arrays.asList(new Event("","C1(1)", "#FADBD8", 10, "/img/full.png"))));
-    setEvent(parseDate("2018-01-27 20:30"), new Box(Arrays.asList(new Event("","C1(1)", "#FADBD8", 0, "/img/empty.png"),new Event("","A5(3)", "#D6EAF8", 2, "/img/some.png"),new Event("","A5(3)", "#D6EAF8", 4, "/img/some.png"))));
+//    setEvent(parseDate("2018-01-25 10:00"), new Box(Arrays.asList(new Event("", "B3(2)", "#D6EAF8", 2, "/img/some.png"),new Event("","A1(2)", "#D6EAF8", 2, "/img/some.png"))));
+//    setEvent(parseDate("2018-01-25 13:30"), new Box(Arrays.asList(new Event("","B3(2)", "#D6EAF8", 0, "/img/one.png"))));
+//    setEvent(parseDate("2018-01-25 15:00"), new Box(Arrays.asList(new Event("","B0(2)", "#FADBD8", 3, "/img/some.png"))));
+//    setEvent(parseDate("2018-01-25 18:30"), new Box(Arrays.asList(new Event("","B3(1)", "#FAE5D3", 10, "/img/not-one.png"))));
+//    setEvent(parseDate("2018-01-26 12:00"), new Box(Arrays.asList(new Event("","A1(1)", "#FADBD8", 2, "/img/some.png"),new Event("","A2(3)", "#D6EAF8", 4, "/img/some.png"))));
+//    setEvent(parseDate("2018-01-26 09:00"), new Box(Arrays.asList(new Event("","D1", "#FADBD8", 4, "/img/some.png"))));
+//    setEvent(parseDate("2018-01-27 17:00"), new Box(Arrays.asList(new Event("","C1(1)", "#FADBD8", 10, "/img/not-one.png"))));
+//    setEvent(parseDate("2018-01-27 20:30"), new Box(Arrays.asList(new Event("","C1(1)", "#FADBD8", 0, "/img/one.png"),new Event("","A5(3)", "#D6EAF8", 2, "/img/some.png"),new Event("","A5(3)", "#D6EAF8", 4, "/img/some.png"))));
   }
 
   private void setEvent(Date date, Box box){
@@ -58,8 +59,8 @@ public class Calendar {
     int column = Ints.indexOf(hours_idx, day);
     int idx = (hour - 9) * 2 + minutes;
     int i = 0;
-    for (Event e  : box.getEvents())
-      e.setId(column+"_" + idx + (i++));
+//    for (Event e  : box.getEvents())
+//      e.setId(column+"_" + idx + (i++));
     hours[column][idx] = box;
   }
 

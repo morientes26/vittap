@@ -3,7 +3,10 @@ package com.vitta_pilates.model.dao;
 import com.vitta_pilates.model.enumeration.ClassInstanceStatus;
 
 import javax.persistence.*;
+
+import javax.persistence.Entity;
 import java.util.*;
+
 
 @Entity
 public class ClassInstance extends OccurrenceContent {
@@ -17,7 +20,7 @@ public class ClassInstance extends OccurrenceContent {
     @OneToOne
     private Attendant trueAttendingTeacher;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany//(cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE})
     @JoinTable(
             name = "class_instance_attendent",
             joinColumns = {@JoinColumn(name = "class_instance_id")},
@@ -40,8 +43,6 @@ public class ClassInstance extends OccurrenceContent {
         this.trueTime = trueTime;
         this.status = ClassInstanceStatus.CREATED;
     }
-
-
 
     public void execute(Attendant teacher, Attendant... pupils) {
         //this.attendance = new ClassroomAttendance(new Date(), teacher, pupils);

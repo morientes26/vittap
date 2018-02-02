@@ -3,6 +3,7 @@ package com.vitta_pilates.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class Box {
 
   public List<Event> events = new ArrayList<>();
@@ -11,7 +12,7 @@ public class Box {
 
   public Box(String idx){
     this.active = false;
-    events.add(new Event(idx));
+   // events.add(new Event(idx));
   }
 
   public Box(List<Event> events){

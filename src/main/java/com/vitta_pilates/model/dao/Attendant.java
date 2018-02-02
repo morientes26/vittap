@@ -1,5 +1,7 @@
 package com.vitta_pilates.model.dao;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.lang.*;
 import java.util.ArrayList;
@@ -28,8 +30,10 @@ public class Attendant {
     @OneToOne
     private User user; // optional
 
+    //@Cascade({org.hibernate.annotations.CascadeType.ALL})
+//cascade = {CascadeType.REMOVE, CascadeType.DETACH}
     @ManyToMany(mappedBy = "attendedPupils")
-    private Set<ClassInstance> classInstances;
+     private Set<ClassInstance> classInstances;
 
     @ManyToMany(mappedBy = "attendedPupils")
     private Set<ProgramInstance> programInstances;

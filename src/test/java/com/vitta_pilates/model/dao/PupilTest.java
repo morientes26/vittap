@@ -73,6 +73,9 @@ public class PupilTest {
   @Autowired
   private PupilService pupilService;
 
+  @Autowired
+  private LevelRepository levelRepository;
+
   @Before
   public void setUp() throws Exception {
 
@@ -92,10 +95,14 @@ public class PupilTest {
     Schedule schedule = new Schedule(new Date(), new Date(), ReccurenceType.DAILY);
     schedule = scheduleRepository.save(schedule);
 
-    ClassCategory classCategory = new ClassCategory("category 1", "desc of 1");
+    ClassCategory classCategory = new ClassCategory("cat", "desc of 1");
     classCategory = classCategoryRepository.save(classCategory);
 
     ClassTemplate classTemplate = new ClassTemplate("t 1","desc 1", classCategory);
+    Level level = new Level("1", "Basic");
+
+    level = levelRepository.save(level);
+    classTemplate.setRequiredLevel(level);
     classTemplate = classTemplateRepository.save(classTemplate);
 
     java.util.Calendar c = java.util.Calendar.getInstance();
@@ -208,6 +215,12 @@ public class PupilTest {
 
     List<ProgramInstance> result = pupilService.findProgramInstanceByPupilAndPeriod(
             pupil1, 0);
+    assertThat(result.isEmpty(), is(false));
+  }
+
+  @Test
+  public void testFilterByClassCategoryAndLevel(){
+    List<ClassInstance> result = classInstanceRepository.findByClassCategoryAndLevel("cat","1");
     assertThat(result.isEmpty(), is(false));
   }
 

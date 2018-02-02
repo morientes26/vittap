@@ -13,6 +13,7 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -24,6 +25,7 @@ public class ClassCategoryViewModel {
   private String keyword;
   private List<ClassCategory> classCategoryList;
   private ClassCategory selectedClassCategory;
+  private List<String> colors = ClassCategory.getAvailableColors();
 
   @WireVariable("classCategoryService")
   private ClassCategoryService service;
@@ -90,5 +92,9 @@ public class ClassCategoryViewModel {
 
   public void setService(ClassCategoryService service) {
     this.service = service;
+  }
+
+  public List<String> getColors() {
+    return colors;
   }
 }

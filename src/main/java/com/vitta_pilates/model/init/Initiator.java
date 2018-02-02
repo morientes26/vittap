@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalTime;
 import java.util.*;
 import java.util.Calendar;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 @Configuration
@@ -59,11 +61,17 @@ public class Initiator  {
   private ProgramInstanceRepository programInstanceRepository;
 
   @Autowired
+  private LevelRepository levelRepository;
+
+  @Autowired
   private ClassService classService;
 
-  private ClassCategory classCategory;
+  private List<ClassCategory> classCategories = new ArrayList<>();
 
   private List<Attendant> pupils;
+
+  private List<ClassInstance> classInstances = new ArrayList<>();
+
   //FIXME: for this puprose will be use FLYWAY libs instead
   // https://flywaydb.org/
   @Bean
@@ -95,7 +103,17 @@ public class Initiator  {
   }
 
   private void importClassCategories(){
-    classCategory = classCategoryRepository.save(new ClassCategory("test category 1","desc 1"));
+    ClassCategory classCategory = new ClassCategory("Category 1","desc 1");
+    classCategory.setColor(ClassCategory.GRAY);
+    classCategories.add(classCategoryRepository.save(classCategory));
+
+    ClassCategory classCategory2 = new ClassCategory("Category 2","desc 2");
+    classCategory2.setColor(ClassCategory.BLUE);
+    classCategories.add(classCategoryRepository.save(classCategory2));
+
+    ClassCategory classCategory3 = new ClassCategory("Category 3","desc 3");
+    classCategory3.setColor(ClassCategory.RED);
+    classCategories.add(classCategoryRepository.save(classCategory2));
   }
 
   private void importTarifs(){
@@ -107,7 +125,7 @@ public class Initiator  {
     IntStream.rangeClosed(1, 10).forEach(
             i -> attendants.add(
                     new Attendant(
-                            new PersonalData("personal data " + i)
+                            new PersonalData(randomName())
                     )
             )
     );
@@ -118,40 +136,65 @@ public class Initiator  {
     Room room = new Room("Room A", "desc room A");
     room = roomRepository.save(room);
 
+    Level level = new Level("1", "Basic");
+    Level level2 = new Level("2", "Intermediate");
+    Level level3 = new Level("3", "Advenced");
+    level = levelRepository.save(level);
+    levelRepository.save(Arrays.asList(level2, level3));
+
     Schedule schedule = new Schedule(new Date(), new Date(), ReccurenceType.DAILY);
     schedule = scheduleRepository.save(schedule);
 
-    ClassTemplate classTemplate = new ClassTemplate("template 1","desc 1", classCategory);
-    classTemplate = classTemplateRepository.save(classTemplate);
+    List<ClassTemplate> classTemplaties =new ArrayList<>();
+    for (int i=0; i<3; i++) {
+      ClassTemplate classTemplate = new ClassTemplate("template "+i, "desc 1", classCategories.get(i));
+      classTemplate.setCapacity(6);
+      classTemplate.setDuration(60);
+      classTemplate.setRequiredLevel(level);
+      classTemplaties.add(classTemplateRepository.save(classTemplate));
+    }
 
-    Calendar c = Calendar.getInstance();
-    c.setTime(new Date());
-    c.add(Calendar.HOUR, -48);
+    for (int i=0; i<10; i++){
+      classInstances.add(new ClassInstance( todayRandomTime()));
+      int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
+      Class clazz = classRepository.save(instanceClass(schedule, classTemplaties.get(randomNum), classInstances.get(i), room, pupils.get(i)));
+      classInstances.get(i).setClazz(clazz);
+      classInstances.get(i).setAttendedPupils(pupils);
+      classInstances.set(i,classInstanceRepository.save(classInstances.get(i)));
+      Attendant teacher = pupils.get(0);
+      teacher.setPupil(false);
+      pupils.set(0, attendantRepository.save(teacher));
+      classService.executeInstance(classInstances.get(i), teacher, pupils.get(1), pupils.get(2), pupils.get(3));
+    }
 
-    ClassInstance classInstance = new ClassInstance( c.getTime());
+  }
+
+
+  private static Class instanceClass(Schedule schedule,
+                                     ClassTemplate classTemplate,
+                                     ClassInstance classInstance,
+                                     Room room,
+                                     Attendant teacher){
 
     Class clazz = new Class(schedule, classTemplate);
+    clazz.setRoom(room);
     clazz.setActive(true);
     clazz.addEvent(classInstance);
-    clazz.setRoom(room);
-    clazz = classRepository.save(clazz);
+    clazz.setConductingTeacher(teacher);
+    return clazz;
+  }
 
+  public static ClassInstance generateClassInstance(Class clazz){
+    ClassInstance classInstance = new ClassInstance( todayRandomTime());
     classInstance.setClazz(clazz);
-    classInstance.setAttendedPupils(pupils);
-    classInstance = classInstanceRepository.save(classInstance);
-
-    Attendant teacher = pupils.get(0);
-    teacher.setPupil(false);
-    pupils.set(0, attendantRepository.save(teacher));
-
-    classService.executeInstance(classInstance, teacher, pupils.get(1), pupils.get(2), pupils.get(3));
+    return classInstance;
 
   }
 
   private void importProgramInstance() {
 
     Calendar c = Calendar.getInstance();
-    c.setTime(new Date());
+    c.setTime(todayRandomTime());
     c.add(Calendar.HOUR, -48);
 
     List<ClassVisit> classVisit = new ArrayList<>();
@@ -165,7 +208,7 @@ public class Initiator  {
             true);
 
     programTemplate = programTemplateRepository.save(programTemplate);
-    Schedule schedule = new Schedule(new Date(), new Date(), ReccurenceType.DAILY);
+    Schedule schedule = new Schedule(todayRandomTime(), todayRandomTime(), ReccurenceType.DAILY);
     schedule = scheduleRepository.save(schedule);
 
     Program program = new Program(schedule, programTemplate,  c.getTime(), 5.00);
@@ -180,6 +223,25 @@ public class Initiator  {
 
   private boolean isEmptyDB(){
     return userRepository.findAll().isEmpty();
+  }
+
+  private static Date todayRandomTime(){
+    int randomNum = ThreadLocalRandom.current().nextInt(9, 22 + 1);
+    Calendar c = Calendar.getInstance();
+    c.setTimeZone(TimeZone.getTimeZone("America/Montevideo"));
+    c.setTime(new Date());
+    c.set(Calendar.HOUR,0);
+    c.set(Calendar.MINUTE,0);
+    c.add(Calendar.HOUR, randomNum);
+    return c.getTime();
+  }
+
+  private static String randomName(){
+    String[] firstname = {"Michal", "Peter", "Martin", "John", "Emm", "Jozef","Robert","Dan"};
+    String[] lastname = {"Zajacovic","Kladivko","Barnabak","Morka","Hasin","Laboreta","Vidla","Urkan"};
+    int randomNum = ThreadLocalRandom.current().nextInt(0, 7);
+    int randomNum2 = ThreadLocalRandom.current().nextInt(0, 7);
+    return firstname[randomNum] + " " + lastname[randomNum2];
   }
 
 }

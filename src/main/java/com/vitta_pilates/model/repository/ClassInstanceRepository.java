@@ -15,6 +15,13 @@ import java.util.List;
 @Repository
 public interface ClassInstanceRepository extends JpaRepository<ClassInstance, Long> {
 
+  /**
+   * Select all ClassInstance of pupils by date range
+   * @param attendant
+   * @param fromD
+   * @param toD
+   * @return
+   */
   @Query("SELECT ci from ClassInstance ci " +
           "JOIN ci.attendedPupils a " +
           "WHERE a.id in :attendent " +
@@ -24,6 +31,13 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, Lo
           @Param("fromD") Date fromD,
           @Param("toD") Date toD);
 
+  /**
+   * Select all ClassInstance of teacher by date range
+   * @param attendant
+   * @param fromD
+   * @param toD
+   * @return
+   */
   @Query("SELECT ci from ClassInstance ci " +
           "JOIN ci.trueAttendingTeacher a " +
           "WHERE a.id in :attendent " +
@@ -32,5 +46,42 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, Lo
           @Param("attendent") Long attendant,
           @Param("fromD") Date fromD,
           @Param("toD") Date toD);
+
+  /**
+   * Select all ClassInstance by ClassCategory and Level
+   */
+  @Query("SELECT ci from ClassInstance ci " +
+          "JOIN ci.clazz c " +
+          "JOIN c.event e " +
+          "JOIN e.type t " +
+          "JOIN e.requiredLevel l " +
+          "WHERE upper(l.name) LIKE upper(CONCAT('%',:level,'%')) " +
+          "AND upper(t.name) LIKE upper(CONCAT('%',:classCategory,'%'))")
+  List<ClassInstance> findByClassCategoryAndLevel(
+          @Param("classCategory") String classCategory,
+          @Param("level") String level);
+
+  /**
+   * Select all ClassInstance by ClassCategory
+   */
+  @Query("SELECT ci from ClassInstance ci " +
+          "JOIN ci.clazz c " +
+          "JOIN c.event e " +
+          "JOIN e.type t " +
+          "WHERE "+
+          "upper(t.name) LIKE upper(CONCAT('%',:classCategory,'%'))")
+  List<ClassInstance> findByClassCategory(
+          @Param("classCategory") String classCategory);
+
+  /**
+   * Select all ClassInstance by Teacher
+   */
+  @Query("SELECT ci from ClassInstance ci " +
+          "JOIN ci.trueAttendingTeacher a " +
+          "JOIN a.personalData p " +
+          "WHERE "+
+          "upper(p.name) LIKE upper(CONCAT('%',:teacher,'%'))")
+  List<ClassInstance> findByTeacher(
+          @Param("teacher") String teacher);
 
 }

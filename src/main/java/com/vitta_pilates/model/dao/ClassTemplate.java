@@ -23,7 +23,7 @@ public class ClassTemplate {
     @OneToOne
     private ClassCategory type; // (class, custom)
 
-    private Integer duration; // in minutes
+    private Integer duration = 60; // in minutes
     private int capacity; // optional : capacity override due to room restrictions or else
 
     @OneToOne
