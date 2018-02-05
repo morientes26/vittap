@@ -20,6 +20,9 @@ public class ClassInstance extends OccurrenceContent {
     @OneToOne
     private Attendant trueAttendingTeacher;
 
+    private String name;
+    private String description;
+
     @ManyToMany//(cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE})
     @JoinTable(
             name = "class_instance_attendent",
@@ -107,4 +110,19 @@ public class ClassInstance extends OccurrenceContent {
         this.clazz = clazz;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

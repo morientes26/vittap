@@ -1,6 +1,7 @@
-package com.vitta_pilates.core.event;
+package com.vitta_pilates.core.event.mvc;
 
 
+import com.vitta_pilates.core.event.component.EventForm;
 import com.vitta_pilates.core.event.component.Filter;
 import com.vitta_pilates.core.event.service.EventService;
 import com.vitta_pilates.model.dao.Event;
@@ -25,6 +26,7 @@ public class CalendarController {
             "",
             "Class Type")
     );
+    model.addAttribute("event", new EventForm());
     return "calendarFull";
   }
 
@@ -38,9 +40,7 @@ public class CalendarController {
     return service.getDefaultData();
   }
 
-  @RequestMapping(value = "/data", method = RequestMethod.POST)//,
-                  //headers="Accept=application/json",
-                  //produces = "application/json") @RequestBody
+  @RequestMapping(value = "/data", method = RequestMethod.POST)
   public @ResponseBody
   List<Event> calendarFiltredData(Filter filter) {
     return service.getFiltred(filter);
@@ -52,10 +52,10 @@ public class CalendarController {
    * @param event
    * @return
    */
-  @RequestMapping(value = "/add", method = RequestMethod.POST, headers="Accept=application/json", produces = "application/json")
+  @RequestMapping(value = "/add", method = RequestMethod.POST)
   public @ResponseBody
-  List<Event> add(@RequestBody Event event) {
-    service.save(event);
+  List<Event> add(EventForm eventForm) {
+    service.save(eventForm);
     //todo: filter from session
     return service.getFiltred(null);
   }
@@ -71,6 +71,12 @@ public class CalendarController {
     service.delete(id);
     //todo: filter from session
     return service.getFiltred(null);
+  }
+
+  @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
+  public @ResponseBody
+  Event loadData(@PathVariable("id") String id) {
+    return service.get(id);
   }
 
 

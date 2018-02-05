@@ -14,10 +14,13 @@ public class Event {
   private String title;
   private String textColor;
   private String teacher;
+  private int duration;
+  private String name;
+  private String description;
 
-  private Event(){}
+  public Event(){}
 
-  private Event(final String id,
+  public Event(final String id,
                 final String color,
                 final int count,
                 final String img,
@@ -26,7 +29,10 @@ public class Event {
                 final Date end,
                 final String title,
                 final String textColor,
-                final String teacher){
+                final String teacher,
+                final int duration,
+                final String name,
+                final String description){
     this.id = id;
     this.color = color;
     this.count = count;
@@ -37,6 +43,9 @@ public class Event {
     this.title = title;
     this.textColor = textColor;
     this.teacher = teacher;
+    this.duration = duration;
+    this.name = name;
+    this.description = description;
   }
 
   public String getId() {
@@ -79,9 +88,22 @@ public class Event {
     return teacher;
   }
 
+  public int getDuration() {
+    return duration;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
   public void setTeacher(String teacher) {
     this.teacher = teacher;
   }
+
 
   public static class EventBuilder {
     private String id;
@@ -94,6 +116,9 @@ public class Event {
     private String title;
     private String textColor;
     private String teacher;
+    private int duration;
+    private String name;
+    private String description;
 
     public EventBuilder(){}
 
@@ -144,6 +169,8 @@ public class Event {
     }
 
     public EventBuilder setEnd(Date start, int duration) {
+      if (start==null)
+        return this;
       java.util.Calendar c = java.util.Calendar.getInstance();
       c.setTime(start);
       c.add(java.util.Calendar.MINUTE, duration);
@@ -161,6 +188,21 @@ public class Event {
       return this;
     }
 
+    public EventBuilder setName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public EventBuilder setDescription(String description) {
+      this.description = description;
+      return this;
+    }
+
+    public EventBuilder setDuration(int duration) {
+      this.duration = duration;
+      return this;
+    }
+
 
     public Event createEvent(){
 
@@ -174,7 +216,10 @@ public class Event {
               this.end,
               this.title,
               this.textColor,
-              this.teacher
+              this.teacher,
+              this.duration,
+              this.name,
+              this.description
       );
     }
   }

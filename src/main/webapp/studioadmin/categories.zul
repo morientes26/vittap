@@ -71,6 +71,8 @@
             <span>${labels.classCategory.color} :</span>
         </div>
         <div sclass="full">
+            <!-- todo: set colorbox-->
+            <!--<colorbox id="color"></colorbox>-->
             <combobox id="color"
                       model="@load(vm.colors)" selectedItem="@bind(fx.color)"
                       selectedIndex="@{vm.colors.index}">
