@@ -170,7 +170,7 @@ $(document).ready(function() {
             var newEvent = new Object();
             newEvent.title = 'test default event';
             newEvent.start =  moment(start).format('DD.MM.YYYY HH:mm');
-            newEvent.end = start.add(1,'hour').format();
+            //newEvent.end = start.add(1,'hour').format();
             newEvent.allDay = false;
 
             var modalStart = $(".js_modal-click");
