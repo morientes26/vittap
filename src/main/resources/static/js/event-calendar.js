@@ -67,8 +67,9 @@ $(document).ready(function() {
         }).done(function(event) {
             $(".modal-body #event-id").val( event.id );
             //todo: time is moved for one hour
-            $(".modal-body #event-start").val(moment(event.start).format('DD.MM.YYYY HH:mm'));
+
             //$(".modal-body #event-start").val(dateTimeZone(event.start).format('DD.MM.YYYY HH:mm'));
+            $(".modal-body #event-start").val(moment(event.start).format('DD.MM.YYYY HH:mm'));
 
             //console.log('event '+event.start);
            // console.log('moment '+moment(event.start).format('DD.MM.YYYY HH:mm'));
