@@ -74,7 +74,7 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, Lo
           @Param("classCategory") String classCategory);
 
   /**
-   * Select all ClassInstance by Teacher
+   * Select all ClassInstance by true attending teacher
    */
   @Query("SELECT ci from ClassInstance ci " +
           "JOIN ci.trueAttendingTeacher a " +
@@ -82,6 +82,17 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, Lo
           "WHERE "+
           "upper(p.name) LIKE upper(CONCAT('%',:teacher,'%'))")
   List<ClassInstance> findByTeacher(
+          @Param("teacher") String teacher);
+
+  /**
+   * Select all ClassInstance by conducting Teacher
+   */
+  @Query("SELECT ci from ClassInstance ci " +
+          "JOIN ci.clazz.conductingTeacher a " +
+          "JOIN a.personalData p " +
+          "WHERE "+
+          "upper(p.name) LIKE upper(CONCAT('%',:teacher,'%'))")
+  List<ClassInstance> findByConductingTeacher(
           @Param("teacher") String teacher);
 
 }

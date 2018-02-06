@@ -46,7 +46,7 @@ public class EventService {
     List<ClassInstance> classInstances;
     if (filter!=null) {
       if (filter.getType().equals("Teacher")){
-        classInstances = classInstanceRepository.findByTeacher(
+        classInstances = classInstanceRepository.findByConductingTeacher(
                 filter.getValue()
         );
       } else {
