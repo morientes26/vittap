@@ -1,16 +1,14 @@
 
 $(document).ready(function() {
 
-    // function dateTimeZone(date){
-    //     if (!moment.tz.zone(name)) {
-    //         moment.tz.add('America/Montevideo|MMT -0330 -03 -02 -0230|3I.I 3u 30 20 2u|012121212121212121212121213232323232324242423243232323232323232323232323232323232323232|-20UIf.g 8jzJ.g 1cLu 1dcu 1cLu 1dcu 1cLu ircu 11zu 1o0u 11zu 1o0u 11zu 1qMu WLu 1qMu WLu 1qMu WLu 1qMu 11zu 1o0u 11zu NAu 11bu 2iMu zWu Dq10 19X0 pd0 jz0 cm10 19X0 1fB0 1on0 11d0 1oL0 1nB0 1fzu 1aou 1fzu 1aou 1fzu 3nAu Jb0 3MN0 1SLu 4jzu 2PB0 Lb0 3Dd0 1pb0 ixd0 An0 1MN0 An0 1wp0 On0 1wp0 Rb0 1zd0 On0 1wp0 Rb0 s8p0 1fB0 1ip0 11z0 1ld0 14n0 1o10 11z0 1o10 11z0 1o10 14n0 1ld0 14n0 1ld0 14n0 1o10 11z0 1o10 11z0 1o10 11z0|17e5');
-    //         moment.tz.link('America/Montevideo');
-    //     }
-    //     console.log(date);
-    //     console.log(moment(date).tz("America/Montevideo"));
-    //     console.log(moment(date).tz("America/Montevideo").format());
-    //     return moment(date).tz("America/Montevideo");
-    // }
+    function dateTimeZone(date){
+        if (!moment.tz.zone(name)) {
+            moment.tz.add('America/Montevideo|MMT -0330 -03 -02 -0230|3I.I 3u 30 20 2u|012121212121212121212121213232323232324242423243232323232323232323232323232323232323232|-20UIf.g 8jzJ.g 1cLu 1dcu 1cLu 1dcu 1cLu ircu 11zu 1o0u 11zu 1o0u 11zu 1qMu WLu 1qMu WLu 1qMu WLu 1qMu 11zu 1o0u 11zu NAu 11bu 2iMu zWu Dq10 19X0 pd0 jz0 cm10 19X0 1fB0 1on0 11d0 1oL0 1nB0 1fzu 1aou 1fzu 1aou 1fzu 3nAu Jb0 3MN0 1SLu 4jzu 2PB0 Lb0 3Dd0 1pb0 ixd0 An0 1MN0 An0 1wp0 On0 1wp0 Rb0 1zd0 On0 1wp0 Rb0 s8p0 1fB0 1ip0 11z0 1ld0 14n0 1o10 11z0 1o10 11z0 1o10 14n0 1ld0 14n0 1ld0 14n0 1o10 11z0 1o10 11z0 1o10 11z0|17e5');
+            moment.tz.link('America/Montevideo');
+        }
+        moment.locale('es-UY');
+        return moment(date).tz("America/Montevideo");
+    }
 
     function isEmpty(obj) {
         for(var key in obj) {
@@ -68,7 +66,14 @@ $(document).ready(function() {
             type: "GET",
         }).done(function(event) {
             $(".modal-body #event-id").val( event.id );
+            //todo: time is moved for one hour
             $(".modal-body #event-start").val(moment(event.start).format('DD.MM.YYYY HH:mm'));
+            //$(".modal-body #event-start").val(dateTimeZone(event.start).format('DD.MM.YYYY HH:mm'));
+
+            //console.log('event '+event.start);
+           // console.log('moment '+moment(event.start).format('DD.MM.YYYY HH:mm'));
+            //console.log('datetimezone '+dateTimeZone(event.start).format('DD.MM.YYYY HH:mm'));
+
             $(".modal-body #event-duration").val((event.end - event.start) / 60000);
             $(".modal-body #event-name").val( event.name );
             $(".modal-body #event-description").val( event.description );
@@ -151,7 +156,7 @@ $(document).ready(function() {
             if (show==2){
                 if (!isEmpty(event.name)) {
                     el.find('.fc-title').after(
-                        $('<span> - ' + event.name + '</span>')
+                        $('<span>' + event.name + '</span>')
                     );
                 }
 
@@ -163,10 +168,9 @@ $(document).ready(function() {
             //var abc = prompt('Enter Title of event');
             var newEvent = new Object();
             newEvent.title = 'test default event';
-            newEvent.start =  moment(start).format();
+            newEvent.start =  moment(start).format('DD.MM.YYYY HH:mm');
             newEvent.end = start.add(1,'hour').format();
             newEvent.allDay = false;
-            //addEvent(newEvent);
 
             var modalStart = $(".js_modal-click");
             modalStart.data('event-object', newEvent);
@@ -238,7 +242,9 @@ $(document).ready(function() {
 
         cleanModal();
         var event = $(e.relatedTarget).data('event-object');
-        $(".modal-body #event-start").val( moment(event.start).format('DD.MM.YYYY HH:mm'));
+        //$(".modal-body #event-start").val( moment(event.start).format('DD.MM.YYYY HH:mm'));
+        $(".modal-body #event-start").val( event.start);
+        //$(".modal-body #event-start").val( dateTimeZone(event.start).format('DD.MM.YYYY HH:mm'));
 
         if (event.id!=null){
             // exist event
