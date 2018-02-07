@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Calendar</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel='stylesheet' href='/static/css/vendor/fullcalendar.min.css' />
+    <link rel='stylesheet' href='/static/css/vendor/bootstrap.css' />
+    <link rel='stylesheet' href='/static/css/vendor/jquery-ui.css' />
+    <link rel='stylesheet' href='/static/css/calendar.css' />
+
+</head>
+<body>
+
+    <div class="back-button">
+        <a class="btn btn-link" href="/index.zul">Back</a>
+    </div>
+
+    <div th:replace="items/filter :: event"></div>
+
+    <div id="calendar"></div>
+
+    <!-- Button trigger modal -->
+    <input type="hidden" class="js_modal-click" data-event-object=""
+           data-toggle="modal" data-target="#eventModal" />
+
+    <!-- Modal -->
+    <div th:replace="items/modal :: event"></div>
+
+    <!-- Confirm dialog-->
+    <div th:replace="items/dialog :: event"></div>
+
+    <script src='/static/js/lib/jquery.min.js'></script>
+    <script src='/static/js/lib/moment.min.js'></script>
+    <script src='/static/js/lib/moment-timezone.min.js'></script>
+    <script src='/static/js/lib/jquery.inputmask.min.js'></script>
+    <script src='/static/js/lib/jquery-ui.min.js'></script>
+    <script src='/static/js/fullcalendar.min.js'></script>
+    <script src='/static/js/bootstrap.js'></script>
+    <script src='/static/js/calendar.js'></script>
+
+</body>
+</html>

@@ -44,6 +44,12 @@ public class Schedule {
     public Schedule() {
     }
 
+    public Schedule(Date startDate, Date endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.reccurenceType = ReccurenceType.ONE_TIME;
+    }
+
     public Schedule(Date startDate, Date endDate, ReccurenceType reccurenceType) {
         this.startDate = startDate;
         this.endDate = endDate;

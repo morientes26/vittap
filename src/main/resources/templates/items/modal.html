@@ -1,61 +1,22 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Calendar</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <link rel='stylesheet' href='/static/css/vendor/fullcalendar.min.css' />
-    <link rel='stylesheet' href='/static/css/vendor/bootstrap.css' />
-    <link rel='stylesheet' href='/static/css/event-calendar.css' />
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 
-    <link href="https://cdn.jsdelivr.net/gh/atatanasov/gijgo@1.8.0/dist/combined/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
+<!-- Modal -->
+<div th:fragment="event" class="modal fade" id="eventModal" tabindex="-1" role="dialog"
+     aria-labelledby="eventModalLabel" aria-hidden="true">
 
-    <div class="tab-panel">
-        <form th:id="filterForm" method="post"
-              th:action="@{'/event-calendar/data'}" onsubmit="return false;">
-            <label title="Show">Show</label>
-            <select id="filterS" title="Show" class="js_show" th:field="*{filter.show}">
-                <option th:selected="${filter.show=='Class Type'}" th:value="'Class Type'">Class Type</option>
-                <option th:selected="${filter.show=='Empty Seats Class'}" th:value="'Empty Seats Class'">Empty Seats Class</option>
-                <option th:selected="${filter.show=='Empty Seats Course'}" th:value="'Empty Seats Course'">Empty Seats Course</option>
-            </select>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Create event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-            <label title="Filter by Type">Filter by Type</label>
-            <select id="type" title="filter By Type" th:field="*{filter.type}">
-                <option th:selected="${filter.type=='Class Type'}" th:value="'Class Type'"> Class Type</option>
-                <option th:selected="${filter.type=='Teacher'}" th:value="'Teacher'">Teacher</option>
-            </select>
-
-            <input type="text" id="value" class="js_filter" th:field="*{filter.value}"
-                   placeholder="Filter by value"/>
-        </form>
-    </div>
-
-    <br/>
-
-    <div id="calendar"></div>
-
-    <a class="btn btn-link" href="/index.zul">Back</a>
-
-    <!-- Button trigger modal -->
-    <input type="hidden" class="js_modal-click" data-event-object=""
-           data-toggle="modal" data-target="#eventModal" />
-
-    <!-- Modal -->
-    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog"
-         aria-labelledby="eventModalLabel" aria-hidden="true">
-
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eventModalLabel">Create event</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="post" id="js_modal-form" th:action="@{'/event-calendar/add'}" onsubmit="return false;">
+            <form method="post" id="js_modal-form" th:action="@{'/event-calendar/add'}" onsubmit="return false;">
                 <div class="modal-body">
 
                     <input type="hidden" id="event-id" th:field="*{event.id}" />
@@ -63,10 +24,9 @@
                     <div class="form-group row">
                         <label for="template" class="col-3 col-form-label">Event Template:</label>
                         <div class="col-9">
-                            <select class="form-control form-control-sm" id="template" name="template">
-                                <option th:value="Custom" selected="selected">Custom</option>
-                                <option th:value="Temp1">Templ1 ..todo</option>
-                                <option th:value="Temp2">Templ2 ..todo</option>
+                            <select class="form-control form-control-sm" id="template" th:field="*{event.type}">
+                                <option th:each="template : ${templates}"
+                                        th:value="${template.id}" th:text="${template.name}"></option>
                             </select>
                         </div>
                     </div>
@@ -94,11 +54,11 @@
                             </label>
                             <label class="col-form-label">
                                 <input type="radio" class="form-control form-control-sm" title="Weekly" name="occurence" th:value="weekly" />
-                            Weekly
+                                Weekly
                             </label>
                             <label class="col-form-label">
                                 <input type="radio" class="form-control form-control-sm" title="Mounthly" name="occurence" th:value="monthly" />
-                            Mounthly
+                                Mounthly
                             </label>
                         </div>
                     </div>
@@ -108,7 +68,7 @@
                         <div class="col-9">
                             <input type="text" class="form-control form-control-sm"
                                    id="event-start" th:field="*{event.start}"/>
-                                   <!--data-inputmask="'alias': 'datetime'"/>-->
+                            <!--data-inputmask="'alias': 'datetime'"/>-->
                         </div>
                     </div>
                     <div class="form-group row">
@@ -131,7 +91,7 @@
                                 Simple
                             </label>
                             <label class="col-form-label">
-                            <input type="radio" class="form-control form-control-sm" title="Class" name="recurrentType" th:value="Class" />
+                                <input type="radio" class="form-control form-control-sm" title="Class" name="recurrentType" th:value="Class" />
                                 Class
                             </label>
                         </div>
@@ -151,18 +111,11 @@
                     <button type="button" class="btn btn-danger js_event-delete">Delete</button>
                     <button type="submit" class="btn btn-primary">Create</button>
                 </div>
-                </form>
-            </div>
+
+            </form>
+
         </div>
     </div>
+</div>
 
-    <script src='/static/js/lib/jquery.min.js'></script>
-    <script src='/static/js/lib/moment.min.js'></script>
-    <script src='/static/js/lib/moment-timezone.min.js'></script>
-    <script src='/static/js/lib/jquery.inputmask.min.js'></script>
-    <script src='/static/js/fullcalendar.min.js'></script>
-    <script src='/static/js/bootstrap.js'></script>
-    <script src='/static/js/event-calendar.js'></script>
-
-</body>
 </html>

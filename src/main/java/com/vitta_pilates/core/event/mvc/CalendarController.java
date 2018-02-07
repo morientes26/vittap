@@ -5,10 +5,14 @@ import com.vitta_pilates.core.event.component.EventForm;
 import com.vitta_pilates.core.event.component.Filter;
 import com.vitta_pilates.core.event.service.EventService;
 import com.vitta_pilates.model.dao.Event;
+import com.vitta_pilates.model.repository.ClassTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -19,6 +23,9 @@ public class CalendarController {
   @Autowired
   EventService service;
 
+  @Autowired
+  ClassTemplateRepository classTemplateRepository;
+
   @RequestMapping({"","/"})
   public String calendarFull( Model model) {
     model.addAttribute("filter", new Filter(
@@ -27,7 +34,9 @@ public class CalendarController {
             "Class Type")
     );
     model.addAttribute("event", new EventForm());
-    return "calendarFull";
+    model.addAttribute("templates", classTemplateRepository.findAll());
+
+    return "calendar";
   }
 
   /**
@@ -49,7 +58,7 @@ public class CalendarController {
 
   /**
    * Add new event to calendar and refreshing data
-   * @param event
+   * @param eventForm
    * @return
    */
   @RequestMapping(value = "/add", method = RequestMethod.POST)

@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="event" class="calendar-filter">
+
+    <form th:id="filterForm" method="post"
+          th:action="@{'/event-calendar/data'}" onsubmit="return false;">
+
+        <label title="Show">Show</label>
+        <select id="filterS" title="Show" class="js_show" th:field="*{filter.show}">
+            <option th:selected="${filter.show=='Class Type'}" th:value="'Class Type'">Class Type</option>
+            <option th:selected="${filter.show=='Empty Seats Class'}" th:value="'Empty Seats Class'">Empty Seats Class</option>
+            <option th:selected="${filter.show=='Empty Seats Course'}" th:value="'Empty Seats Course'">Empty Seats Course</option>
+        </select>
+
+        <label title="Filter by Type">Filter by Type</label>
+        <select id="type" title="filter By Type" th:field="*{filter.type}">
+            <option th:selected="${filter.type=='Class Type'}" th:value="'Class Type'"> Class Type</option>
+            <option th:selected="${filter.type=='Teacher'}" th:value="'Teacher'">Teacher</option>
+        </select>
+
+        <input type="text" id="value" class="js_filter" th:field="*{filter.value}"
+               placeholder="Filter by value"/>
+
+    </form>
+
+</div>
+</html>

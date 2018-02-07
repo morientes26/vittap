@@ -17,6 +17,7 @@ public class Event {
   private int duration;
   private String name;
   private String description;
+  private String room;
 
   public Event(){}
 
@@ -32,7 +33,8 @@ public class Event {
                 final String teacher,
                 final int duration,
                 final String name,
-                final String description){
+                final String description,
+                final String room){
     this.id = id;
     this.color = color;
     this.count = count;
@@ -46,6 +48,7 @@ public class Event {
     this.duration = duration;
     this.name = name;
     this.description = description;
+    this.room = room;
   }
 
   public String getId() {
@@ -104,6 +107,13 @@ public class Event {
     this.teacher = teacher;
   }
 
+  public String getRoom() {
+    return room;
+  }
+
+  public void setRoom(String room) {
+    this.room = room;
+  }
 
   public static class EventBuilder {
     private String id;
@@ -119,6 +129,7 @@ public class Event {
     private int duration;
     private String name;
     private String description;
+    private String room;
 
     public EventBuilder(){}
 
@@ -168,16 +179,6 @@ public class Event {
       return this;
     }
 
-    public EventBuilder setEnd(Date start, int duration) {
-      if (start==null)
-        return this;
-      java.util.Calendar c = java.util.Calendar.getInstance();
-      c.setTime(start);
-      c.add(java.util.Calendar.MINUTE, duration);
-      this.end =  c.getTime();
-      return this;
-    }
-
     public EventBuilder setTextColor(String textColor) {
       this.textColor = textColor;
       return this;
@@ -203,6 +204,11 @@ public class Event {
       return this;
     }
 
+    public EventBuilder setRoom(String room) {
+      this.room = room;
+      return this;
+    }
+
 
     public Event createEvent(){
 
@@ -219,7 +225,8 @@ public class Event {
               this.teacher,
               this.duration,
               this.name,
-              this.description
+              this.description,
+              this.room
       );
     }
   }

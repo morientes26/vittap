@@ -3,9 +3,7 @@ package com.vitta_pilates.core.event.component;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by  ??_?¬ morientes on 05/02/2018.
- */
+
 public class EventForm implements Serializable{
 
   private String id;
@@ -14,7 +12,7 @@ public class EventForm implements Serializable{
   private String title;
   private String name;
   private String description;
-  private String type;
+  private Long type;
   private String occurence;
   private String recurrentType;
 
@@ -54,11 +52,11 @@ public class EventForm implements Serializable{
     this.title = title;
   }
 
-  public String getType() {
+  public Long getType() {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(Long type) {
     this.type = type;
   }
 

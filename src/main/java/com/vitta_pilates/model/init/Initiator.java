@@ -146,13 +146,25 @@ public class Initiator  {
     schedule = scheduleRepository.save(schedule);
 
     List<ClassTemplate> classTemplaties =new ArrayList<>();
-    for (int i=0; i<3; i++) {
-      ClassTemplate classTemplate = new ClassTemplate("template "+i, "desc 1", classCategories.get(i));
-      classTemplate.setCapacity(6);
-      classTemplate.setDuration(60);
-      classTemplate.setRequiredLevel(level);
-      classTemplaties.add(classTemplateRepository.save(classTemplate));
-    }
+
+    ClassTemplate classTemplate = new ClassTemplate("Custom", "desc 1", classCategories.get(0));
+    classTemplate.setCapacity(6);
+    classTemplate.setDuration(60);
+    classTemplate.setRequiredLevel(level);
+    classTemplaties.add(classTemplateRepository.save(classTemplate));
+
+    ClassTemplate classTemplate2 = new ClassTemplate("Rumba template", "desc 2", classCategories.get(1));
+    classTemplate2.setCapacity(6);
+    classTemplate2.setDuration(60);
+    classTemplate2.setRequiredLevel(level);
+    classTemplaties.add(classTemplateRepository.save(classTemplate2));
+
+    ClassTemplate classTemplate3 = new ClassTemplate("Chacha template ", "desc 3", classCategories.get(2));
+    classTemplate3.setCapacity(6);
+    classTemplate3.setDuration(60);
+    classTemplate3.setRequiredLevel(level);
+    classTemplaties.add(classTemplateRepository.save(classTemplate3));
+
 
     for (int i=0; i<10; i++){
       classInstances.add(new ClassInstance( todayRandomTime()));
@@ -170,7 +182,7 @@ public class Initiator  {
   }
 
 
-  private static Class instanceClass(Schedule schedule,
+  public static Class instanceClass(Schedule schedule,
                                      ClassTemplate classTemplate,
                                      ClassInstance classInstance,
                                      Room room,
@@ -182,6 +194,13 @@ public class Initiator  {
     clazz.addEvent(classInstance);
     clazz.setConductingTeacher(teacher);
     return clazz;
+  }
+
+  public static Class instanceClass(
+          Schedule schedule,
+          ClassTemplate classTemplate){
+
+    return new Class(schedule, classTemplate);
   }
 
   public static ClassInstance generateClassInstance(Class clazz){
