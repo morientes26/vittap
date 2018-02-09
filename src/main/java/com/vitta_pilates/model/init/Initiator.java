@@ -148,20 +148,20 @@ public class Initiator  {
     List<ClassTemplate> classTemplaties =new ArrayList<>();
 
     ClassTemplate classTemplate = new ClassTemplate("Custom", "desc 1", classCategories.get(0));
-    classTemplate.setCapacity(6);
+    classTemplate.setCapacity(5);
     classTemplate.setDuration(60);
     classTemplate.setRequiredLevel(level);
     classTemplaties.add(classTemplateRepository.save(classTemplate));
 
     ClassTemplate classTemplate2 = new ClassTemplate("Rumba template", "desc 2", classCategories.get(1));
-    classTemplate2.setCapacity(6);
+    classTemplate2.setCapacity(5);
     classTemplate2.setDuration(60);
     classTemplate2.setRequiredLevel(level);
     classTemplaties.add(classTemplateRepository.save(classTemplate2));
 
     ClassTemplate classTemplate3 = new ClassTemplate("Chacha template ", "desc 3", classCategories.get(2));
-    classTemplate3.setCapacity(6);
-    classTemplate3.setDuration(60);
+    classTemplate3.setCapacity(2);
+    classTemplate3.setDuration(5);
     classTemplate3.setRequiredLevel(level);
     classTemplaties.add(classTemplateRepository.save(classTemplate3));
 
@@ -176,7 +176,28 @@ public class Initiator  {
       Attendant teacher = pupils.get(0);
       teacher.setPupil(false);
       pupils.set(0, attendantRepository.save(teacher));
-      classService.executeInstance(classInstances.get(i), teacher, pupils.get(1), pupils.get(2), pupils.get(3));
+
+      if (i==7) {
+        // do nothing
+      } else if (i==8) {
+        classService.executeInstance(classInstances.get(i),
+                teacher,
+                pupils.get(1),
+                pupils.get(2),
+                pupils.get(3),
+                pupils.get(4)
+        );
+      } else if (i==9) {
+        classService.executeInstance(classInstances.get(i),
+                teacher,
+                pupils.get(1),
+                pupils.get(2),
+                pupils.get(3),
+                pupils.get(4)
+        );
+      } else {
+        classService.executeInstance(classInstances.get(i), teacher, pupils.get(1), pupils.get(2), pupils.get(3));
+      }
     }
 
   }

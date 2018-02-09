@@ -19,8 +19,19 @@ body {
     height:13px;
     float:left;
 }
+.fc-image-lg{
+    height:42px;
+    text-align: center;
+    vertical-align: middle;
+}
 .fc-count{
     float:left;
+}
+.fc-count-lg{
+    left:18px;
+    top:5px;
+    position: absolute;
+    color: #fff;
 }
 
 .back-button{

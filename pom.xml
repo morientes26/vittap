@@ -5,7 +5,7 @@
 
 	<groupId>vittap</groupId>
 	<artifactId>vittap-web</artifactId>
-	<version>0.6.1</version>
+	<version>0.6.2</version>
 	<packaging>jar</packaging>
 
 	<name>vittap</name>
@@ -63,6 +63,12 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>19.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.9.9</version>
 		</dependency>
 
 		<dependency>

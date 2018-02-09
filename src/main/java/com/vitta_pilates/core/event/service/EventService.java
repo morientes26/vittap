@@ -156,7 +156,7 @@ public class EventService {
    * @return -1 if params are equal else real value of empty seats
    */
   private int pupilFilling(int capacity, int countOfPupils){
-    if (capacity==countOfPupils)
+    if (countOfPupils==0)
       return -1;
     return capacity - countOfPupils;
   }

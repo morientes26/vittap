@@ -87,11 +87,11 @@
                         <label class="col-3 col-form-label">Event Type :</label>
                         <div class="col-9 checkbox">
                             <label class="col-form-label">
-                                <input type="radio" class="form-control form-control-sm" title="Simple" name="recurrentType" checked="checked" th:value="Simple" />
+                                <input type="radio" class="form-control form-control-sm" title="Simple" th:field="*{event.recurrentType}" checked="checked" th:value="Simple" />
                                 Simple
                             </label>
                             <label class="col-form-label">
-                                <input type="radio" class="form-control form-control-sm" title="Class" name="recurrentType" th:value="Class" />
+                                <input type="radio" class="form-control form-control-sm" title="Class" th:field="*{event.recurrentType}" th:value="Class" />
                                 Class
                             </label>
                         </div>

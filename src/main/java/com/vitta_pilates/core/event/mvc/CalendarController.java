@@ -31,7 +31,7 @@ public class CalendarController {
     model.addAttribute("filter", new Filter(
             "Class Type",
             "",
-            "Class Type")
+            "All")
     );
     model.addAttribute("event", new EventForm());
     model.addAttribute("templates", classTemplateRepository.findAll());

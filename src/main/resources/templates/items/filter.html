@@ -10,7 +10,7 @@
 
         <label title="Show">Show</label>
         <select id="filterS" title="Show" class="js_show" th:field="*{filter.show}">
-            <option th:selected="${filter.show=='Class Type'}" th:value="'Class Type'">Class Type</option>
+            <option th:selected="${filter.show=='All'}" th:value="'All'">All</option>
             <option th:selected="${filter.show=='Empty Seats Class'}" th:value="'Empty Seats Class'">Empty Seats Class</option>
             <option th:selected="${filter.show=='Empty Seats Course'}" th:value="'Empty Seats Course'">Empty Seats Course</option>
         </select>

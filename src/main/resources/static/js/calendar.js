@@ -40,6 +40,8 @@ $(document).ready(function() {
 
         var deleteFollowedEvents = function(id){
             //todo: implement delete action on all followed events
+            //todo: temporaly only delete one event
+            deleteEvent(id);
         };
 
 
@@ -146,6 +148,9 @@ $(document).ready(function() {
 
     // -------- initialization of component event calendar --------------------
 
+    // test if device is mobile
+    var isMobile = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()));
+
     $("#calendar").fullCalendar({
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
         aspectRatio: 1,
@@ -160,7 +165,7 @@ $(document).ready(function() {
         maxTIme:'22:00',
         timezone: 'UTC-3',//'America/Montevideo',
         allDaySlot: false,
-        defaultView: 'agendaThreeDay',
+        defaultView: 'agendaWeek',
         editable: false,  // cannot edit event
         header: {
             left: 'prev,next today',
@@ -204,33 +209,44 @@ $(document).ready(function() {
                 event.teacher = '';
             }
 
-            el.find('.fc-content').attr('title', event.description);
             el.find('.fc-title').after($('<span class="fc-name">' + event.name + '</span>'));
-            el.find('.fc-name').after($('<span class="fc-teacher"> - ' + event.teacher + '</span>'));
+            el.find('.fc-name').after($('<span class="fc-teacher"> ' + event.teacher + '</span>'));
 
-            if (show==1) {
+            if (show==1 || show==2) {
 
                 if (event.count > 1) {
                     el.find('.fc-teacher').after(
                         $(
                           '<img class="fc-image" src="/static/img/some.png"/>'+
-                          '<span class="fc-count">[' + event.count + ']</span>'
+                          '<span class="fc-count">' + event.count + ' </span>'
                         )
                     );
                 } else if (event.count == 1) {
                     el.find('.fc-teacher').after(
                         $(
-                          '<img class="fc-image" src="/static/img/one.png"/>' +
-                          '<span class="fc-count">[' + event.count + ']</span>'
+                            '<img class="fc-image" src="/static/img/one.png"/>'
+                        )
+                    )
+                } else if (event.count == 0) {
+                       // no flag to show
+                } else if (event.count < 1) {
+                    el.find('.fc-teacher').after(
+                        $(
+                            '<img class="fc-image" src="/static/img/critical.png"/>'
                         )
                     );
                 }
             }
 
             if (show==2){
-
-
+                el.find('.fc-title').empty();
+                el.find('.fc-time').empty();
+                el.find('.fc-name').empty();
+                el.find('.fc-teacher').empty();
+                el.find('.fc-image').removeClass('fc-image').addClass('fc-image-lg');
+                el.find('.fc-count').removeClass('fc-count').addClass('fc-count-lg');
             }
+
 
             if (show==3){
 
@@ -310,5 +326,11 @@ $(document).ready(function() {
 
     // init component
     $(":input").inputmask();
+
+    // default value by device
+    if (isMobile){
+        $("#filterS").val("Empty Seats Class").trigger("change");
+        $(".fc-agendaThreeDay-button").click();
+    }
 
 });
