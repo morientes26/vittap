@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Class Event Title -->
+<div th:fragment="event">
+
+    <div class="form-group row">
+        <label for="category" class="col-3 col-form-label">Category:</label>
+        <div class="col-9">
+            <input type="text" id="category" class="form-control form-control-sm"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="room" class="col-3 col-form-label">Room:</label>
+        <div class="col-9">
+            <input type="text" id="room" class="form-control form-control-sm"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="description" class="col-3 col-form-label">Description:</label>
+        <div class="col-9">
+            <input type="text" id="description" class="form-control form-control-sm"/>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-4 offset-8">
+            <input type="button" th:value="'Cancel Class'" class="btn btn-danger"/>
+        </div>
+    </div>
+
+    <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill" href="#registration">Registration</a></li>
+        <li><a data-toggle="pill" href="#attendance">Attendance</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="registration" class="tab-pane fade in active">
+            <p th:replace="items/class-event :: registration"></p>
+        </div>
+        <div id="attendance" class="tab-pane fade">
+            <p th:replace="items/class-event :: attendance"></p>
+        </div>
+    </div>
+</div>
+
+
+<!-- Class Event Registration -->
+<p th:fragment="registration">
+
+    <table class="event-registration">
+    <thead>
+    <tr>
+        <th width="10%">Members</th>
+        <th width="10%">Temporary</th>
+        <th width="25%">Name</th>
+        <th width="25%"></th>
+        <th width="30%"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><img src=""/></td>
+        <td><img src=""/></td>
+        <td>teacher</td>
+        <td>Suspend</td>
+        <td>Unenroll</td>
+    </tr>
+    <tr>
+        <td><img src=""/></td>
+        <td><img src=""/></td>
+        <td colspan="2">
+            <div th:replace="items/class-event :: select-teacher"></div>
+        </td>
+        <td>Enroll</td>
+    </tr>
+    <tr>
+        <td><img src=""/></td>
+        <td><img src=""/></td>
+        <td colspan="2">
+            <div th:replace="items/class-event :: select-pupil"></div>
+        </td>
+        <td>Enroll</td>
+    </tr>
+    </tbody>
+    </table>
+</p>
+
+<!-- Class Event Attendance -->
+<p th:fragment="attendance">
+
+    tu sa vygeneruje tabulka dochadzky
+</p>
+
+<div th:fragment="select-teacher">
+    <select size="50" class="js-teacher" data-placeholder="Search a teacher"
+            name="teacher">
+    </select>
+</div>
+
+<div th:fragment="select-pupil">
+    <select style="width: 200px" class="js-pupil" data-placeholder="Search a pupil"
+            name="pupil">
+    </select>
+</div>
+
+</html>

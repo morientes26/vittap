@@ -29,7 +29,7 @@ public class ClassInstance extends OccurrenceContent {
             joinColumns = {@JoinColumn(name = "class_instance_id")},
             inverseJoinColumns = {@JoinColumn(name = "attendent_id")}
     )
-    List<Attendant> attendedPupils = new ArrayList<>();
+    private List<Attendant> attendedPupils = new ArrayList<>();
 
     /** Final teacher's salary is made of all finished events. After closing salary, events become 'payed' */
     @Enumerated(EnumType.STRING)

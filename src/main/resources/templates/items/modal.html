@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <!-- Modal -->
-<div th:fragment="event" class="modal fade" id="eventModal" tabindex="-1" role="dialog"
+<div th:fragment="event" class="modal fade" id="eventModal" role="dialog"
      aria-labelledby="eventModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document">
@@ -98,9 +98,8 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-3 col-form-label">Event Content :</label>
-                        <div class="col-9">
-                            ...
+                        <div class="col-12">
+                            <div th:replace="items/class-event :: event"></div>
                         </div>
                     </div>
 

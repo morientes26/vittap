@@ -2,12 +2,11 @@ package com.vitta_pilates.core.event.service;
 
 import com.vitta_pilates.core.event.component.EventForm;
 import com.vitta_pilates.core.event.component.Filter;
+import com.vitta_pilates.core.event.component.SelectPersonResult;
 import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.dao.Class;
-import com.vitta_pilates.model.enumeration.ReccurenceType;
 import com.vitta_pilates.model.init.Initiator;
 import com.vitta_pilates.model.repository.*;
-import org.hibernate.JDBCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -108,6 +108,23 @@ public class EventService {
   public Event get(String id){
     log.debug("Load event id: {} from DB", id);
     return transform(classInstanceRepository.findOne(Long.valueOf(id)));
+  }
+
+  public SelectPersonResult getPerson(String term, boolean isTeacher){
+    if (term==null)
+      term = "";
+    SelectPersonResult result = new SelectPersonResult();
+    List<Attendant> persons;
+    if (isTeacher)
+      persons = attendantRepository.findAllTeachersByName(term);
+    else
+      persons = attendantRepository.findAllPupilsByName(term);
+    persons.forEach(item-> result.getResults().add(transform(item)));
+    return result;
+  }
+
+  private SelectPersonResult.Person transform(Attendant attendant){
+    return new SelectPersonResult.Person(String.valueOf(attendant.getId()), attendant.getPersonalData().getName());
   }
 
   private Event transform(ClassInstance classInstance){

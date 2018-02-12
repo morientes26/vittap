@@ -3,16 +3,14 @@ package com.vitta_pilates.core.event.mvc;
 
 import com.vitta_pilates.core.event.component.EventForm;
 import com.vitta_pilates.core.event.component.Filter;
+import com.vitta_pilates.core.event.component.SelectPersonResult;
 import com.vitta_pilates.core.event.service.EventService;
 import com.vitta_pilates.model.dao.Event;
 import com.vitta_pilates.model.repository.ClassTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -82,10 +80,30 @@ public class CalendarController {
     return service.getFiltred(null);
   }
 
+  /**
+   * Load one event
+   * @param id
+   * @return
+   */
   @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
   public @ResponseBody
   Event loadData(@PathVariable("id") String id) {
     return service.get(id);
+  }
+
+  /**
+   * Load all teacher to select2 box
+   * @return
+   */
+  @RequestMapping(value = "/selectData", method = RequestMethod.GET)
+  public @ResponseBody
+  SelectPersonResult selectData(
+          @RequestParam(value = "id", defaultValue = "teacher") String id,
+          @RequestParam(value = "term", required=false) String term,
+          @RequestParam(value = "_type", required=false) String type) {
+    return (id.equals("teacher")) ?
+            service.getPerson(term, true) :
+            service.getPerson(term, false);
   }
 
 

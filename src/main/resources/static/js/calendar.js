@@ -1,5 +1,7 @@
 
 $(document).ready(function() {
+    //fix select2 in modal
+    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
     // helper for usual javascript jobs
     var utils = (function(){
@@ -69,6 +71,22 @@ $(document).ready(function() {
             $(".modal-title").val("Create event");
             $(".modal-footer button[type='submit']").text("Create");
             $(".modal-footer .js_event-delete").hide();
+            $('.js-teacher').select2({
+                ajax: {
+                    url: '/event-calendar/selectData?id=teacher',
+                    dataType: 'json'
+                },
+                placeholder: "Select a teacher",
+                allowClear: true
+            });
+            $('.js-pupil').select2({
+                ajax: {
+                    url: '/event-calendar/selectData?id=pupil',
+                    dataType: 'json'
+                },
+                placeholder: "Select a pupil",
+                allowClear: true
+            });
         };
 
         var loadEvent = function (id) {
@@ -325,7 +343,8 @@ $(document).ready(function() {
     });
 
     // init component
-    $(":input").inputmask();
+    // input mask date picker
+    $(':input').inputmask();
 
     // default value by device
     if (isMobile){
@@ -334,3 +353,4 @@ $(document).ready(function() {
     }
 
 });
+
