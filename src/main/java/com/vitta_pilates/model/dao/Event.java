@@ -1,6 +1,10 @@
 package com.vitta_pilates.model.dao;
 
+import com.vitta_pilates.core.event.component.AttendanceForm;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Event {
 
@@ -18,6 +22,9 @@ public class Event {
   private String name;
   private String description;
   private String room;
+
+  private AttendanceForm attendanceTeacherForm = new AttendanceForm();
+  private List<AttendanceForm> attendanceForm = new ArrayList<>();
 
   public Event(){}
 
@@ -113,6 +120,22 @@ public class Event {
 
   public void setRoom(String room) {
     this.room = room;
+  }
+
+  public AttendanceForm getAttendanceTeacherForm() {
+    return attendanceTeacherForm;
+  }
+
+  public void setAttendanceTeacherForm(AttendanceForm attendanceTeacherForm) {
+    this.attendanceTeacherForm = attendanceTeacherForm;
+  }
+
+  public List<AttendanceForm> getAttendanceForm() {
+    return attendanceForm;
+  }
+
+  public void setAttendanceForm(List<AttendanceForm> attendanceForm) {
+    this.attendanceForm = attendanceForm;
   }
 
   public static class EventBuilder {

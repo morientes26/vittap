@@ -1,11 +1,14 @@
 package com.vitta_pilates.core.event.mvc;
 
 
+import com.vitta_pilates.core.event.component.AttendanceForm;
 import com.vitta_pilates.core.event.component.EventForm;
 import com.vitta_pilates.core.event.component.Filter;
 import com.vitta_pilates.core.event.component.SelectPersonResult;
+import com.vitta_pilates.core.event.service.AttendenceService;
 import com.vitta_pilates.core.event.service.EventService;
 import com.vitta_pilates.model.dao.Event;
+import com.vitta_pilates.model.dao.attendance.Attendance;
 import com.vitta_pilates.model.repository.ClassTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,9 @@ public class CalendarController {
 
   @Autowired
   EventService service;
+
+  @Autowired
+  AttendenceService attendenceService;
 
   @Autowired
   ClassTemplateRepository classTemplateRepository;
@@ -87,9 +93,16 @@ public class CalendarController {
    */
   @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
   public @ResponseBody
-  Event loadData(@PathVariable("id") String id) {
+  Event getEvent(@PathVariable("id") String id) {
     return service.get(id);
   }
+
+//  @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
+//  public String getEvent(@PathVariable("id") String id, Model model)
+//  {
+//    model.addAttribute("event", service.get(id));
+//    return "items/modal :: modal-dialog";
+//  }
 
   /**
    * Load all teacher to select2 box
@@ -106,5 +119,28 @@ public class CalendarController {
             service.getPerson(term, false);
   }
 
+  /**
+   * Load Attendance to modal
+   * @return
+   */
+//  @RequestMapping(value = "/attendance/{id}", method = RequestMethod.GET)
+//  public @ResponseBody
+//  List<AttendanceForm> getAttendance(
+//          @PathVariable("id") String id) {
+//    return attendenceService.getAttendance(id);
+//  }
 
+  @RequestMapping(value = "/attendance/{id}", method = RequestMethod.GET)
+  public
+  String getAttendance(
+          @PathVariable("id") String id, Model model) {
+    List<AttendanceForm> list =  attendenceService.getAttendance(id);
+    EventForm eventForm = new EventForm();
+    if (!list.isEmpty())
+      eventForm.setAttendanceTeacherForm(list.get(0));
+      if (list.size()>1)
+        eventForm.setAttendanceForm(list.subList(1, list.size()));
+    model.addAttribute("event", eventForm);
+    return "items/class-event :: registration";
+  }
 }

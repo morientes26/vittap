@@ -7,113 +7,118 @@
 <div th:fragment="event" class="modal fade" id="eventModal" role="dialog"
      aria-labelledby="eventModalLabel" aria-hidden="true">
 
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="eventModalLabel">Create event</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+    <div th:replace="items/modal :: modal-dialog" >
+    </div>
 
-            <form method="post" id="js_modal-form" th:action="@{'/event-calendar/add'}" onsubmit="return false;">
-                <div class="modal-body">
+</div>
 
-                    <input type="hidden" id="event-id" th:field="*{event.id}" />
 
-                    <div class="form-group row">
-                        <label for="template" class="col-3 col-form-label">Event Template:</label>
-                        <div class="col-9">
-                            <select class="form-control form-control-sm" id="template" th:field="*{event.type}">
-                                <option th:each="template : ${templates}"
-                                        th:value="${template.id}" th:text="${template.name}"></option>
-                            </select>
-                        </div>
+<div th:fragment="modal-dialog" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="eventModalLabel">Create event</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <form method="post" id="js_modal-form" th:action="@{'/event-calendar/add'}" onsubmit="return false;">
+            <div class="modal-body">
+
+                <input type="hidden" id="event-id" th:field="*{event.id}"/>
+
+                <div class="form-group row">
+                    <label for="template" class="col-3 col-form-label">Event Template:</label>
+                    <div class="col-9">
+                        <select class="form-control form-control-sm" id="template" th:field="*{event.type}">
+                            <option th:each="template : ${templates}"
+                                    th:value="${template.id}" th:text="${template.name}"></option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="form-group row">
-                        <label for="event-name" class="col-3 col-form-label">Name:</label>
-                        <div class="col-9">
-                            <input class="form-control form-control-sm" th:type="text" id="event-name"
-                                   th:field="*{event.name}" placeholder="name"/>
-                        </div>
+                <div class="form-group row">
+                    <label for="event-name" class="col-3 col-form-label">Name:</label>
+                    <div class="col-9">
+                        <input class="form-control form-control-sm" th:type="text" id="event-name"
+                               th:field="*{event.name}" placeholder="name"/>
                     </div>
-                    <div class="form-group row">
-                        <label for="event-description" class="col-3 col-form-label">Description:</label>
-                        <div class="col-9">
+                </div>
+                <div class="form-group row">
+                    <label for="event-description" class="col-3 col-form-label">Description:</label>
+                    <div class="col-9">
                             <textarea class="form-control form-control-sm" rows="4" id="event-description"
                                       placeholder="description" th:field="*{event.description}"></textarea>
-                        </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-3 col-form-label">Occurence:</label>
-                        <div class="col-9 checkbox">
-                            <label class="col-form-label">
-                                <input type="radio" class="form-control form-control-sm" title="One-time" name="occurence" checked="checked" th:value="one-time" />
-                                One-time
-                            </label>
-                            <label class="col-form-label">
-                                <input type="radio" class="form-control form-control-sm" title="Weekly" name="occurence" th:value="weekly" />
-                                Weekly
-                            </label>
-                            <label class="col-form-label">
-                                <input type="radio" class="form-control form-control-sm" title="Mounthly" name="occurence" th:value="monthly" />
-                                Mounthly
-                            </label>
-                        </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-3 col-form-label">Occurence:</label>
+                    <div class="col-9 checkbox">
+                        <label class="col-form-label">
+                            <input type="radio" class="form-control form-control-sm" title="One-time" name="occurence" checked="checked" th:value="one-time" />
+                            One-time
+                        </label>
+                        <label class="col-form-label">
+                            <input type="radio" class="form-control form-control-sm" title="Weekly" name="occurence" th:value="weekly" />
+                            Weekly
+                        </label>
+                        <label class="col-form-label">
+                            <input type="radio" class="form-control form-control-sm" title="Mounthly" name="occurence" th:value="monthly" />
+                            Mounthly
+                        </label>
                     </div>
-
-                    <div class="form-group row">
-                        <label for="event-start" class="col-3 col-form-label">Start Date:</label>
-                        <div class="col-9">
-                            <input type="text" class="form-control form-control-sm"
-                                   id="event-start" th:field="*{event.start}"/>
-                            <!--data-inputmask="'alias': 'datetime'"/>-->
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="event-duration" class="col-3 col-form-label">Duration :</label>
-                        <div class="col-9">
-                            <input class="form-control form-control-sm" th:type="number" th:value="60"
-                                   id="event-duration" th:field="*{event.duration}"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-12 text-md-left">Notification Settings:</div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-3 col-form-label">Event Type :</label>
-                        <div class="col-9 checkbox">
-                            <label class="col-form-label">
-                                <input type="radio" class="form-control form-control-sm" title="Simple" th:field="*{event.recurrentType}" checked="checked" th:value="Simple" />
-                                Simple
-                            </label>
-                            <label class="col-form-label">
-                                <input type="radio" class="form-control form-control-sm" title="Class" th:field="*{event.recurrentType}" th:value="Class" />
-                                Class
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-12">
-                            <div th:replace="items/class-event :: event"></div>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger js_event-delete">Delete</button>
-                    <button type="submit" class="btn btn-primary">Create</button>
+                <div class="form-group row">
+                    <label for="event-start" class="col-3 col-form-label">Start Date:</label>
+                    <div class="col-9">
+                        <input type="text" class="form-control form-control-sm"
+                               id="event-start" th:field="*{event.start}"/>
+                        <!--data-inputmask="'alias': 'datetime'"/>-->
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="event-duration" class="col-3 col-form-label">Duration :</label>
+                    <div class="col-9">
+                        <input class="form-control form-control-sm" th:type="number" th:value="60"
+                               id="event-duration" th:field="*{event.duration}"/>
+                    </div>
                 </div>
 
-            </form>
+                <div class="form-group row">
+                    <div class="col-12 text-md-left">Notification Settings:</div>
+                </div>
 
-        </div>
+                <div class="form-group row">
+                    <label class="col-3 col-form-label">Event Type :</label>
+                    <div class="col-9 checkbox">
+                        <label class="col-form-label">
+                            <input type="radio" class="form-control form-control-sm" title="Simple" th:field="*{event.type}" checked="checked" th:value="S" />
+                            Simple
+                        </label>
+                        <label class="col-form-label">
+                            <input type="radio" class="form-control form-control-sm" title="Class" th:field="*{event.type}" th:value="C" />
+                            Class
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-12">
+                        <div th:replace="items/class-event :: event"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger js_event-delete">Delete</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+
+        </form>
+
     </div>
 </div>
 

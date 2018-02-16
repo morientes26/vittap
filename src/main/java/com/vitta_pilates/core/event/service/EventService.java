@@ -1,10 +1,12 @@
 package com.vitta_pilates.core.event.service;
 
+import com.vitta_pilates.core.event.component.AttendanceForm;
 import com.vitta_pilates.core.event.component.EventForm;
 import com.vitta_pilates.core.event.component.Filter;
 import com.vitta_pilates.core.event.component.SelectPersonResult;
 import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.dao.Class;
+import com.vitta_pilates.model.dao.attendance.Attendance;
 import com.vitta_pilates.model.init.Initiator;
 import com.vitta_pilates.model.repository.*;
 import org.slf4j.Logger;
@@ -43,6 +45,9 @@ public class EventService {
   @Autowired
   AttendantRepository attendantRepository;
 
+  @Autowired
+  AttendanceRepository attendanceRepository;
+
   public List<Event> getDefaultData(){
     return getFiltred(null);
   }
@@ -73,7 +78,8 @@ public class EventService {
     if (!StringUtils.isEmpty(eventForm.getId())){
       classInstance = classInstanceRepository.findOne(Long.valueOf(eventForm.getId()));
     } else {
-      ClassTemplate classTemplate = classTemplateRepository.getOne(eventForm.getType());
+      //todo: what kind of class template
+      ClassTemplate classTemplate = classTemplateRepository.getOne(1L);
 
       //todo: this is only create custom template and class
       Schedule schedule = new Schedule(
@@ -95,6 +101,15 @@ public class EventService {
     classInstance.setDescription(eventForm.getDescription());
     //todo: what about duration ??? is only on class not on instance
     classInstance = classInstanceRepository.save(classInstance);
+
+    if (eventForm.getType().equals(EventForm.Type.SIMPLE.getName())){
+
+    } else {
+      Attendance attendance = new Attendance();
+      attendance.setClassInstance(classInstance);
+      attendance = attendanceRepository.save(attendance);
+    }
+
     log.debug("Persist event id: {} from calendar event", classInstance.getId());
   }
 
@@ -105,9 +120,15 @@ public class EventService {
     log.debug("Delete event id: {} from calendar event", id);
   }
 
-  public Event get(String id){
+  public EventForm getEventForm(String id){
     log.debug("Load event id: {} from DB", id);
-    return transform(classInstanceRepository.findOne(Long.valueOf(id)));
+    ClassInstance classInstance = classInstanceRepository.findOne(Long.valueOf(id));
+    Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
+    return transform(classInstance, attendance);
+  }
+
+  public Event get(String id){
+    return transform(classInstanceRepository.getOne(Long.valueOf(id)));
   }
 
   public SelectPersonResult getPerson(String term, boolean isTeacher){
@@ -122,6 +143,10 @@ public class EventService {
     persons.forEach(item-> result.getResults().add(transform(item)));
     return result;
   }
+
+
+
+  // private
 
   private SelectPersonResult.Person transform(Attendant attendant){
     return new SelectPersonResult.Person(String.valueOf(attendant.getId()), attendant.getPersonalData().getName());
@@ -152,7 +177,29 @@ public class EventService {
     if (classInstance.getClazz().getRoom()!=null){
       event.setRoom(classInstance.getClazz().getRoom().getName());
     }
+
     return event;
+  }
+
+  private EventForm transform(ClassInstance classInstance, Attendance attendance){
+    EventForm eventForm = new EventForm();
+    eventForm.setId(String.valueOf(classInstance.getId()));
+    eventForm.setName(classInstance.getName());
+    eventForm.setDescription(classInstance.getDescription());
+   //todo: eventForm.setDuration(classInstance.get);
+   //todo: eventForm.setOccurence();
+   //todo: eventForm.setRecurrentType();
+    eventForm.setStart(classInstance.getTrueTime().toString());
+    eventForm.setDuration(classInstance.getClazz().getEvent().getDuration());
+    eventForm.setTitle(
+            classInstance.getClazz().getEvent().getName() + " "
+                    + classInstance.getClazz().getEvent().getRequiredLevel().getName());
+    //todo:eventForm.setType();
+    //todo:
+    eventForm.setAttendanceTeacherForm(null);
+    eventForm.setAttendanceForm(null);
+
+    return eventForm;
   }
 
   private Date dateValue(String dateS){

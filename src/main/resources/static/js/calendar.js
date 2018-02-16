@@ -64,6 +64,8 @@ $(document).ready(function() {
         // html button for delete event
         var deleteButton = $(".js_event-delete");
 
+        var registration = $(".js_registration");
+
         var clean = function () {
             $(".modal-body #event-id").val('');
             $(".modal-body #event-name").val('');
@@ -150,6 +152,19 @@ $(document).ready(function() {
                 var event = $(".js_modal-click").data('event-object');
                 $('#eventModal').modal('hide');
                 $("#delete-dialog-confirm").data('event', event).dialog("open");
+            });
+
+            registration.bind('click', function () {
+                var event = $(".js_modal-click").data('event-object');
+                $.ajax({
+                    type: 'GET',
+                    url: '/event-calendar/attendance/'+event.id,
+
+                    success: function(events) {
+
+                       $('#tab-registration').replaceWith(events);
+                    }
+                });
             });
         };
 

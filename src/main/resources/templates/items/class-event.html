@@ -34,13 +34,13 @@
     </div>
 
     <ul class="nav nav-pills">
-        <li class="active"><a data-toggle="pill" href="#registration">Registration</a></li>
+        <li class="active"><a data-toggle="pill" class="js_registration" href="#registration">Registration</a></li>
         <li><a data-toggle="pill" href="#attendance">Attendance</a></li>
     </ul>
 
     <div class="tab-content">
         <div id="registration" class="tab-pane fade in active">
-            <p th:replace="items/class-event :: registration"></p>
+            <p id="tab-registration" th:replace="items/class-event :: registration"></p>
         </div>
         <div id="attendance" class="tab-pane fade">
             <p th:replace="items/class-event :: attendance"></p>
@@ -63,29 +63,39 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td><img src=""/></td>
-        <td><img src=""/></td>
-        <td>teacher</td>
-        <td>Suspend</td>
-        <td>Unenroll</td>
-    </tr>
-    <tr>
-        <td><img src=""/></td>
-        <td><img src=""/></td>
-        <td colspan="2">
+
+    <tr th:if="${event.AttendanceTeacherForm!=null}"> <!-- teacher -->
+        <td>
+            <label th:replace="items/class-event :: seat-fixed(${event.attendanceTeacherForm})" ></label>
+        </td>
+        <td>
+            <label th:replace="items/class-event :: seat-temporary(${event.attendanceTeacherForm})"></label>
+        </td>
+        <td th:if="${event.attendanceTeacherForm.name!=null}" th:text="${event.attendanceTeacherForm.name}"></td>
+        <td th:unless="${event.attendanceTeacherForm.name!=null}">
             <div th:replace="items/class-event :: select-teacher"></div>
         </td>
-        <td>Enroll</td>
+        <td><div th:replace="items/class-event :: action(1, 2, ${event.attendanceTeacherForm.action})"></div></td>
+        <td><div th:replace="items/class-event :: action(1, 2, ${event.attendanceTeacherForm.action2})"></div></td>
     </tr>
-    <tr>
-        <td><img src=""/></td>
-        <td><img src=""/></td>
-        <td colspan="2">
+
+        <!-- pupils -->
+    <tr th:if="${event.attendanceForm!=null}" th:each="att : ${event.attendanceForm}">
+        <td>
+            <label th:replace="items/class-event :: seat-fixed(${att})" ></label>
+        </td>
+        <td>
+            <label th:replace="items/class-event :: seat-temporary(${att})"></label>
+        </td>
+        <td th:if="${att.name!=null}" th:text="${att.name}"></td>
+        <td th:unless="${att.name!=null}">
             <div th:replace="items/class-event :: select-pupil"></div>
         </td>
-        <td>Enroll</td>
+        <td><div th:replace="items/class-event :: action(1, 2, ${att.action})"></div></td>
+        <td><div th:replace="items/class-event :: action(1, 2, ${att.action2})"></div></td>
     </tr>
+
+
     </tbody>
     </table>
 </p>
@@ -96,16 +106,48 @@
     tu sa vygeneruje tabulka dochadzky
 </p>
 
+<!-- seat image fixed -->
+<label th:fragment="seat-fixed(att)">
+    <input type="radio" th:name="'seat'+${att.id}" value="fixed" />
+    <img th:if="${att.fixed!=null}" th:src="'/static/img/'+${att.fixed.url}"/>
+</label>
+
+<!-- seat image temporary -->
+<label th:fragment="seat-temporary(att)">
+    <input type="radio" th:name="'seat'+${att.id}" value="temporary" />
+    <img th:if="${att.temporary!=null}" th:src="'/static/img/'+${att.temporary.url}"/>
+</label>
+
+<!-- choosing teacher from selectbox2 -->
 <div th:fragment="select-teacher">
     <select size="50" class="js-teacher" data-placeholder="Search a teacher"
             name="teacher">
     </select>
 </div>
 
+<!-- choosing pupil from selectbox2 -->
 <div th:fragment="select-pupil">
-    <select style="width: 200px" class="js-pupil" data-placeholder="Search a pupil"
+    <select  size="50" class="js-pupil" data-placeholder="Search a pupil"
             name="pupil">
     </select>
+</div>
+
+<!-- action buttons -->
+<div th:fragment="action(user, attendance, type)">
+
+    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).ENROLL}"
+            th:text="enroll" data-th-attendance="${attendance}" data-th-user="${user}">
+    </button>
+    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).UNENROLL}"
+            th:text="unenroll" data-th-attendance="${attendance}" data-th-user="${user}">
+    </button>
+    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).SUSPEND}"
+            th:text="suspend" data-th-attendance="${attendance}" data-th-user="${user}">
+    </button>
+    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).UNSUSPEND}"
+            th:text="unsuspend" data-th-attendance="${attendance}" data-th-user="${user}">
+    </button>
+    <span th:if="${type==''}"></span>
 </div>
 
 </html>

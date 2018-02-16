@@ -39,6 +39,24 @@ body {
     margin-bottom: 20px;
 }
 
+.event-registration{
+    text-align: left;
+}
+.event-registration img{
+    height: 20px;
+}
+.event-registration label > input{ /* HIDE RADIO */
+    visibility: hidden; /* Makes input not-clickable */
+    position: absolute; /* Remove input from document flow */
+}
+.event-registration label > input + img{ /* IMAGE STYLES */
+    cursor:pointer;
+    border:2px solid transparent;
+}
+.event-registration label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
+    border:2px solid #f00;
+}
+
 /* ---------------- Backlog (not used yet) --------------------- */
 .datepicker {
     z-index:1151; /* has to be larger than 1050 */
