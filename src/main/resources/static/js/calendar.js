@@ -64,6 +64,8 @@ $(document).ready(function() {
         // html button for delete event
         var deleteButton = $(".js_event-delete");
 
+        var eventType = $(".js_event-type");
+
         var registration = $(".js_registration");
         var attandence = $(".js_attendance");
 
@@ -167,6 +169,21 @@ $(document).ready(function() {
                     }
                 });
             });
+
+            function showClassEvent(eventType){
+                if (eventType.val()=='C') {
+                    console.log(eventType.val());
+                    $('#class-event').show();
+                } else {
+                    $('#class-event').hide();
+                }
+            }
+
+            eventType.bind('change', function () {
+                showClassEvent($(this));
+            });
+
+
         };
 
         return {

@@ -42,6 +42,11 @@ public class AttendenceService {
   @Autowired
   ClassInstanceRepository classInstanceRepository;
 
+  public ClassInstance getClassInstance(String attendanceId){
+    Attendance attendance = attendanceRepository.findOne(Long.valueOf(attendanceId));
+    return attendance.getClassInstance();
+  }
+
   public List<AttendanceForm> getAttendance(String classInstanceId){
     if (classInstanceId==null)
       return new ArrayList<>();
@@ -173,7 +178,7 @@ public class AttendenceService {
       seat.setTemporary(slot);
     seat = classSeatRepository.save(seat);
     attendance.getClassSeats().add(seat);
-    attendanceRepository.save(attendance);
+    attendance = attendanceRepository.save(attendance);
     log.info("Enroll attendant {} to attendance {}", user.getId(), attendance.getId());
   }
   private void unenroll(ActionForm form, Attendance attendance, Attendant user){

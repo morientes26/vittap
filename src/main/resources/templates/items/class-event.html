@@ -4,7 +4,7 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <!-- Class Event Title -->
-<div th:fragment="event">
+<div th:fragment="event" id="class-event" style="display: none;">
 
     <div class="form-group row">
         <label for="category" class="col-3 col-form-label">Category:</label>
@@ -27,16 +27,10 @@
         </div>
     </div>
 
-    <div class="form-group row">
-        <div class="col-4 offset-8">
-            <input type="button" th:value="'Cancel Class'" class="btn btn-danger"/>
-        </div>
-    </div>
-
-    <p class="text-left">
+    <div class="text-left">
         <a href="#registration" class="js_registration btn btn-link" >Registration</a>
         <a href="#attendance" class="js_attendance btn btn-link" >Attendance</a>
-    </p>
+    </div>
 
     <div class="tab-content">
         <div id="registration" class="tab-pane fade in active">
@@ -93,7 +87,7 @@
             <div th:replace="items/class-event :: action(${att.user}, ${att.id}, ${att.action},'fixed_'+${iterStat.index + 1}, true, false)"></div>
         </td>
         <td>
-            <button class="js_attend btn btn-link" style="display: none;">V</button>
+            <button class="js_attend btn btn-link" style="display: none;" onClick="return false;">V</button>
             <div th:replace="items/class-event :: action(${att.user}, ${att.id}, ${att.action2},'temporary_'+${iterStat.index + 1}, false, false)"></div>
         </td>
     </tr>
@@ -170,6 +164,7 @@
                 $j('.js_actions :button').hide();
                 $j('.js_status :button').hide();
                 $j('.js_attend :button').hide();
+                $j(".js_registration").click();
             }).fail(function(xhr, status, error) {
                 console.log(error);
             });

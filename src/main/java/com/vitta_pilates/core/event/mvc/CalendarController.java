@@ -118,7 +118,7 @@ public class CalendarController {
   public
   String getAttendance(
           @PathVariable("id") String id, Model model) {
-    model.addAttribute("event", prepareAttendanceForm(id));
+    model.addAttribute("event", prepareAttendanceFormByClassInstance(id));
     return "items/class-event :: registration";
   }
 
@@ -130,7 +130,13 @@ public class CalendarController {
     return "items/class-event :: registration";
   }
 
-  private EventForm prepareAttendanceForm(String id){
+  private EventForm prepareAttendanceForm(String attId){
+    return prepareAttendanceFormByClassInstance(
+            String.valueOf(attendenceService.getClassInstance(attId).getId())
+    );
+  }
+
+  private EventForm prepareAttendanceFormByClassInstance(String id){
     List<AttendanceForm> list =  attendenceService.getAttendance(id);
     EventForm eventForm = new EventForm();
     if (!list.isEmpty())

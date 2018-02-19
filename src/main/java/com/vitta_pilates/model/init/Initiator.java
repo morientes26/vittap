@@ -4,6 +4,9 @@ package com.vitta_pilates.model.init;
 import com.vitta_pilates.core.people.service.ClassService;
 import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.dao.Class;
+import com.vitta_pilates.model.dao.attendance.Attendance;
+import com.vitta_pilates.model.dao.attendance.ClassSeat;
+import com.vitta_pilates.model.dao.attendance.ClassSeatSlot;
 import com.vitta_pilates.model.enumeration.LevelOfAccess;
 import com.vitta_pilates.model.enumeration.ReccurenceType;
 import com.vitta_pilates.model.repository.*;
@@ -64,6 +67,15 @@ public class Initiator  {
   private LevelRepository levelRepository;
 
   @Autowired
+  private ClassSeatSlotRepository classSeatSlotRepository;
+
+  @Autowired
+  private ClassSeatRepository classSeatRepository;
+
+  @Autowired
+  AttendanceRepository attendanceRepository;
+
+  @Autowired
   private ClassService classService;
 
   private List<ClassCategory> classCategories = new ArrayList<>();
@@ -83,6 +95,7 @@ public class Initiator  {
       importAttendents();
       importClassInstance();
       importProgramInstance();
+      importEventAttendance(3);
     };
   }
 
@@ -229,6 +242,21 @@ public class Initiator  {
     classInstance.setClazz(clazz);
     return classInstance;
 
+  }
+
+  public void importEventAttendance(int count){
+    for (int i=0;i<count;i++) {
+      ClassSeatSlot slot = new ClassSeatSlot(pupils.get(i));
+      //slot = classSeatSlotRepository.save(slot);
+      ClassSeat seat = new ClassSeat();
+      seat.setTeacher(true);
+      seat.setFixed(slot);
+      seat = classSeatRepository.save(seat);
+      Attendance attendance = new Attendance();
+      attendance.setClassInstance(classInstances.get(i));
+      attendance.getClassSeats().add(seat);
+      attendanceRepository.save(attendance);
+    }
   }
 
   private void importProgramInstance() {
