@@ -21,47 +21,6 @@ public class EventForm implements Serializable{
 
   public EventForm(){
 
-    //fixme: test data
-
-//    attendanceTeacherForm = new AttendanceForm.AttendanceFormBuilder(2L,1L)
-//            .setFixed(AttendanceForm.Flag.ENROLL)
-//            .setTemporary(AttendanceForm.Flag.DISABLED)
-//            .setAction(AttendanceForm.Action.SUSPEND)
-//            .setAction2(AttendanceForm.Action.ENROLL)
-//            .createAttendanceForm();
-//
-//    attendanceForm.add( new AttendanceForm.AttendanceFormBuilder(1L,2L)
-//            .setFixed(AttendanceForm.Flag.ENROLL)
-//            .setTemporary(AttendanceForm.Flag.DISABLED)
-//            .setAction(AttendanceForm.Action.SUSPEND)
-//            .setAction2(AttendanceForm.Action.ENROLL)
-//            .createAttendanceForm()
-//    );
-//    attendanceForm.add( new AttendanceForm.AttendanceFormBuilder(1L,2L)
-//            .setFixed(AttendanceForm.Flag.SUSPENDED)
-//            .setTemporary(AttendanceForm.Flag.ENROLL)
-//            .setAction2(AttendanceForm.Action.UNENROLL)
-//            .createAttendanceForm()
-//    );
-//    attendanceForm.add( new AttendanceForm.AttendanceFormBuilder(1L,2L)
-//            .setFixed(AttendanceForm.Flag.DISABLED)
-//            .setTemporary(AttendanceForm.Flag.ENROLL)
-//            .setAction2(AttendanceForm.Action.UNENROLL)
-//            .createAttendanceForm()
-//    );
-//    attendanceForm.add( new AttendanceForm.AttendanceFormBuilder(1L,2L)
-//            .setFixed(AttendanceForm.Flag.EMPTY)
-//            .setTemporary(AttendanceForm.Flag.EMPTY)
-//            .setAction2(AttendanceForm.Action.ENROLL)
-//            .createAttendanceForm()
-//    );
-//    attendanceForm.add( new AttendanceForm.AttendanceFormBuilder(1L,2L)
-//            .setFixed(AttendanceForm.Flag.ENROLL)
-//            .setTemporary(AttendanceForm.Flag.EMPTY)
-//            .setAction2(AttendanceForm.Action.ENROLL)
-//            .createAttendanceForm()
-//    );
-
   }
 
   public enum Type {

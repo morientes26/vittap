@@ -1,10 +1,7 @@
 package com.vitta_pilates.core.event.mvc;
 
 
-import com.vitta_pilates.core.event.component.AttendanceForm;
-import com.vitta_pilates.core.event.component.EventForm;
-import com.vitta_pilates.core.event.component.Filter;
-import com.vitta_pilates.core.event.component.SelectPersonResult;
+import com.vitta_pilates.core.event.component.*;
 import com.vitta_pilates.core.event.service.AttendenceService;
 import com.vitta_pilates.core.event.service.EventService;
 import com.vitta_pilates.model.dao.Event;
@@ -97,12 +94,6 @@ public class CalendarController {
     return service.get(id);
   }
 
-//  @RequestMapping(value = "/data/{id}", method = RequestMethod.GET)
-//  public String getEvent(@PathVariable("id") String id, Model model)
-//  {
-//    model.addAttribute("event", service.get(id));
-//    return "items/modal :: modal-dialog";
-//  }
 
   /**
    * Load all teacher to select2 box
@@ -123,24 +114,29 @@ public class CalendarController {
    * Load Attendance to modal
    * @return
    */
-//  @RequestMapping(value = "/attendance/{id}", method = RequestMethod.GET)
-//  public @ResponseBody
-//  List<AttendanceForm> getAttendance(
-//          @PathVariable("id") String id) {
-//    return attendenceService.getAttendance(id);
-//  }
-
   @RequestMapping(value = "/attendance/{id}", method = RequestMethod.GET)
   public
   String getAttendance(
           @PathVariable("id") String id, Model model) {
+    model.addAttribute("event", prepareAttendanceForm(id));
+    return "items/class-event :: registration";
+  }
+
+  @RequestMapping(value = "/action", method = RequestMethod.POST)
+  public
+  String action(ActionForm form, Model model) {
+    attendenceService.action(form);
+    model.addAttribute("event", prepareAttendanceForm(form.getAttendanceId()));
+    return "items/class-event :: registration";
+  }
+
+  private EventForm prepareAttendanceForm(String id){
     List<AttendanceForm> list =  attendenceService.getAttendance(id);
     EventForm eventForm = new EventForm();
     if (!list.isEmpty())
       eventForm.setAttendanceTeacherForm(list.get(0));
-      if (list.size()>1)
-        eventForm.setAttendanceForm(list.subList(1, list.size()));
-    model.addAttribute("event", eventForm);
-    return "items/class-event :: registration";
+    if (list.size()>1)
+      eventForm.setAttendanceForm(list.subList(1, list.size()));
+    return eventForm;
   }
 }

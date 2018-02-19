@@ -21,6 +21,11 @@ public class  ClassSeatSlot {
 
   public ClassSeatSlot(){}
 
+  public ClassSeatSlot(Attendant attendant){
+    this.attendant = attendant;
+    this.status = ClassSeatSlotStatus.OCCUPIED;
+  }
+
 
   public Long getId() {
     return id;

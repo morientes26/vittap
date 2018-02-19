@@ -65,6 +65,7 @@ $(document).ready(function() {
         var deleteButton = $(".js_event-delete");
 
         var registration = $(".js_registration");
+        var attandence = $(".js_attendance");
 
         var clean = function () {
             $(".modal-body #event-id").val('');
@@ -73,22 +74,6 @@ $(document).ready(function() {
             $(".modal-title").val("Create event");
             $(".modal-footer button[type='submit']").text("Create");
             $(".modal-footer .js_event-delete").hide();
-            $('.js-teacher').select2({
-                ajax: {
-                    url: '/event-calendar/selectData?id=teacher',
-                    dataType: 'json'
-                },
-                placeholder: "Select a teacher",
-                allowClear: true
-            });
-            $('.js-pupil').select2({
-                ajax: {
-                    url: '/event-calendar/selectData?id=pupil',
-                    dataType: 'json'
-                },
-                placeholder: "Select a pupil",
-                allowClear: true
-            });
         };
 
         var loadEvent = function (id) {
@@ -161,8 +146,24 @@ $(document).ready(function() {
                     url: '/event-calendar/attendance/'+event.id,
 
                     success: function(events) {
+                       $('#registration').replaceWith(events);
+                       $('.js_actions :button').hide();
+                       $('.js_status').hide();
+                       $('.js_attend').hide();
+                    }
+                });
+            });
+            attandence.bind('click', function () {
+                var event = $(".js_modal-click").data('event-object');
+                $.ajax({
+                    type: 'GET',
+                    url: '/event-calendar/attendance/'+event.id,
 
-                       $('#tab-registration').replaceWith(events);
+                    success: function(events) {
+                        $('#registration').replaceWith(events);
+                        $('.js_actions :button').hide();
+                        $('.js_status').show();
+                        $('.js_attend').show();
                     }
                 });
             });

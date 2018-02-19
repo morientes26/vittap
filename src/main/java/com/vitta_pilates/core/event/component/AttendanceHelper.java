@@ -54,14 +54,14 @@ public class AttendanceHelper {
     
     static Attendance createDummyAttendance() {
         Attendance att = new Attendance();
-        att.setTeacher( new ClassSeat());
-        att.getTeacher().setFixed(new ClassSeatSlot());
-        att.getTeacher().setTemporary(new ClassSeatSlot());
-        att.setPupils(new ArrayList<>());
+//        att.setTeacher( new ClassSeat());
+//        att.getTeacher().setFixed(new ClassSeatSlot());
+//        att.getTeacher().setTemporary(new ClassSeatSlot());
+        att.setClassSeats(new ArrayList<>());
         ClassSeat c = new ClassSeat();
         c.setFixed(new ClassSeatSlot());
         c.setTemporary(new ClassSeatSlot());
-        att.getPupils().add(c);
+        att.getClassSeats().add(c);
 
         return att;
     }
@@ -88,10 +88,10 @@ public class AttendanceHelper {
 
         //rendering GUI according to model(DB)
         //DB => for all seats: Controller.getClassSeatStatus, Controller.getAppliableActions => GUI 
-        helper.renderSeat(att.getTeacher());
-        for(int i=0; i<att.getPupils().size(); i++ )
-            helper.renderSeat(att.getPupils().get(i));
-        
+//        helper.renderSeat(att.getTeacher());
+//        for(int i = 0; i<att.getClassSeats().size(); i++ )
+//            helper.renderSeat(att.getClassSeats().get(i));
+//
         //
         //GUI => seat[i], action_X: Service.actionX(seat[i]) => DB
         //on enrollFixed

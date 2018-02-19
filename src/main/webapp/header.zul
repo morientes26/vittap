@@ -37,7 +37,7 @@
 
         <menu label="${labels.menu.people}">
             <menupopup>
-                <menuitem label="${labels.menu.pupils}" href="/people/pupil.zul"/>
+                <menuitem label="${labels.menu.classSeats}" href="/people/pupil.zul"/>
                 <menuitem label="${labels.menu.teachers}" href="/people/teacher.zul" />
                 <menuitem label="${labels.menu.appusers}" href="" />
             </menupopup>
@@ -57,7 +57,7 @@
 
         <menu label="${labels.menu.people}">
             <menupopup>
-                <menuitem label="${labels.menu.pupils}" href=""/>
+                <menuitem label="${labels.menu.classSeats}" href=""/>
                 <menuitem label="${labels.menu.teachers}" href="" />
                 <menuitem label="${labels.menu.appusers}" href="" />
             </menupopup>

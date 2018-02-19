@@ -33,24 +33,21 @@
         </div>
     </div>
 
-    <ul class="nav nav-pills">
-        <li class="active"><a data-toggle="pill" class="js_registration" href="#registration">Registration</a></li>
-        <li><a data-toggle="pill" href="#attendance">Attendance</a></li>
-    </ul>
+    <p class="text-left">
+        <a href="#registration" class="js_registration btn btn-link" >Registration</a>
+        <a href="#attendance" class="js_attendance btn btn-link" >Attendance</a>
+    </p>
 
     <div class="tab-content">
         <div id="registration" class="tab-pane fade in active">
-            <p id="tab-registration" th:replace="items/class-event :: registration"></p>
-        </div>
-        <div id="attendance" class="tab-pane fade">
-            <p th:replace="items/class-event :: attendance"></p>
+            <p th:replace="items/class-event :: registration"></p>
         </div>
     </div>
 </div>
 
 
 <!-- Class Event Registration -->
-<p th:fragment="registration">
+<p th:fragment="registration" id="tab-registration">
 
     <table class="event-registration">
     <thead>
@@ -66,88 +63,179 @@
 
     <tr th:if="${event.AttendanceTeacherForm!=null}"> <!-- teacher -->
         <td>
-            <label th:replace="items/class-event :: seat-fixed(${event.attendanceTeacherForm})" ></label>
+            <label th:replace="items/class-event :: seat-fixed(${event.attendanceTeacherForm}, '0')" ></label>
         </td>
         <td>
-            <label th:replace="items/class-event :: seat-temporary(${event.attendanceTeacherForm})"></label>
+            <label th:replace="items/class-event :: seat-temporary(${event.attendanceTeacherForm}, '0')"></label>
         </td>
-        <td th:if="${event.attendanceTeacherForm.name!=null}" th:text="${event.attendanceTeacherForm.name}"></td>
-        <td th:unless="${event.attendanceTeacherForm.name!=null}">
-            <div th:replace="items/class-event :: select-teacher"></div>
+        <td th:if="${event.attendanceTeacherForm.user!=0}" th:text="${event.attendanceTeacherForm.name}"></td>
+        <td th:if="${event.attendanceTeacherForm.user==0}">
+            <th:block th:replace="items/class-event :: select-teacher"></th:block>
         </td>
-        <td><div th:replace="items/class-event :: action(1, 2, ${event.attendanceTeacherForm.action})"></div></td>
-        <td><div th:replace="items/class-event :: action(1, 2, ${event.attendanceTeacherForm.action2})"></div></td>
+        <td><div th:replace="items/class-event :: action(${event.attendanceTeacherForm.user}, ${event.attendanceTeacherForm.id}, ${event.attendanceTeacherForm.action},'fixed_0', true, true)"></div></td>
+        <td><div th:replace="items/class-event :: action(${event.attendanceTeacherForm.user}, ${event.attendanceTeacherForm.id}, ${event.attendanceTeacherForm.action2},'temporary_0', false, true)"></div></td>
     </tr>
 
         <!-- pupils -->
-    <tr th:if="${event.attendanceForm!=null}" th:each="att : ${event.attendanceForm}">
+    <tr th:if="${event.attendanceForm!=null}" th:each="att,iterStat : ${event.attendanceForm}">
         <td>
-            <label th:replace="items/class-event :: seat-fixed(${att})" ></label>
+            <label th:replace="items/class-event :: seat-fixed(${att}, ${iterStat.index + 1})" ></label>
         </td>
         <td>
-            <label th:replace="items/class-event :: seat-temporary(${att})"></label>
+            <label th:replace="items/class-event :: seat-temporary(${att}, ${iterStat.index + 1})"></label>
         </td>
-        <td th:if="${att.name!=null}" th:text="${att.name}"></td>
-        <td th:unless="${att.name!=null}">
-            <div th:replace="items/class-event :: select-pupil"></div>
+        <td th:if="${att.user!=null}" th:text="${att.name}"></td>
+        <td th:unless="${att.user!=null}">
+            <th:block th:replace="items/class-event :: select-pupil"></th:block>
         </td>
-        <td><div th:replace="items/class-event :: action(1, 2, ${att.action})"></div></td>
-        <td><div th:replace="items/class-event :: action(1, 2, ${att.action2})"></div></td>
+        <td>
+            <span class="js_status red" style="display: none;">x</span>
+            <div th:replace="items/class-event :: action(${att.user}, ${att.id}, ${att.action},'fixed_'+${iterStat.index + 1}, true, false)"></div>
+        </td>
+        <td>
+            <button class="js_attend btn btn-link" style="display: none;">V</button>
+            <div th:replace="items/class-event :: action(${att.user}, ${att.id}, ${att.action2},'temporary_'+${iterStat.index + 1}, false, false)"></div>
+        </td>
     </tr>
 
 
     </tbody>
     </table>
-</p>
+<script src='/static/js/lib/jquery.min.js'></script>
+<script src='/static/js/lib/select2.min.js'></script>
+<script>
+    var $j = jQuery.noConflict();
+    $j(document).ready(function() {
+        $j("input.js_fixed").bind('click',function(){
+            var id = $j(this).data('id')
+            var f = $j('.fixed_' + id);
+            var t = $j('.temporary_' + id);
+            $j('.js_actions :button').hide();
+            f.show();
+            t.hide();
+        });
+        $j("input.js_temporary").bind('click',function(){
+            var id = $j(this).data('id')
+            var f = $j('.fixed_' + id);
+            var t = $j('.temporary_' + id);
+            $j('.js_actions :button').hide();
+            f.hide();
+            t.show();
+        });
+        $j('.js-teacher').select2({
+            ajax: {
+                url: '/event-calendar/selectData?id=teacher',
+                dataType: 'json'
+            },
+            placeholder: "Select a teacher",
+            allowClear: true
+        });
+        $j('.js-pupil').select2({
+            ajax: {
+                url: '/event-calendar/selectData?id=pupil',
+                dataType: 'json'
+            },
+            placeholder: "Select a pupil",
+            allowClear: true
+        });
 
-<!-- Class Event Attendance -->
-<p th:fragment="attendance">
+        $j('.js_btn_action').bind('click',function(event){
 
-    tu sa vygeneruje tabulka dochadzky
+            event.preventDefault();
+
+            var attId = $j(this).data('attendance');
+            var user = $j(this).data('user');
+
+            if (user === "undefined" || user=="undefined" || user == null){
+                //fixme: better selector who is not depends on html layout
+                console.log($(this).parents('tr').find('select').val());
+                user = $(this).parents('tr').find('select').val();
+            }
+            var action = $j(this).data('action');
+            var fixed = $j(this).data('fixed');
+            var teacher = $j(this).data('teacher');
+            var data = {
+                attendanceId : attId,
+                user : user,
+                action : action,
+                fixed : fixed,
+                teacher : teacher
+            };
+            $j.ajax({
+                url: '/event-calendar/action',
+                type: 'post',
+                data: data
+            }).done(function(events) {
+                $j('#registration').replaceWith(events);
+                $j('.js_actions :button').hide();
+                $j('.js_status :button').hide();
+                $j('.js_attend :button').hide();
+            }).fail(function(xhr, status, error) {
+                console.log(error);
+            });
+
+            return false;
+
+        });
+    });
+
+
+</script>
 </p>
 
 <!-- seat image fixed -->
-<label th:fragment="seat-fixed(att)">
-    <input type="radio" th:name="'seat'+${att.id}" value="fixed" />
-    <img th:if="${att.fixed!=null}" th:src="'/static/img/'+${att.fixed.url}"/>
+<label th:fragment="seat-fixed(att, id)">
+    <input th:if="${att.fixed!=null}" class="js_fixed" th:attr="data-id=${id}" type="radio" th:name="'seat'+${att.id}" value="fixed" />
+    <img   th:if="${att.fixed!=null}" th:src="'/static/img/'+${att.fixed.url}"/>
 </label>
 
 <!-- seat image temporary -->
-<label th:fragment="seat-temporary(att)">
-    <input type="radio" th:name="'seat'+${att.id}" value="temporary" />
+<label  th:fragment="seat-temporary(att, id)">
+    <input th:if="${att.temporary!=null}" class="js_temporary" th:attr="data-id=${id}" type="radio" th:name="'seat'+${att.id}" value="temporary" />
     <img th:if="${att.temporary!=null}" th:src="'/static/img/'+${att.temporary.url}"/>
 </label>
 
 <!-- choosing teacher from selectbox2 -->
-<div th:fragment="select-teacher">
-    <select size="50" class="js-teacher" data-placeholder="Search a teacher"
+<th:block th:fragment="select-teacher">
+    <select style="width: 200px" class="js-teacher select2" data-placeholder="Search a teacher"
             name="teacher">
     </select>
-</div>
+</th:block>
 
 <!-- choosing pupil from selectbox2 -->
-<div th:fragment="select-pupil">
-    <select  size="50" class="js-pupil" data-placeholder="Search a pupil"
+<th:block th:fragment="select-pupil">
+    <select style="width: 200px" class="js-pupil select2" data-placeholder="Search a pupil"
             name="pupil">
     </select>
-</div>
+</th:block>
 
 <!-- action buttons -->
-<div th:fragment="action(user, attendance, type)">
+<div th:fragment="action(user, attendance, type, clazz, isFixed, isTeacher)" class="js_actions">
 
-    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).ENROLL}"
-            th:text="enroll" data-th-attendance="${attendance}" data-th-user="${user}">
-    </button>
-    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).UNENROLL}"
-            th:text="unenroll" data-th-attendance="${attendance}" data-th-user="${user}">
-    </button>
-    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).SUSPEND}"
-            th:text="suspend" data-th-attendance="${attendance}" data-th-user="${user}">
-    </button>
-    <button th:if="${type==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).UNSUSPEND}"
-            th:text="unsuspend" data-th-attendance="${attendance}" data-th-user="${user}">
-    </button>
-    <span th:if="${type==''}"></span>
+    <th:block th:each="t : ${type}">
+        <button th:if="${t==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).ENROLL}"
+                th:class="${clazz} + ' js_btn_action'" th:text="enroll" style="display:none;"
+                th:attr="data-attendance=${attendance},data-user=${user},data-action='enroll',data-fixed=${isFixed},data-teacher=${isTeacher}"
+        >
+        </button>
+        <button th:if="${t==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).UNENROLL}"
+                th:class="${clazz} + ' js_btn_action'" th:text="unenroll" style="display:none;"
+                th:attr="data-attendance=${attendance},data-user=${user},data-action='unenroll',data-fixed=${isFixed},data-teacher=${isTeacher}"
+        >
+        </button>
+        <button th:if="${t==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).SUSPEND}"
+                th:class="${clazz} + ' js_btn_action'" th:text="suspend" style="display:none;"
+                th:attr="data-attendance=${attendance},data-user=${user},data-action='suspend',data-fixed=${isFixed},data-teacher=${isTeacher}"
+        >
+        </button>
+        <button th:if="${t==T(com.vitta_pilates.core.event.component.AttendanceForm.Action).UNSUSPEND}"
+                th:class="${clazz} + ' js_btn_action'"  th:text="unsuspend" style="display:none;"
+                th:attr="data-attendance=${attendance},data-user=${user},data-action='unsuspend',data-fixed=${isFixed},data-teacher=${isTeacher}"
+        >
+        </button>
+        <span th:class="${clazz}" th:if="${type==''}"></span>
+    </th:block>
+
 </div>
 
 </html>

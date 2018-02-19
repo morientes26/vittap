@@ -1,6 +1,10 @@
 package com.vitta_pilates.model.dao.attendance;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +17,19 @@ public class ClassSeat {
 
   //    int position;
   @OneToOne
+  @Cascade(value = CascadeType.ALL)
   private ClassSeatSlot fixed;
 
   @OneToOne
+  @Cascade(value = CascadeType.ALL)
   private ClassSeatSlot temporary;
 
   private boolean attendanceStaus = false; // true = attended, false = not_attended
 
-  @ManyToMany(mappedBy = "pupils")
-  private List<Attendance> pupils  = new ArrayList<>();
+  private boolean isTeacher = false;
+
+  @ManyToMany(mappedBy = "classSeats")
+  private List<Attendance> classSeats  = new ArrayList<>();
 
   public ClassSeat(){}
 
@@ -53,11 +61,19 @@ public class ClassSeat {
     this.attendanceStaus = attendanceStaus;
   }
 
-  public List<Attendance> getPupils() {
-    return pupils;
+  public boolean isTeacher() {
+    return isTeacher;
   }
 
-  public void setPupils(List<Attendance> pupils) {
-    this.pupils = pupils;
+  public void setTeacher(boolean teacher) {
+    isTeacher = teacher;
+  }
+
+  public List<Attendance> getClassSeats() {
+    return classSeats;
+  }
+
+  public void setClassSeats(List<Attendance> classSeats) {
+    this.classSeats = classSeats;
   }
 }

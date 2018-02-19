@@ -1,21 +1,26 @@
 package com.vitta_pilates.core.event.service;
 
+import com.vitta_pilates.core.event.component.ActionForm;
 import com.vitta_pilates.core.event.component.AttendanceForm;
 import com.vitta_pilates.core.event.component.AttendanceHelper;
 import com.vitta_pilates.model.dao.Attendant;
 import com.vitta_pilates.model.dao.ClassInstance;
 import com.vitta_pilates.model.dao.attendance.Attendance;
 import com.vitta_pilates.model.dao.attendance.ClassSeat;
+import com.vitta_pilates.model.dao.attendance.ClassSeatSlot;
 import com.vitta_pilates.model.enumeration.ClassSeatSlotStatus;
-import com.vitta_pilates.model.repository.AttendanceRepository;
-import com.vitta_pilates.model.repository.ClassInstanceRepository;
+import com.vitta_pilates.model.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Service
 public class AttendenceService {
@@ -26,95 +31,172 @@ public class AttendenceService {
   AttendanceRepository attendanceRepository;
 
   @Autowired
+  AttendantRepository attendantRepository;
+
+  @Autowired
+  ClassSeatRepository classSeatRepository;
+
+  @Autowired
+  ClassSeatSlotRepository classSeatSlotRepository;
+
+  @Autowired
   ClassInstanceRepository classInstanceRepository;
 
   public List<AttendanceForm> getAttendance(String classInstanceId){
+    if (classInstanceId==null)
+      return new ArrayList<>();
     List<AttendanceForm> result = new ArrayList<>();
     ClassInstance classInstance = classInstanceRepository.findOne(Long.valueOf(classInstanceId));
     Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
     if (attendance!=null){
 
-//      AttendanceHelper.ClassSeatStatus status = AttendanceHelper.getClassSeatStatus(
-//              attendance.getTeacher().getFixed().getStatus(),
-//              attendance.getTeacher().getTemporary().getStatus()
-//      );
+      result.add(buildAttendanceForm(attendance, attendance.getTeacher()));
 
-      //todo: AttendanceHelper.getAppliableActions(attendance.getTeacher().getFixed().getStatus(), true);
-      //todo: AttendanceHelper.getAppliableActions(attendance.getTeacher().getTemporary().getStatus(), false);
-      AttendanceForm attendanceTeacherForm =  new AttendanceForm.AttendanceFormBuilder()
-         .setId(attendance.getId())
-         .setFixed(AttendanceForm.Flag.ENROLL)
-         .setTemporary(AttendanceForm.Flag.EMPTY)
-         .setName("test")
-         .setAction(null)
-         .setAction2(null)
-         .createAttendanceForm();
+      attendance.getPupils().forEach(pupils -> result.add(buildAttendanceForm(attendance, pupils)));
 
-      result.add(attendanceTeacherForm);
+      int emptySize = classInstance.getClazz().getEvent().getCapacity()-result.size();
 
-      for (ClassSeat pupil : attendance.getPupils()) {
-        AttendanceForm attendanceForm = new AttendanceForm.AttendanceFormBuilder()
-          .setId(pupil.getId())
-          .setFixed(AttendanceForm.Flag.EMPTY)
-          .setTemporary(AttendanceForm.Flag.EMPTY)
-          .setName("test2")
-          .setAction(null)
-          .setAction2(null)
-          .createAttendanceForm();
-
-        result.add(attendanceForm);
-      }
+      for (int i=0; i<emptySize;i++)
+        result.add(buildAttendanceForm(attendance));
 
     }
     return result;
   }
 
-  public void enrollFixed(ClassSeat seat, Attendant attendant, boolean isTeacher) {
-    //from selected date until end date of the course
-    //add Attendant ID into ClassSeat on fixed slot position
-
-    //neprida tu istu osobu viackrat
-    //kontrola pretekania (capacity exceeded on dd/MM/yyyy)
-    log.info("enroll fixed seat: {} attendent: {} is teacher: {}", seat, attendant, isTeacher);
-  }
-  public void unenrollFixed(ClassSeat seat, Attendant attendant, boolean isTeacher) {
-    //from selected date
-    //get the ClassSeat ID from the given attendance
-    //remove Attendant ID if exist
-
-    //check if emptied Class/ClassInstance
-    log.info("unenroll fixed seat: {} attendent: {} is teacher: {}", seat, attendant, isTeacher);
+  private AttendanceForm buildAttendanceForm(Attendance attendance){
+    AttendanceForm result = new AttendanceForm();
+    result.action = Collections.singletonList(AttendanceForm.Action.ENROLL);
+    result.action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
+    result.fixed =  AttendanceForm.Flag.EMPTY;
+    result.temporary =  AttendanceForm.Flag.EMPTY;
+    result.id = attendance.getId();
+    return result;
   }
 
-  public void enrollTemporary(ClassSeat seat, Attendant attendant, boolean isTeacher) {
-    log.info("enroll temporary seat: {} attendent: {} is teacher: {}", seat, attendant, isTeacher);
-  }
-  public void unenrollTemporary(ClassSeat seat, Attendant attendant, boolean isTeacher) {
-    log.info("unenroll fixed seat: {} attendent: {} is teacher: {}", seat, attendant, isTeacher);
+  private AttendanceForm buildAttendanceForm(Attendance attendance, ClassSeat classSeat){
+
+    String name = "";
+    AttendanceForm.Flag flagFixed = AttendanceForm.Flag.EMPTY;
+    AttendanceForm.Flag flagTemporary = AttendanceForm.Flag.EMPTY;
+    ClassSeatSlotStatus status = (classSeat!=null && classSeat.getFixed()!=null)
+            ? classSeat.getFixed().getStatus() : ClassSeatSlotStatus.EMPTY;
+    ClassSeatSlotStatus status2 = (classSeat!=null && classSeat.getTemporary()!=null)
+            ? classSeat.getTemporary().getStatus() : ClassSeatSlotStatus.EMPTY;
+    AttendanceHelper.ClassSeatStatus classSeatStatus = AttendanceHelper.getClassSeatStatus(status,status2);
+    List<AttendanceForm.Action> action = Collections.singletonList(AttendanceForm.Action.ENROLL);
+    List<AttendanceForm.Action> action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
+    Long user = 0L;
+
+    if (classSeat!=null)
+      switch (classSeatStatus) {
+        case EMPTY:
+          action = Collections.singletonList(AttendanceForm.Action.ENROLL);
+          action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
+          break;
+        case ENROLLED_FIXED:
+          name = classSeat.getFixed().getAttendant().getPersonalData().getName();
+          user = classSeat.getFixed().getAttendant().getId();
+          flagFixed = AttendanceForm.Flag.ENROLL;
+          flagTemporary = AttendanceForm.Flag.DISABLED;
+
+          action = Arrays.asList(AttendanceForm.Action.UNENROLL, AttendanceForm.Action.SUSPEND);
+          action2 = null;
+          break;
+        case ENROLLED_TEMPORARY:
+          name = classSeat.getTemporary().getAttendant().getPersonalData().getName();
+          user = classSeat.getTemporary().getAttendant().getId();
+          flagFixed = AttendanceForm.Flag.DISABLED;
+          flagTemporary = AttendanceForm.Flag.ENROLL;
+
+          action = null;
+          action2 = Collections.singletonList(AttendanceForm.Action.UNENROLL);
+          break;
+        case SUSPENDED_EMPTY:
+          flagFixed = AttendanceForm.Flag.SUSPENDED;
+          flagTemporary = AttendanceForm.Flag.EMPTY;
+          user = classSeat.getFixed().getAttendant().getId();
+
+          action = Collections.singletonList(AttendanceForm.Action.UNSUSPEND);
+          action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
+          break;
+        case SUSPENDED_ENROLLED:
+          name = classSeat.getTemporary().getAttendant().getPersonalData().getName();
+          user = classSeat.getTemporary().getAttendant().getId();
+          flagFixed = AttendanceForm.Flag.SUSPENDED;
+          flagTemporary = AttendanceForm.Flag.ENROLL;
+
+          action = null;
+          action2 = Collections.singletonList(AttendanceForm.Action.UNENROLL);
+          break;
+      }
+
+    return new AttendanceForm.AttendanceFormBuilder()
+            .setId(attendance.getId())
+            .setFixed(flagFixed)
+            .setTemporary(flagTemporary)
+            .setName(name)
+            .setUser(user)
+            .setAction(action)
+            .setAction2(action2)
+            .createAttendanceForm();
+
   }
 
-  public void suspendFixed(ClassSeat seat, Attendant attendant, boolean isTeacher) {
-    //Attendance->pupils[i]->fixed = ClassSeatSlotStatus.SUSPENDED
-    log.info("enroll fixed seat: {} attendent: {} is teacher: {}", seat, attendant, isTeacher);
-  }
-  public void unsuspendFixed(ClassSeat seat, Attendant attendant, boolean isTeacher) {
-    //Attendance->pupils[i]->fixed = ClassSeatSlotStatus.OCCUPIED
-    log.info("unsuspend fixed seat: {} attendent: {} is teacher: {}", seat, attendant, isTeacher);
-  }
+  public void action(ActionForm form){
+    log.info("action {}", form);
+    checkNotNull(form);
+    checkNotNull(form.getAction());
+    checkNotNull(form.isTeacher());
+    checkNotNull(form.isFixed());
+    checkNotNull(form.getUser());
 
-  public int getEmptySeats(ClassInstance cl) {
-    //for all seats in attendance, list those that are not in state EMPTY or SUSPENDED_EMPTY
+    Attendance attendance = attendanceRepository.findOne(Long.valueOf(form.getAttendanceId()));
+    Attendant user = attendantRepository.findOne(form.getUser());
 
-    return 0;
-  }
-
-  public int getEmptyFixedSeats() {
-    //for all seats in attendance, list those that are not in state EMPTY or SUSPENDED_EMPTY and is fixed
-
-    return 0;
+    switch (form.getAction()){
+      case "enroll":enroll(form, attendance, user); break;
+      case "unenroll":unenroll(form, attendance, user); break;
+      case "suspend":suspend(attendance, user); break;
+      case "unsuspend":unsuspend(attendance, user); break;
+    }
   }
 
-  private AttendanceForm transfrom(Attendance attendance){
-    return new AttendanceForm();
+  private void enroll(ActionForm form, Attendance attendance, Attendant user){
+
+    ClassSeatSlot slot = new ClassSeatSlot(user);
+    slot = classSeatSlotRepository.save(slot);
+    ClassSeat seat = new ClassSeat();
+    seat.setTeacher(form.isTeacher());
+    if (form.isFixed())
+      seat.setFixed(slot);
+    else
+      seat.setTemporary(slot);
+    seat = classSeatRepository.save(seat);
+    attendance.getClassSeats().add(seat);
+    attendanceRepository.save(attendance);
+    log.info("Enroll attendant {} to attendance {}", user.getId(), attendance.getId());
   }
+  private void unenroll(ActionForm form, Attendance attendance, Attendant user){
+    ClassSeat seat;
+    if (form.isFixed()) {
+      seat = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
+
+    } else {
+      seat = classSeatRepository.findByAttendanceAndAttendantTemporary(attendance, user).get(0);
+    }
+    attendance.getClassSeats().remove(seat);
+    attendanceRepository.save(attendance);
+    classSeatRepository.delete(seat);
+  }
+  private void suspend(Attendance attendance, Attendant user){
+    ClassSeat seat = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
+    seat.getFixed().setStatus(ClassSeatSlotStatus.SUSPENDED);
+    classSeatRepository.save(seat);
+  }
+  private void unsuspend(Attendance attendance, Attendant user){
+    ClassSeat seat = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
+    seat.getFixed().setStatus(ClassSeatSlotStatus.OCCUPIED);
+    classSeatRepository.save(seat);
+  }
+
 }

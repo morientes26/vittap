@@ -1,14 +1,15 @@
 package com.vitta_pilates.core.event.component;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class AttendanceForm implements Serializable {
 
     public Flag fixed;
     public Flag temporary;
     public String name;
-    public Action action;
-    public Action action2;
+    public List<Action> action;
+    public List<Action> action2;
     public Long user;
     public Long id; //attendance_id
 
@@ -16,8 +17,8 @@ public class AttendanceForm implements Serializable {
     public AttendanceForm(Flag fixed,
                           Flag temporary,
                           String name,
-                          Action action,
-                          Action action2,
+                          List<Action> action,
+                          List<Action> action2,
                           Long user,
                           Long id){
       this.fixed = fixed;
@@ -34,8 +35,8 @@ public class AttendanceForm implements Serializable {
       private Flag fixed;
       private Flag temporary;
       private String name;
-      private Action action;
-      private Action action2;
+      private List<Action> action;
+      private List<Action> action2;
       private Long user;
       private Long id;
 
@@ -68,13 +69,18 @@ public class AttendanceForm implements Serializable {
         return this;
       }
 
-      public AttendanceFormBuilder setAction(Action action){
+      public AttendanceFormBuilder setAction(List<Action> action){
         this.action = action;
         return this;
       }
 
-      public AttendanceFormBuilder setAction2(Action action2){
+      public AttendanceFormBuilder setAction2(List<Action> action2){
         this.action2 = action2;
+        return this;
+      }
+
+      public AttendanceFormBuilder setUser(Long user){
+        this.user = user;
         return this;
       }
 
