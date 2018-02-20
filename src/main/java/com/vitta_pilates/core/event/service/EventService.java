@@ -131,15 +131,15 @@ public class EventService {
     log.debug("Delete event id: {} from calendar event", id);
   }
 
-  public EventForm getEventForm(String id){
-    log.debug("Load event id: {} from DB", id);
-    ClassInstance classInstance = classInstanceRepository.findOne(Long.valueOf(id));
-    Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
-    return transform(classInstance, attendance);
-  }
+//  public EventForm getEventForm(String id){
+//    log.debug("Load event id: {} from DB", id);
+//    ClassInstance classInstance = classInstanceRepository.findOne(Long.valueOf(id));
+//    Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
+//    return transform(classInstance, attendance);
+//  }
 
   public Event get(String id){
-    return transform(classInstanceRepository.getOne(Long.valueOf(id)));
+    return transform(classInstanceRepository.getOne(Long.valueOf(id)), true);
   }
 
   public SelectPersonResult getPerson(String term, boolean isTeacher){
@@ -164,6 +164,10 @@ public class EventService {
   }
 
   private Event transform(ClassInstance classInstance){
+    return transform(classInstance, false);
+  }
+
+  private Event transform(ClassInstance classInstance, boolean full){
     Event event = new Event.EventBuilder()
             .setId(classInstance.getId())
             .setStart(classInstance.getTrueTime())
@@ -187,6 +191,13 @@ public class EventService {
     }
     if (classInstance.getClazz().getRoom()!=null){
       event.setRoom(classInstance.getClazz().getRoom().getName());
+    }
+
+    if (full){
+      event.setType(EventForm.Type.SIMPLE.getName());
+      Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
+      if (attendance!=null)
+        event.setType(EventForm.Type.CLASS.getName());
     }
 
     return event;

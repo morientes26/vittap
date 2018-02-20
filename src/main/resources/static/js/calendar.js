@@ -73,9 +73,12 @@ $(document).ready(function() {
             $(".modal-body #event-id").val('');
             $(".modal-body #event-name").val('');
             $(".modal-body #event-description").val('');
-            $(".modal-title").val("Create event");
+            $(".modal-title").text("Create event");
             $(".modal-footer button[type='submit']").text("Create");
             $(".modal-footer .js_event-delete").hide();
+            $(".modal-body #event").show();
+            $('.modal-body #event-type').show();
+            $("#attendance-table").empty();
         };
 
         var loadEvent = function (id) {
@@ -85,6 +88,15 @@ $(document).ready(function() {
                 $(".modal-body #event-duration").val((event.end - event.start) / 60000);
                 $(".modal-body #event-name").val( event.name );
                 $(".modal-body #event-description").val( event.description );
+                $(".modal-title").text("Edit event");
+                $(".modal-footer button[type='submit']").text("Update");
+                $(".modal-footer .js_event-delete").show();
+                $('#event-type').hide();
+                if (event.type=='C'){
+                    $('#type2').click();
+                } else {
+                    $('#event').hide();
+                }
             });
         };
 
@@ -121,15 +133,10 @@ $(document).ready(function() {
 
                 clean();
                 var event = $(e.relatedTarget).data('event-object');
-                //$(".modal-body #event-start").val( moment(event.start).format('DD.MM.YYYY HH:mm'));
                 $(".modal-body #event-start").val( event.start);
-                //$(".modal-body #event-start").val( dateTimeZone(event.start).format('DD.MM.YYYY HH:mm'));
 
                 if (event.id!=null){
                     // exist event
-                    $(".modal-title").val("Edit event");
-                    $(".modal-footer button[type='submit']").text("Update");
-                    $(".modal-footer .js_event-delete").show();
                     modalHandler.loadEvent(event.id);
                 }
             });
@@ -171,8 +178,6 @@ $(document).ready(function() {
             eventType.bind('change', function () {
                 showClassEvent($(this));
             });
-
-
         };
 
         return {

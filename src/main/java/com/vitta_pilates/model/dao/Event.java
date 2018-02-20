@@ -22,6 +22,7 @@ public class Event {
   private String name;
   private String description;
   private String room;
+  private String type;
 
   private AttendanceForm attendanceTeacherForm = new AttendanceForm();
   private List<AttendanceForm> attendanceForm = new ArrayList<>();
@@ -41,7 +42,8 @@ public class Event {
                 final int duration,
                 final String name,
                 final String description,
-                final String room){
+                final String room,
+                final String type){
     this.id = id;
     this.color = color;
     this.count = count;
@@ -56,6 +58,7 @@ public class Event {
     this.name = name;
     this.description = description;
     this.room = room;
+    this.type = type;
   }
 
   public String getId() {
@@ -138,6 +141,14 @@ public class Event {
     this.attendanceForm = attendanceForm;
   }
 
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+     this.type = type;
+  }
+
   public static class EventBuilder {
     private String id;
     private String color;
@@ -153,6 +164,7 @@ public class Event {
     private String name;
     private String description;
     private String room;
+    private String type;
 
     public EventBuilder(){}
 
@@ -232,6 +244,11 @@ public class Event {
       return this;
     }
 
+    public EventBuilder setType(String type) {
+      this.type = type;
+      return this;
+    }
+
 
     public Event createEvent(){
 
@@ -249,7 +266,8 @@ public class Event {
               this.duration,
               this.name,
               this.description,
-              this.room
+              this.room,
+              this.type
       );
     }
   }
