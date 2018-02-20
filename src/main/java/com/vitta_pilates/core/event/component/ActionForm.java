@@ -8,6 +8,7 @@ public class ActionForm implements Serializable{
   private String attendanceId;
   private String action;
   private Long user;
+  private Long user2;
   private boolean isTeacher;
   private boolean fixed;
 
@@ -51,5 +52,13 @@ public class ActionForm implements Serializable{
 
   public void setTeacher(boolean teacher) {
     isTeacher = teacher;
+  }
+
+  public Long getUser2() {
+    return user2;
+  }
+
+  public void setUser2(Long user2) {
+    this.user2 = user2;
   }
 }

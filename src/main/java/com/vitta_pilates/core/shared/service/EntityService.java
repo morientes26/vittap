@@ -2,7 +2,6 @@ package com.vitta_pilates.core.shared.service;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.transaction.Transactional;
 import java.util.List;

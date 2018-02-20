@@ -75,6 +75,8 @@ public class AttendenceService {
     result.fixed =  AttendanceForm.Flag.EMPTY;
     result.temporary =  AttendanceForm.Flag.EMPTY;
     result.id = attendance.getId();
+    result.select = true;
+    result.attend = false;
     return result;
   }
 
@@ -91,19 +93,26 @@ public class AttendenceService {
     List<AttendanceForm.Action> action = Collections.singletonList(AttendanceForm.Action.ENROLL);
     List<AttendanceForm.Action> action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
     Long user = 0L;
+    Long user2 = 0L;
+    boolean select = true;
+    boolean attend = false;
+    if (classSeat!=null){
+      attend = classSeat.isAttendanceStaus();
+    }
 
     if (classSeat!=null)
       switch (classSeatStatus) {
         case EMPTY:
           action = Collections.singletonList(AttendanceForm.Action.ENROLL);
           action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
+          select = true;
           break;
         case ENROLLED_FIXED:
           name = classSeat.getFixed().getAttendant().getPersonalData().getName();
           user = classSeat.getFixed().getAttendant().getId();
           flagFixed = AttendanceForm.Flag.ENROLL;
           flagTemporary = AttendanceForm.Flag.DISABLED;
-
+          select = false;
           action = Arrays.asList(AttendanceForm.Action.UNENROLL, AttendanceForm.Action.SUSPEND);
           action2 = null;
           break;
@@ -111,25 +120,28 @@ public class AttendenceService {
           name = classSeat.getTemporary().getAttendant().getPersonalData().getName();
           user = classSeat.getTemporary().getAttendant().getId();
           flagFixed = AttendanceForm.Flag.DISABLED;
-          flagTemporary = AttendanceForm.Flag.ENROLL;
-
+          flagTemporary = AttendanceForm.Flag.ENROLL_SUSPENDED;
+          select = false;
           action = null;
           action2 = Collections.singletonList(AttendanceForm.Action.UNENROLL);
           break;
         case SUSPENDED_EMPTY:
           flagFixed = AttendanceForm.Flag.SUSPENDED;
           flagTemporary = AttendanceForm.Flag.EMPTY;
+          select = true;
+          name = classSeat.getFixed().getAttendant().getPersonalData().getName();
           user = classSeat.getFixed().getAttendant().getId();
-
           action = Collections.singletonList(AttendanceForm.Action.UNSUSPEND);
-          action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
+          action2 = Collections.singletonList(AttendanceForm.Action.ENROLL_SUSPENDED);
           break;
         case SUSPENDED_ENROLLED:
           name = classSeat.getTemporary().getAttendant().getPersonalData().getName();
-          user = classSeat.getTemporary().getAttendant().getId();
+          user = classSeat.getFixed().getAttendant().getId();
+          user2 = classSeat.getTemporary().getAttendant().getId();
+
           flagFixed = AttendanceForm.Flag.SUSPENDED;
           flagTemporary = AttendanceForm.Flag.ENROLL;
-
+          select = false;
           action = null;
           action2 = Collections.singletonList(AttendanceForm.Action.UNENROLL);
           break;
@@ -141,13 +153,21 @@ public class AttendenceService {
             .setTemporary(flagTemporary)
             .setName(name)
             .setUser(user)
+            .setUser2(user2)
             .setAction(action)
             .setAction2(action2)
+            .setSelect(select)
+            .setAttend(attend)
             .createAttendanceForm();
 
   }
 
-  public void action(ActionForm form){
+  /**
+   * Perform action on attendence and return ClassInstance
+   * @param form
+   * @return ClassInstance
+   */
+  public ClassInstance action(ActionForm form){
     log.info("action {}", form);
     checkNotNull(form);
     checkNotNull(form.getAction());
@@ -161,9 +181,12 @@ public class AttendenceService {
     switch (form.getAction()){
       case "enroll":enroll(form, attendance, user); break;
       case "unenroll":unenroll(form, attendance, user); break;
+      case "enroll_suspended":enroll_suspended(form, attendance, user); break;
       case "suspend":suspend(attendance, user); break;
       case "unsuspend":unsuspend(attendance, user); break;
     }
+
+    return attendance.getClassInstance();
   }
 
   private void enroll(ActionForm form, Attendance attendance, Attendant user){
@@ -176,16 +199,21 @@ public class AttendenceService {
       seat.setFixed(slot);
     else
       seat.setTemporary(slot);
+
     seat = classSeatRepository.save(seat);
     attendance.getClassSeats().add(seat);
     attendance = attendanceRepository.save(attendance);
     log.info("Enroll attendant {} to attendance {}", user.getId(), attendance.getId());
   }
   private void unenroll(ActionForm form, Attendance attendance, Attendant user){
+
+    if (form.getUser2()!=null){
+      unenroll_suspend(form, attendance);
+      return;
+    }
     ClassSeat seat;
     if (form.isFixed()) {
       seat = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
-
     } else {
       seat = classSeatRepository.findByAttendanceAndAttendantTemporary(attendance, user).get(0);
     }
@@ -193,6 +221,29 @@ public class AttendenceService {
     attendanceRepository.save(attendance);
     classSeatRepository.delete(seat);
   }
+
+  private void enroll_suspended(ActionForm form, Attendance attendance, Attendant user){
+
+    Attendant user2 = attendantRepository.findOne(form.getUser2());
+
+    ClassSeatSlot slot = new ClassSeatSlot(user2);
+    slot = classSeatSlotRepository.save(slot);
+
+    // find classSeat by fixed slot
+    ClassSeat seatFixed = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
+    // add temporary slot by new user
+    seatFixed.setTemporary(slot);
+    classSeatRepository.save(seatFixed);
+  }
+
+  private void unenroll_suspend(ActionForm form, Attendance attendance){
+    ClassSeat seat;
+    Attendant user2 = attendantRepository.findOne(form.getUser2());
+    seat = classSeatRepository.findByAttendanceAndAttendantTemporary(attendance, user2).get(0);
+    seat.setTemporary(null);
+    classSeatRepository.save(seat);
+  }
+
   private void suspend(Attendance attendance, Attendant user){
     ClassSeat seat = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
     seat.getFixed().setStatus(ClassSeatSlotStatus.SUSPENDED);

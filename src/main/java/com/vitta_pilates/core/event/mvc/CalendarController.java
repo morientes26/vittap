@@ -4,6 +4,7 @@ package com.vitta_pilates.core.event.mvc;
 import com.vitta_pilates.core.event.component.*;
 import com.vitta_pilates.core.event.service.AttendenceService;
 import com.vitta_pilates.core.event.service.EventService;
+import com.vitta_pilates.model.dao.ClassInstance;
 import com.vitta_pilates.model.dao.Event;
 import com.vitta_pilates.model.dao.attendance.Attendance;
 import com.vitta_pilates.model.repository.ClassTemplateRepository;
@@ -119,15 +120,15 @@ public class CalendarController {
   String getAttendance(
           @PathVariable("id") String id, Model model) {
     model.addAttribute("event", prepareAttendanceFormByClassInstance(id));
-    return "items/class-event :: registration";
+    return "items/class-event :: attendance-table";
   }
 
   @RequestMapping(value = "/action", method = RequestMethod.POST)
-  public
-  String action(ActionForm form, Model model) {
-    attendenceService.action(form);
+  public @ResponseBody
+  long action(ActionForm form, Model model) {
+    ClassInstance classInstance = attendenceService.action(form);
     model.addAttribute("event", prepareAttendanceForm(form.getAttendanceId()));
-    return "items/class-event :: registration";
+    return classInstance.getId();
   }
 
   private EventForm prepareAttendanceForm(String attId){

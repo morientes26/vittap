@@ -143,30 +143,19 @@ $(document).ready(function() {
 
             registration.bind('click', function () {
                 var event = $(".js_modal-click").data('event-object');
-                $.ajax({
-                    type: 'GET',
-                    url: '/event-calendar/attendance/'+event.id,
-
-                    success: function(events) {
-                       $('#registration').replaceWith(events);
-                       $('.js_actions :button').hide();
-                       $('.js_status').hide();
-                       $('.js_attend').hide();
-                    }
+                $("#attendance-table").load('/event-calendar/attendance/'+event.id, function() {
+                    $('.js_actions :button').hide();
+                    $('.js_status :button').hide();
+                    $('.js_attend :button').hide();
                 });
             });
             attandence.bind('click', function () {
                 var event = $(".js_modal-click").data('event-object');
-                $.ajax({
-                    type: 'GET',
-                    url: '/event-calendar/attendance/'+event.id,
-
-                    success: function(events) {
-                        $('#registration').replaceWith(events);
-                        $('.js_actions :button').hide();
-                        $('.js_status').show();
-                        $('.js_attend').show();
-                    }
+                $("#attendance-table").load('/event-calendar/attendance/'+event.id, function() {
+                    $('.js_actions :button').hide();
+                    $('.select2').hide();
+                    $('.js_status').show();
+                    $('.js_attend').show();
                 });
             });
 

@@ -89,13 +89,13 @@ public class Initiator  {
   @Bean
   InitializingBean initDbData() {
     return () -> {
-      importUsersAndRoles();
-      importClassCategories();
-      importTarifs();
-      importAttendents();
-      importClassInstance();
-      importProgramInstance();
-      importEventAttendance(3);
+//      importUsersAndRoles();
+//      importClassCategories();
+//      importTarifs();
+//      importAttendents();
+//      importClassInstance();
+//      importProgramInstance();
+//      importEventAttendance(3);
     };
   }
 

@@ -75,26 +75,14 @@ public class EventService {
     checkNotNull(eventForm);
 
     ClassInstance classInstance;
+    // update class instance
     if (!StringUtils.isEmpty(eventForm.getId())){
       classInstance = classInstanceRepository.findOne(Long.valueOf(eventForm.getId()));
     } else {
-      //todo: what kind of class template
-      ClassTemplate classTemplate = classTemplateRepository.getOne(1L);
-
-      //todo: this is only create custom template and class
-      Schedule schedule = new Schedule(
-              dateValue(eventForm.getStart()),
-              evaluateEndDate(dateValue(eventForm.getStart()), eventForm.getDuration()
-              )
-      );
-      schedule = scheduleRepository.save(schedule);
-      Class clazz = Initiator.instanceClass(schedule, classTemplate);
-      clazz = classRepository.save(clazz);
-
-      classInstance = new ClassInstance();
-      classInstance.setClazz(clazz);
+      classInstance = prepareNew(eventForm);
     }
 
+    // set data from modal
     // todo: event template class ????
     classInstance.setTrueTime(dateValue(eventForm.getStart()));
     classInstance.setName(eventForm.getName());
@@ -102,20 +90,43 @@ public class EventService {
     //todo: what about duration ??? is only on class not on instance
     classInstance = classInstanceRepository.save(classInstance);
 
-    if (eventForm.getType().equals(EventForm.Type.SIMPLE.getName())){
-
-    } else {
-      Attendance attendance = new Attendance();
-      attendance.setClassInstance(classInstance);
-      attendance = attendanceRepository.save(attendance);
+    // create empty attendance if type of class instance is CLASS and hasn't any attendence
+    if (eventForm.getType().contains(EventForm.Type.CLASS.getName())){
+      Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
+      if (attendance==null) {
+        attendance = new Attendance();
+        attendance.setClassInstance(classInstance);
+        attendanceRepository.save(attendance);
+      }
     }
 
     log.debug("Persist event id: {} from calendar event", classInstance.getId());
   }
 
+  private ClassInstance prepareNew(EventForm eventForm){
+
+    ClassInstance classInstance = new ClassInstance();
+    //todo: what kind of class template
+    ClassTemplate classTemplate = classTemplateRepository.getOne(1L);
+
+    //todo: this is only create custom template and class
+    Schedule schedule = new Schedule(
+            dateValue(eventForm.getStart()),
+            evaluateEndDate(dateValue(eventForm.getStart()), eventForm.getDuration()
+            )
+    );
+    schedule = scheduleRepository.save(schedule);
+    Class clazz = Initiator.instanceClass(schedule, classTemplate);
+    clazz = classRepository.save(clazz);
+
+    classInstance.setClazz(clazz);
+    return classInstance;
+  }
+
   public void delete(String id){
     checkNotNull(id);
     ClassInstance classInstance = classInstanceRepository.findOne(Long.valueOf(id));
+    attendanceRepository.delete(attendanceRepository.findOneByClassInstance(classInstance));
     classInstanceRepository.deleteInBatch(Arrays.asList(classInstance));
     log.debug("Delete event id: {} from calendar event", id);
   }
