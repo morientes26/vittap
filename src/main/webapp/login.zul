@@ -34,7 +34,7 @@
 
             <div align="right">
                 <!-- fixme: getting from pom.xml -->
-                <label value="version. 0.7.1" />
+                <label value="version. 0.7.3" />
             </div>
         </vlayout>
     </hbox>

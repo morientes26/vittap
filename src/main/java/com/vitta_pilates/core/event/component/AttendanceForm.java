@@ -15,6 +15,7 @@ public class AttendanceForm implements Serializable {
     public Long id; //attendance_id
     public boolean select = false;
     public boolean attend = false;
+    public Long attendId;
 
     public AttendanceForm(){}
     public AttendanceForm(Flag fixed,
@@ -26,7 +27,8 @@ public class AttendanceForm implements Serializable {
                           Long user2,
                           Long id,
                           boolean select,
-                          boolean attend){
+                          boolean attend,
+                          Long attendId){
       this.fixed = fixed;
       this.temporary = temporary;
       this.name = name;
@@ -37,6 +39,7 @@ public class AttendanceForm implements Serializable {
       this.id = id;
       this.select = select;
       this.attend = attend;
+      this.attendId = attendId;
     }
 
     public static class AttendanceFormBuilder {
@@ -51,6 +54,7 @@ public class AttendanceForm implements Serializable {
       private Long id;
       public boolean select;
       public boolean attend;
+      public Long attendId;
 
       public AttendanceFormBuilder(){
 
@@ -111,6 +115,11 @@ public class AttendanceForm implements Serializable {
         return this;
       }
 
+      public AttendanceFormBuilder setAttendId(Long attendId){
+        this.attendId = attendId;
+        return this;
+      }
+
       public AttendanceForm createAttendanceForm(){
         return new AttendanceForm(
                 this.fixed,
@@ -122,7 +131,8 @@ public class AttendanceForm implements Serializable {
                 this.user2,
                 this.id,
                 this.select,
-                this.attend
+                this.attend,
+                this.attendId
         );
       }
     }

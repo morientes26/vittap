@@ -126,7 +126,9 @@ public class EventService {
   public void delete(String id){
     checkNotNull(id);
     ClassInstance classInstance = classInstanceRepository.findOne(Long.valueOf(id));
-    attendanceRepository.delete(attendanceRepository.findOneByClassInstance(classInstance));
+    Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
+    if (attendance!=null)
+      attendanceRepository.delete(attendance);
     classInstanceRepository.deleteInBatch(Arrays.asList(classInstance));
     log.debug("Delete event id: {} from calendar event", id);
   }

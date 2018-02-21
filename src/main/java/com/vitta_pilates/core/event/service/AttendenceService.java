@@ -1,6 +1,7 @@
 package com.vitta_pilates.core.event.service;
 
 import com.vitta_pilates.core.event.component.ActionForm;
+import com.vitta_pilates.core.event.component.AttendForm;
 import com.vitta_pilates.core.event.component.AttendanceForm;
 import com.vitta_pilates.core.event.component.AttendanceHelper;
 import com.vitta_pilates.model.dao.Attendant;
@@ -47,7 +48,7 @@ public class AttendenceService {
     return attendance.getClassInstance();
   }
 
-  public List<AttendanceForm> getAttendance(String classInstanceId){
+  public List<AttendanceForm> getRegistration(String classInstanceId){
     if (classInstanceId==null)
       return new ArrayList<>();
     List<AttendanceForm> result = new ArrayList<>();
@@ -55,20 +56,27 @@ public class AttendenceService {
     Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
     if (attendance!=null){
 
-      result.add(buildAttendanceForm(attendance, attendance.getTeacher()));
+      result.add(buildRegistrationForm(attendance, attendance.getTeacher()));
 
-      attendance.getPupils().forEach(pupils -> result.add(buildAttendanceForm(attendance, pupils)));
+      attendance.getPupils().forEach(pupils -> result.add(buildRegistrationForm(attendance, pupils)));
 
       int emptySize = classInstance.getClazz().getEvent().getCapacity()-result.size();
 
       for (int i=0; i<emptySize;i++)
-        result.add(buildAttendanceForm(attendance));
+        result.add(buildRegistrationForm(attendance));
 
     }
     return result;
   }
 
-  private AttendanceForm buildAttendanceForm(Attendance attendance){
+  public List<AttendanceForm> getAttendance(String classInstanceId){
+    if (classInstanceId==null)
+      return new ArrayList<>();
+    List<AttendanceForm> result = getRegistration(classInstanceId);
+    return buildListAttendendForm(result);
+  }
+
+  private AttendanceForm buildRegistrationForm(Attendance attendance){
     AttendanceForm result = new AttendanceForm();
     result.action = Collections.singletonList(AttendanceForm.Action.ENROLL);
     result.action2 = Collections.singletonList(AttendanceForm.Action.ENROLL);
@@ -80,7 +88,7 @@ public class AttendenceService {
     return result;
   }
 
-  private AttendanceForm buildAttendanceForm(Attendance attendance, ClassSeat classSeat){
+  private AttendanceForm buildRegistrationForm(Attendance attendance, ClassSeat classSeat){
 
     String name = "";
     AttendanceForm.Flag flagFixed = AttendanceForm.Flag.EMPTY;
@@ -96,8 +104,11 @@ public class AttendenceService {
     Long user2 = 0L;
     boolean select = true;
     boolean attend = false;
+    Long attendId = 0L;
+
     if (classSeat!=null){
       attend = classSeat.isAttendanceStaus();
+      attendId = classSeat.getId();
     }
 
     if (classSeat!=null)
@@ -158,15 +169,27 @@ public class AttendenceService {
             .setAction2(action2)
             .setSelect(select)
             .setAttend(attend)
+            .setAttendId(attendId)
             .createAttendanceForm();
 
   }
 
-  /**
-   * Perform action on attendence and return ClassInstance
-   * @param form
-   * @return ClassInstance
-   */
+  private List<AttendanceForm> buildListAttendendForm( List<AttendanceForm>  attendancesForm) {
+    List<AttendanceForm> result = new ArrayList<>();
+    for (AttendanceForm form :attendancesForm){
+      form.action = new ArrayList<>();
+      form.action2 = new ArrayList<>();
+      form.select = false;
+      result.add(form);
+    }
+    return result;
+  }
+
+    /**
+     * Perform action on attendence and return ClassInstance
+     * @param form - ActionForm
+     * @return ClassInstance
+     */
   public ClassInstance action(ActionForm form){
     log.info("action {}", form);
     checkNotNull(form);
@@ -186,6 +209,20 @@ public class AttendenceService {
       case "unsuspend":unsuspend(attendance, user); break;
     }
 
+    return attendance.getClassInstance();
+  }
+
+  /**
+   * Perform attend true/false on classSeat
+   * @param form - AttendForm
+   * @return ClassInstance
+   */
+  public ClassInstance attend(AttendForm form){
+    Attendance attendance = attendanceRepository.findOne(Long.valueOf(form.getAttendanceId()));
+    ClassSeat classSeat = classSeatRepository.findOne(Long.valueOf(form.getAttendId()));
+    classSeat.setAttendanceStaus(!classSeat.isAttendanceStaus());
+    classSeatRepository.save(classSeat);
+    log.info("Perform attend {} on classSeat {}", classSeat.isAttendanceStaus(), classSeat.getId());
     return attendance.getClassInstance();
   }
 
@@ -220,6 +257,7 @@ public class AttendenceService {
     attendance.getClassSeats().remove(seat);
     attendanceRepository.save(attendance);
     classSeatRepository.delete(seat);
+    log.info("Unnroll attendant {} to attendance {}", user.getId(), attendance.getId());
   }
 
   private void enroll_suspended(ActionForm form, Attendance attendance, Attendant user){
@@ -234,6 +272,7 @@ public class AttendenceService {
     // add temporary slot by new user
     seatFixed.setTemporary(slot);
     classSeatRepository.save(seatFixed);
+    log.info("Enroll suspend attendant {} to attendance {}", user2.getId(), attendance.getId());
   }
 
   private void unenroll_suspend(ActionForm form, Attendance attendance){
@@ -242,17 +281,20 @@ public class AttendenceService {
     seat = classSeatRepository.findByAttendanceAndAttendantTemporary(attendance, user2).get(0);
     seat.setTemporary(null);
     classSeatRepository.save(seat);
+    log.info("Unenroll suspend attendant {} to attendance {}", user2.getId(), attendance.getId());
   }
 
   private void suspend(Attendance attendance, Attendant user){
     ClassSeat seat = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
     seat.getFixed().setStatus(ClassSeatSlotStatus.SUSPENDED);
     classSeatRepository.save(seat);
+    log.info("Suspend attendant {} to attendance {}", user.getId(), attendance.getId());
   }
   private void unsuspend(Attendance attendance, Attendant user){
     ClassSeat seat = classSeatRepository.findByAttendanceAndAttendantFixed(attendance, user).get(0);
     seat.getFixed().setStatus(ClassSeatSlotStatus.OCCUPIED);
     classSeatRepository.save(seat);
+    log.info("Unuspend attendant {} to attendance {}", user.getId(), attendance.getId());
   }
 
 }
