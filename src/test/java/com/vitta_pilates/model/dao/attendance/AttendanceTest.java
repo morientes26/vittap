@@ -65,12 +65,12 @@ public class AttendanceTest {
     ClassSeatSlot classSeatSlot = new ClassSeatSlot();
     classSeatSlot.setAttendant(this.attendant);
     classSeatSlot.setStatus(ClassSeatSlotStatus.EMPTY);
-    classSeatSlot = classSeatSlotRepository.save(classSeatSlot);
+    //classSeatSlot = classSeatSlotRepository.save(classSeatSlot);
 
     ClassSeatSlot classSeatSlot2 = new ClassSeatSlot();
     classSeatSlot2.setAttendant(this.attendant);
     classSeatSlot2.setStatus(ClassSeatSlotStatus.OCCUPIED);
-    classSeatSlot2 = classSeatSlotRepository.save(classSeatSlot2);
+    //classSeatSlot2 = classSeatSlotRepository.save(classSeatSlot2);
 
     ClassSeat classSeat = new ClassSeat();
     classSeat.setFixed(classSeatSlot);
@@ -83,7 +83,6 @@ public class AttendanceTest {
     classSeat2.setAttendanceStaus(true);
 
     classSeats.add(classSeatRepository.save(classSeat));
-    classSeats.add(classSeatRepository.save(classSeat2));
 
     ClassCategory classCategory = classCategoryRepository.save(
             new ClassCategory("test","test"));
@@ -104,20 +103,18 @@ public class AttendanceTest {
   public void testCreateAttendance() {
     int count = attendanceRepository.findAll().size();
 
-//    Attendance attendance = new Attendance();
-//    attendance.setClassInstance(this.classInstance);
-//    attendance.setTeacher(this.classSeats.get(0));
-//    attendance.setClassSeats(Collections.singletonList(this.classSeats.get(1)));
-//    attendance = attendanceRepository.save(attendance);
-//
-//    List<Attendance> result = attendanceRepository.findAll();
-//    assertThat(result.size(), is(count+1));
-//    assertThat(attendance.getTeacher().getFixed().getStatus(), is(ClassSeatSlotStatus.EMPTY));
-//    assertThat(attendance.getClassSeats().get(0).getTemporary().getStatus(), is(ClassSeatSlotStatus.OCCUPIED));
-//
-//    // test pupils vs seats n:m relationship
-//    attendance = attendanceRepository.findOne(attendance.getId());
-//    assertThat(attendance.getClassSeats().size(), is(1));
+    Attendance attendance = new Attendance();
+    attendance.setClassInstance(this.classInstance);
+    attendance.setClassSeats(Collections.singletonList(this.classSeats.get(0)));
+    attendance = attendanceRepository.save(attendance);
+
+    List<Attendance> result = attendanceRepository.findAll();
+    assertThat(result.size(), is(count+1));
+    assertThat(attendance.getClassSeats().get(0).getTemporary().getStatus(), is(ClassSeatSlotStatus.OCCUPIED));
+
+    // test pupils vs seats n:m relationship
+    attendance = attendanceRepository.findOne(attendance.getId());
+    assertThat(attendance.getClassSeats().size(), is(1));
   }
 
 }

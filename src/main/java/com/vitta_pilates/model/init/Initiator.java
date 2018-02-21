@@ -12,6 +12,7 @@ import com.vitta_pilates.model.enumeration.ReccurenceType;
 import com.vitta_pilates.model.repository.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -84,18 +85,24 @@ public class Initiator  {
 
   private List<ClassInstance> classInstances = new ArrayList<>();
 
+
+  @Value("${spring.jpa.hibernate.ddl-auto}")
+  private String ddlAuto;
+
   //FIXME: for this puprose will be use FLYWAY libs instead
   // https://flywaydb.org/
   @Bean
   InitializingBean initDbData() {
     return () -> {
-      importUsersAndRoles();
-      importClassCategories();
-      importTarifs();
-      importAttendents();
-      importClassInstance();
-      importProgramInstance();
-      importEventAttendance(3);
+      if (ddlAuto.equals("create") || ddlAuto.equals("create-drop")) {
+        importUsersAndRoles();
+        importClassCategories();
+        importTarifs();
+        importAttendents();
+        importClassInstance();
+        importProgramInstance();
+        importEventAttendance(3);
+      }
     };
   }
 
