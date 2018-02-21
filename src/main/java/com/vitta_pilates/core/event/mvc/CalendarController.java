@@ -115,11 +115,19 @@ public class CalendarController {
    * Load Attendance to modal
    * @return
    */
+  @RequestMapping(value = "/registration/{id}", method = RequestMethod.GET)
+  public
+  String getRegistration(
+          @PathVariable("id") String id, Model model) {
+    model.addAttribute("event", prepareRegistration(id));
+    return "items/class-event :: attendance-table";
+  }
+
   @RequestMapping(value = "/attendance/{id}", method = RequestMethod.GET)
   public
   String getAttendance(
           @PathVariable("id") String id, Model model) {
-    model.addAttribute("event", prepareAttendanceFormByClassInstance(id));
+    model.addAttribute("event", prepareAttendanceForm(id));
     return "items/class-event :: attendance-table";
   }
 
@@ -131,14 +139,25 @@ public class CalendarController {
     return classInstance.getId();
   }
 
-  private EventForm prepareAttendanceForm(String attId){
-    return prepareAttendanceFormByClassInstance(
-            String.valueOf(attendenceService.getClassInstance(attId).getId())
-    );
+  @RequestMapping(value = "/attend", method = RequestMethod.POST)
+  public @ResponseBody
+  long attend(AttendForm form, Model model) {
+    ClassInstance classInstance = attendenceService.attend(form);
+    model.addAttribute("event", prepareAttendanceForm(form.getAttendanceId()));
+    return classInstance.getId();
   }
 
-  private EventForm prepareAttendanceFormByClassInstance(String id){
-    List<AttendanceForm> list =  attendenceService.getAttendance(id);
+  private EventForm prepareRegistration(String id){
+    List<AttendanceForm> list =  attendenceService.getRegistration(id);
+    return prepareEventForm(list);
+  }
+
+  private EventForm prepareAttendanceForm(String attId){
+    List<AttendanceForm> list =  attendenceService.getAttendance(attId);
+    return prepareEventForm(list);
+  }
+
+  private EventForm prepareEventForm(List<AttendanceForm> list ){
     EventForm eventForm = new EventForm();
     if (!list.isEmpty())
       eventForm.setAttendanceTeacherForm(list.get(0));

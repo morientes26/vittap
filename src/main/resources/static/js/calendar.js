@@ -150,7 +150,7 @@ $(document).ready(function() {
 
             registration.bind('click', function () {
                 var event = $(".js_modal-click").data('event-object');
-                $("#attendance-table").load('/event-calendar/attendance/'+event.id, function() {
+                $("#attendance-table").load('/event-calendar/registration/'+event.id, function() {
                     $('.js_actions :button').hide();
                     $('.js_status :button').hide();
                     $('.js_attend :button').hide();

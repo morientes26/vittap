@@ -43,7 +43,7 @@ body {
     text-align: left;
 }
 .event-registration img{
-    height: 20px;
+    height: 30px;
 }
 .event-registration label > input{ /* HIDE RADIO */
     visibility: hidden; /* Makes input not-clickable */
@@ -56,7 +56,12 @@ body {
 .event-registration label > input:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     border:2px solid #f00;
 }
-
+.red {
+    color: red;
+}
+.green {
+    color: green;
+}
 /* ---------------- Backlog (not used yet) --------------------- */
 .datepicker {
     z-index:1151; /* has to be larger than 1050 */

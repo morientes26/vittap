@@ -37,11 +37,11 @@
     <table class="event-registration">
     <thead>
     <tr>
-        <th width="10%">Members</th>
-        <th width="10%">Temporary</th>
-        <th width="25%">Name</th>
-        <th width="25%"></th>
-        <th width="30%"></th>
+        <th width="5%">Mem.</th>
+        <th width="5%">Tem.</th>
+        <th width="40%">Name</th>
+        <th width="40%"></th>
+        <th width="10%"></th>
     </tr>
     </thead>
     <tbody>
@@ -53,17 +53,19 @@
         <td>
             <label th:replace="items/class-event :: seat-temporary(${event.attendanceTeacherForm}, '0')"></label>
         </td>
-        <td th:if="${event.attendanceTeacherForm.name!=''}" th:text="${event.attendanceTeacherForm.name}"></td>
-        <td th:if="${event.attendanceTeacherForm.select==true}">
-            <th:block th:replace="items/class-event :: select-teacher"></th:block>
+        <td>
+            <div th:if="${event.attendanceTeacherForm.name!=''}" th:text="${event.attendanceTeacherForm.name}"></div>
+            <div th:if="${event.attendanceTeacherForm.select==true}">
+                <th:block th:replace="items/class-event :: select-teacher"></th:block>
+            </div>
         </td>
         <td>
-            <span th:if="${event.attendanceTeacherForm.attend==true}" class="js_status green" style="display: none;">ok</span>
-            <span th:if="${event.attendanceTeacherForm.attend==false}" class="js_status red" style="display: none;">x</span>
+            <span th:if="${event.attendanceTeacherForm.attend==true}" class="js_status green" style="display: none;">attended</span>
+            <span th:if="${event.attendanceTeacherForm.attend==false}" class="js_status red" style="display: none;">---</span>
             <div th:replace="items/class-event :: action(${event.attendanceTeacherForm.user},${event.attendanceTeacherForm.user2}, ${event.attendanceTeacherForm.id}, ${event.attendanceTeacherForm.action},'fixed_0', true, true)"></div>
         </td>
         <td>
-            <button class="js_attend btn btn-link" href="@#todo" style="display: none;" onClick="return false;">attend</button>
+            <button class="js_attend btn-sm btn-primary" th:attr="data-attend=${event.attendanceTeacherForm.attendId},data-attendance=${event.attendanceTeacherForm.id}" style="display: none;" >ok</button>
             <div th:replace="items/class-event :: action(${event.attendanceTeacherForm.user}, ${event.attendanceTeacherForm.user2}, ${event.attendanceTeacherForm.id}, ${event.attendanceTeacherForm.action2},'temporary_0', false, true)"></div>
         </td>
     </tr>
@@ -76,17 +78,19 @@
         <td>
             <label th:replace="items/class-event :: seat-temporary(${att}, ${iterStat.index + 1})"></label>
         </td>
-        <td th:if="${att.name!=''}" th:text="${att.name}"></td>
-        <td th:if="${att.select==true}">
-            <th:block th:replace="items/class-event :: select-pupil"></th:block>
+        <td>
+            <div th:if="${att.name!=''}" th:text="${att.name}"></div>
+            <div th:if="${att.select==true}">
+                <th:block th:replace="items/class-event :: select-pupil"></th:block>
+            </div>
         </td>
         <td>
-            <span th:if="${att.attend==true}" class="js_status green" style="display: none;">ok</span>
-            <span th:if="${att.attend==false}" class="js_status red" style="display: none;">x</span>
+            <span th:if="${att.attend==true}" class="js_status green" style="display: none;">attended</span>
+            <span th:if="${att.attend==false}" class="js_status red" style="display: none;">---</span>
             <div th:replace="items/class-event :: action(${att.user}, ${att.user2}, ${att.id}, ${att.action},'fixed_'+${iterStat.index + 1}, true, false)"></div>
         </td>
         <td>
-            <button class="js_attend btn btn-link" href="@#todo" style="display: none;" onClick="return false;">attend</button>
+            <button class="js_attend btn-sm btn-primary" style="display: none;" th:attr="data-attend=${att.attendId},data-attendance=${att.id}">ok</button>
             <div th:replace="items/class-event :: action(${att.user}, ${att.user2}, ${att.id}, ${att.action2},'temporary_'+${iterStat.index + 1}, false, false)"></div>
         </td>
     </tr>
@@ -139,8 +143,6 @@
             var attId = $j(this).data('attendance');
             var user = $j(this).data('user');
             var user2 = $j(this).data('user2');
-            console.log(user);
-            console.log(user2);
 
             //fixme: better selector who is not depends on html layout
             var select_value = $j(this).parents('tr').find('select').val();
@@ -152,8 +154,6 @@
             if (user2 === "undefined" || user2=="undefined" || user2 == null || user2 == 0){
                 user2 = select_value;
             }
-            console.log(user);
-            console.log(user2);
             var action = $j(this).data('action');
             var fixed = $j(this).data('fixed');
             var teacher = $j(this).data('teacher');
@@ -171,7 +171,7 @@
                 data: data
             }).done(function(classInstanceId) {
 
-                $j("#attendance-table").load('/event-calendar/attendance/'+classInstanceId, function() {
+                $j("#attendance-table").load('/event-calendar/registration/'+classInstanceId, function() {
                     $j('.js_actions :button').hide();
                     $j('.js_status :button').hide();
                     $j('.js_attend :button').hide();
@@ -183,6 +183,33 @@
 
             return false;
 
+        });
+
+        $j('.js_attend').bind('click',function(event){
+            event.preventDefault();
+            var attendId = $j(this).data('attend');
+            var attendanceId = $j(this).data('attendance');
+            var data = {
+                attendId : attendId,
+                attendanceId: attendanceId
+            };
+            $j.ajax({
+                url: '/event-calendar/attend',
+                type: 'post',
+                data: data
+            }).done(function(classInstanceId) {
+
+                $j("#attendance-table").load('/event-calendar/attendance/'+classInstanceId, function() {
+                    $j('.js_actions').hide();
+                    $j('.select2').hide();
+                    $j('.js_status').show();
+                    $j('.js_attend').show();
+                });
+
+            }).fail(function(xhr, status, error) {
+                console.error(error);
+            });
+            return false;
         });
     });
 
