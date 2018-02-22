@@ -99,9 +99,9 @@ public class Initiator  {
         importClassCategories();
         importTarifs();
         importAttendents();
-        importClassInstance();
-        importProgramInstance();
-        importEventAttendance(3);
+      //  importClassInstance();
+     //   importProgramInstance();
+      //  importEventAttendance(3);
       }
     };
   }
