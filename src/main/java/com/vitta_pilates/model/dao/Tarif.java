@@ -6,6 +6,7 @@ import org.zkoss.bind.annotation.Immutable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -18,12 +19,12 @@ public class Tarif {
     @NotEmpty(message = "Name can not be null")
     private String name;
     private String description;
-    private Double value; // pesos per hour // TODO:2017-01-13:mze: make it currency independent
+    private BigDecimal value; // pesos per hour // TODO:2017-01-13:mze: make it currency independent
     private Date dateOfIssue;
 
     public Tarif(){}
 
-    public Tarif(String name, String description, Double value, Date dateOfIssue) {
+    public Tarif(String name, String description, BigDecimal value, Date dateOfIssue) {
         this.name = name;
         this.description = description; 
         this.value = value;
@@ -61,11 +62,11 @@ public class Tarif {
         this.description = description;
     }
 
-    public Double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

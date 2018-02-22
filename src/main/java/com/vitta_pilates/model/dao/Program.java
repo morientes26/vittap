@@ -1,6 +1,7 @@
 package com.vitta_pilates.model.dao;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,12 +22,12 @@ public class Program {
     private Set<ProgramInstance> programInstances;
 
     private Date dateOfIssue; // date when the program is given to a pupil
-    private Double discount; // by default 0
+    private BigDecimal discount; // by default 0
     private boolean active; // scheduled
 
     public Program(){}
 
-    public Program(Schedule schedule, ProgramTemplate programTemplate, Date dateOfIssue, Double discount) {
+    public Program(Schedule schedule, ProgramTemplate programTemplate, Date dateOfIssue, BigDecimal discount) {
         this.schedule = schedule;
         this.programTemplate = programTemplate;
         this.dateOfIssue = dateOfIssue;
@@ -76,11 +77,11 @@ public class Program {
         this.dateOfIssue = dateOfIssue;
     }
 
-    public Double getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Double discount) {
+    public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 
