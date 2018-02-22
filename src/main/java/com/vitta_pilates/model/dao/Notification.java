@@ -4,6 +4,7 @@ import com.vitta_pilates.model.enumeration.NotificationType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -13,7 +14,7 @@ public class Notification {
     @GeneratedValue
     private long id;
 
-    private LocalDateTime occurence;
+    private Date occurence;
     private NotificationType type;
 
     @ManyToMany(mappedBy = "notifications")
@@ -23,11 +24,11 @@ public class Notification {
         return id;
     }
 
-    public LocalDateTime getOccurence() {
+    public Date getOccurence() {
         return occurence;
     }
 
-    public void setOccurence(LocalDateTime occurence) {
+    public void setOccurence(Date occurence) {
         this.occurence = occurence;
     }
 
