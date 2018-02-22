@@ -156,7 +156,7 @@ public class V1__Database_scheme_initialization implements SpringJdbcMigration, 
     jdbcTemplate.execute("alter table user_account add constraint FK_fiywq2x4mg0ht0oq58ihdshpe foreign key (role_id) references role");
     jdbcTemplate.execute("alter table user_account_notification add constraint FK_4jd3d80sc5wbdsp83ifd1x0ty foreign key (notification_id) references notification");
     jdbcTemplate.execute("alter table user_account_notification add constraint FK_3f6m5xf0ndtbw3lcobglmlccp foreign key (user_account_id) references user_account");
-    jdbcTemplate.execute("create sequence hibernate_sequence");
+    //jdbcTemplate.execute("create sequence hibernate_sequence");
   }
 
   @Override
