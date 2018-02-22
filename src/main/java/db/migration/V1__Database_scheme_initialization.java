@@ -97,7 +97,7 @@ public class V1__Database_scheme_initialization implements SpringJdbcMigration, 
     jdbcTemplate.execute("drop table if exists tarif cascade");
     jdbcTemplate.execute("drop table if exists user_account cascade");
     jdbcTemplate.execute("drop table if exists user_account_notification cascade");
-    jdbcTemplate.execute("drop sequence hibernate_sequence");
+   // jdbcTemplate.execute("drop sequence hibernate_sequence");
 
     jdbcTemplate.execute("create table attendance (id int8 not null, class_instance_id int8, primary key (id))");
     jdbcTemplate.execute("create table attendance_class_seat (attendance_id int8 not null, class_seat_id int8 not null)");
