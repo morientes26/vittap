@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
@@ -136,7 +137,7 @@ public class Initiator  {
   }
 
   private void importTarifs(){
-    tarifRepository.save(new Tarif("test tarif 1", "desc", 1.00, new Date()));
+    tarifRepository.save(new Tarif("test tarif 1", "desc", new BigDecimal(1.00), new Date()));
   }
 
   private void importAttendents(){
@@ -272,7 +273,7 @@ public class Initiator  {
     c.add(Calendar.HOUR, -48);
 
     List<ClassVisit> classVisit = new ArrayList<>();
-    Tarif tarif = tarifRepository.save(new Tarif("tarif A", "some tarif number A",1.00, new Date()));
+    Tarif tarif = tarifRepository.save(new Tarif("tarif A", "some tarif number A", new BigDecimal(1.00), new Date()));
     ProgramTemplate programTemplate = new ProgramTemplate(
             "template",
             "description of something",
@@ -285,7 +286,7 @@ public class Initiator  {
     Schedule schedule = new Schedule(todayRandomTime(), todayRandomTime(), ReccurenceType.DAILY);
     schedule = scheduleRepository.save(schedule);
 
-    Program program = new Program(schedule, programTemplate,  c.getTime(), 5.00);
+    Program program = new Program(schedule, programTemplate,  c.getTime(), new BigDecimal(5.00));
     programRepository.save(program);
 
     ProgramInstance programInstance = new ProgramInstance(c.getTime(), ProgramInstanceStatus.EXECUTED);
