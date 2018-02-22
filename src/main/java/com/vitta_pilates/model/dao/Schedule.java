@@ -27,7 +27,7 @@ public class Schedule {
     
     // daily
     //private Time scheduledTime;
-    private LocalTime scheduledTime;
+    private Date scheduledTime;
     // weekly
     private DayOfWeek scheduledDay;
     // monthly
@@ -92,11 +92,11 @@ public class Schedule {
         this.reccurenceType = reccurenceType;
     }
 
-    public LocalTime getScheduledTime() {
+    public Date getScheduledTime() {
         return scheduledTime;
     }
 
-    public void setScheduledTime(LocalTime scheduledTime) {
+    public void setScheduledTime(Date scheduledTime) {
         this.scheduledTime = scheduledTime;
     }
 
