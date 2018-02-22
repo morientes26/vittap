@@ -6,7 +6,7 @@
 //import org.springframework.jdbc.core.JdbcTemplate;
 //import org.springframework.stereotype.Component;
 //
-////@Component
+//@Component
 //public class V2__Default_data_initialization_users_roles implements SpringJdbcMigration, MigrationInfoProvider {
 //
 //  // not working because of issue of autowired dependency
@@ -16,29 +16,29 @@
 //  @Override
 //  public void migrate(JdbcTemplate jdbcTemplate) throws Exception {
 //
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO ROLE (DESCRIPTION, NAME) VALUES ('Administrator', 'ADMIN')");
+//   // jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+//    //jdbcTemplate.execute("INSERT INTO public.role (description, name) VALUES ('Administrator', 'ADMIN')");
 //
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO ROLE (DESCRIPTION, NAME) VALUES ('Pupil', 'PUPIL')");
-//
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO ROLE (DESCRIPTION, NAME) VALUES ('Teacher', 'TEACHER')");
-//
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO ROLE (DESCRIPTION, NAME) VALUES ('Secretary', 'SECRETARY')");
-//
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('admin', 'admin', 'test', 1)");
-//
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('pupil', 'pupil', 'test', 2)");
-//
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('teacher', 'teacher', 'test', 3)");
-//
-//    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
-//    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('secretary', 'secretary', 'test', 4)");
+////    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+////    jdbcTemplate.execute("INSERT INTO ROLE (DESCRIPTION, NAME) VALUES ('Pupil', 'PUPIL')");
+////
+////    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+////    jdbcTemplate.execute("INSERT INTO ROLE (DESCRIPTION, NAME) VALUES ('Teacher', 'TEACHER')");
+////
+////    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+////    jdbcTemplate.execute("INSERT INTO ROLE (DESCRIPTION, NAME) VALUES ('Secretary', 'SECRETARY')");
+////
+////    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+////    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('admin', 'admin', 'test', 1)");
+////
+////    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+////    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('pupil', 'pupil', 'test', 2)");
+////
+////    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+////    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('teacher', 'teacher', 'test', 3)");
+////
+////    jdbcTemplate.execute("select nextval ('hibernate_sequence')");
+////    jdbcTemplate.execute("INSERT INTO USER_ACCOUNT (LOGIN, NAME, PASSWORD, ROLE_ID) VALUES ('secretary', 'secretary', 'test', 4)");
 //  }
 //
 //  @Override

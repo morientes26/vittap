@@ -96,9 +96,9 @@ public class Initiator  {
     return () -> {
       if (ddlAuto.equals("create") || ddlAuto.equals("create-drop")) {
         importUsersAndRoles();
-        importClassCategories();
-        importTarifs();
-        importAttendents();
+//        importClassCategories();
+//        importTarifs();
+//        importAttendents();
       //  importClassInstance();
      //   importProgramInstance();
       //  importEventAttendance(3);
