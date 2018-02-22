@@ -28,9 +28,9 @@
                 <input type="hidden" id="event-id" th:field="*{event.id}"/>
 
                 <div class="form-group row">
-                    <label for="template" class="col-3 col-form-label">Event Template:</label>
+                    <label for="templateType" class="col-3 col-form-label">Event Template:</label>
                     <div class="col-9">
-                        <select class="form-control form-control-sm" id="template" th:field="*{event.type}">
+                        <select class="form-control form-control-sm" id="templateType" th:field="*{event.templateType}">
                             <option th:each="template : ${templates}"
                                     th:value="${template.id}" th:text="${template.name}"></option>
                         </select>

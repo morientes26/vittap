@@ -32,7 +32,7 @@ public class ClassService extends EntityService<com.vitta_pilates.model.dao.Clas
   @Transactional
   public ClassInstance executeInstance(ClassInstance instance, Attendant teacher, Attendant... pupils){
     log.debug("Execute instance {}", instance);
-    instance.execute(teacher, pupils);
+  //  instance.execute(teacher, pupils);
     return classInstanceRepository.save(instance);
   }
 }

@@ -29,9 +29,6 @@ public class Attendant {
     private UserAccount userAccount; // optional
 
     @ManyToMany(mappedBy = "attendedPupils")
-     private Set<ClassInstance> classInstances;
-
-    @ManyToMany(mappedBy = "attendedPupils")
     private Set<ProgramInstance> programInstances;
 
     private boolean pupil = true;
@@ -46,17 +43,8 @@ public class Attendant {
 
     public Attendant(PersonalData personalData/* , ProgramInstance[] programs */) {
         this.personalData = personalData;
-        
-//        this.skills.add(new Skill(Cathegory.MAT, Level.FIRSTCOMMER));
-//        this.skills.add(new Skill(Cathegory.SUSPENSUS, Level.FIRSTCOMMER));
-//        this.skills.add(new Skill(Cathegory.REFORMER, Level.FIRSTCOMMER));
     }
 
-    //note: it should be in service layer together with persistance operation
-//    public void buyCourse( Program program ) {
-//        this.programs.add(program);
-//    }
-//
     //note: it should be in service layer together with persistance operation
     public void addSkill(Skill newSkill) {
         for (int i = 0; i < skills.size(); i++) {
@@ -64,50 +52,6 @@ public class Attendant {
             if( s.getCategory() == newSkill.getCategory() )
                 skills.set(i, newSkill);
         }
-    }
-
-    //FIXME: It is better to use ORM approach than 3 for cycles
-    @Deprecated
-    public List<ClassInstance> listAllPupilAttendances(Map<String, com.vitta_pilates.model.dao.Class> managedEvents) {
-        List<ClassInstance> result = new ArrayList<>();
-        
-        // for all managed events
-        for (Map.Entry<String, com.vitta_pilates.model.dao.Class> entry : managedEvents.entrySet()) {
-            // for all event instances
-            List<ClassInstance> instances = entry.getValue().getInstances();
-            for (ClassInstance instance : instances) {
-                // list those where this attendant is listed
-                for (Attendant pupil : instance.getAttendedPupils()) {
-                    if( pupil.personalData.getName().equalsIgnoreCase(personalData.getName()) ) {
-                        result.add(instance);
-                        break;
-                    }
-                }
-            }
-        }
-        
-        return result;
-    }
-
-    //FIXME: It is better to use ORM approach than 3 for cycles
-    @Deprecated
-    public List<ClassInstance> listAllTeacherAttendances(Map<String, com.vitta_pilates.model.dao.Class> managedEvents) {
-        List<ClassInstance> result = new ArrayList<>();
-        
-        // for all managed events
-        for (Map.Entry<String, com.vitta_pilates.model.dao.Class> entry : managedEvents.entrySet()) {
-            // for all event instances
-            List<ClassInstance> instances = entry.getValue().getInstances();
-            for (ClassInstance instance : instances) {
-                // list those where this attendant is listed
-                Attendant teacher = instance.getTrueAttendingTeacher();
-                if( teacher.personalData.getName().equalsIgnoreCase(personalData.getName()) ) {
-                    result.add(instance);
-                }
-            }
-        }
-        
-        return result;
     }
 
     @Override
@@ -143,14 +87,6 @@ public class Attendant {
 
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
-    }
-
-    public Set<ClassInstance> getClassInstances() {
-        return classInstances;
-    }
-
-    public void setClassInstances(Set<ClassInstance> classInstances) {
-        this.classInstances = classInstances;
     }
 
     public Set<ProgramInstance> getProgramInstances() {

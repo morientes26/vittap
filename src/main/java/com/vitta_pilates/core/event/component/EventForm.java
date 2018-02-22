@@ -15,7 +15,7 @@ public class EventForm implements Serializable{
   private String description;
   private String type = Type.SIMPLE.getName();
   private String occurence;
-  private String recurrentType;
+  private Long templateType;
   private AttendanceForm attendanceTeacherForm = new AttendanceForm();
   private List<AttendanceForm> attendanceForm = new ArrayList<>();
 
@@ -85,12 +85,12 @@ public class EventForm implements Serializable{
     this.occurence = occurence;
   }
 
-  public String getRecurrentType() {
-    return recurrentType;
+  public Long getTemplateType() {
+    return templateType;
   }
 
-  public void setRecurrentType(String recurrentType) {
-    this.recurrentType = recurrentType;
+  public void setTemplateType(Long templateType) {
+    this.templateType = templateType;
   }
 
   public String getName() {

@@ -110,7 +110,7 @@ public class TeacherTest {
     this.clazz = classRepository.save(this.clazz);
 
     classInstance.setClazz(clazz);
-    classInstance.setAttendedPupils(attendants);
+  //  classInstance.setAttendedPupils(attendants);
     classInstance = classInstanceRepository.save(classInstance);
     attendants = attendantRepository.save(attendants);
 

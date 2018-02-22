@@ -62,7 +62,7 @@ public class AttendenceService {
 
       int emptySize = classInstance.getClazz().getEvent().getCapacity()-result.size();
 
-      for (int i=0; i<emptySize;i++)
+      for (int i=0; i<=emptySize;i++)
         result.add(buildRegistrationForm(attendance));
 
     }

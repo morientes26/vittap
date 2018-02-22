@@ -2,7 +2,9 @@ package com.vitta_pilates.core.people.service;
 
 import com.vitta_pilates.core.shared.service.EntityService;
 import com.vitta_pilates.model.dao.*;
+import com.vitta_pilates.model.dao.attendance.Attendance;
 import com.vitta_pilates.model.enumeration.FilterTeacherData;
+import com.vitta_pilates.model.repository.AttendanceRepository;
 import com.vitta_pilates.model.repository.AttendantRepository;
 import com.vitta_pilates.model.repository.ClassInstanceRepository;
 import com.vitta_pilates.model.repository.ProgramInstanceRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +37,9 @@ public class TeacherService extends EntityService<Attendant> {
 
   @Autowired
   ProgramInstanceRepository programInstanceRepository;
+
+  @Autowired
+  AttendanceRepository attendanceRepository;
 
   public TeacherService(AttendantRepository repository){
     super(repository);
@@ -73,18 +79,20 @@ public class TeacherService extends EntityService<Attendant> {
   }
 
   public List<ClassInstance> findClassInstanceByPeriod(
-          Attendant pupil,
+          Attendant teacher,
           int month){
 
     LocalDate fromDate = LocalDate.now().plusMonths( month ).with(firstDayOfMonth());
     LocalDate toDate = LocalDate.now().plusMonths( month ).with(lastDayOfMonth());
 
 
-    List<ClassInstance> result = classInstanceRepository.findByTeacherAndDate(
-            pupil.getId(),
+    List<ClassInstance> result = new ArrayList<>();
+    List<Attendance> attendances = attendanceRepository.findByTeacherAndDate(
+            teacher.getId(),
             Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
             Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
     );
+    attendances.forEach(att-> result.add(att.getClassInstance()));
 
     return result;
 

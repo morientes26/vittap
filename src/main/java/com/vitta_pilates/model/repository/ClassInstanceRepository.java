@@ -22,14 +22,16 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, Lo
    * @param toD
    * @return
    */
-  @Query("SELECT ci from ClassInstance ci " +
-          "JOIN ci.attendedPupils a " +
-          "WHERE a.id in :attendent " +
-          "AND ci.trueTime BETWEEN :fromD AND :toD")
-  List<ClassInstance> findByPupilAndDate(
-          @Param("attendent") Long attendant,
-          @Param("fromD") Date fromD,
-          @Param("toD") Date toD);
+
+
+//  @Query("SELECT ci from ClassInstance ci " +
+//          "JOIN a.attendedPupils a " +
+//          "WHERE a.id in :attendent " +
+//          "AND ci.trueTime BETWEEN :fromD AND :toD")
+//  List<ClassInstance> findByPupilAndDate(
+//          @Param("attendent") Long attendant,
+//          @Param("fromD") Date fromD,
+//          @Param("toD") Date toD);
 
   /**
    * Select all ClassInstance of teacher by date range

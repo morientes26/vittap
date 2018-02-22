@@ -1,7 +1,7 @@
 <zk>
     <div id="classes">
         <div sclass="pagination">
-            <!-- kalendarova paginacia" -->
+            <!-- calendar pagination" -->
             <button label="${labels.control.left}"
                     onClick="@command('calendarControlClassInstance',direction='left')"/>
 

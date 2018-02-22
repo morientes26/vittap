@@ -74,20 +74,24 @@ public class EventService {
   public void save(EventForm eventForm){
     checkNotNull(eventForm);
 
-    ClassInstance classInstance;
     // update class instance
-    if (!StringUtils.isEmpty(eventForm.getId())){
-      classInstance = classInstanceRepository.findOne(Long.valueOf(eventForm.getId()));
-    } else {
-      classInstance = prepareNew(eventForm);
-    }
+    ClassInstance classInstance = (!StringUtils.isEmpty(eventForm.getId()))
+            ? classInstanceRepository.findOne(Long.valueOf(eventForm.getId()))
+            : prepareNew(eventForm);
+
+    ClassTemplate classTemplate = classTemplateRepository.getOne(eventForm.getTemplateType());
 
     // set data from modal
     // todo: event template class ????
     classInstance.setTrueTime(dateValue(eventForm.getStart()));
     classInstance.setName(eventForm.getName());
     classInstance.setDescription(eventForm.getDescription());
+    classInstance.getClazz().setEvent(classTemplate);
     //todo: what about duration ??? is only on class not on instance
+    classInstance.getClazz().getSchedule().setStartDate(dateValue(eventForm.getStart()));
+    classInstance.getClazz().getSchedule().setEndDate(evaluateEndDate(
+            dateValue(eventForm.getStart()), eventForm.getDuration()
+    ));
     classInstance = classInstanceRepository.save(classInstance);
 
     // create empty attendance if type of class instance is CLASS and hasn't any attendence
@@ -105,20 +109,21 @@ public class EventService {
 
   private ClassInstance prepareNew(EventForm eventForm){
 
-    ClassInstance classInstance = new ClassInstance();
-    //todo: what kind of class template
-    ClassTemplate classTemplate = classTemplateRepository.getOne(1L);
 
-    //todo: this is only create custom template and class
+    ClassTemplate classTemplate = classTemplateRepository.getOne(eventForm.getTemplateType());
+
+    //todo: this create only custom template and class
     Schedule schedule = new Schedule(
             dateValue(eventForm.getStart()),
-            evaluateEndDate(dateValue(eventForm.getStart()), eventForm.getDuration()
+            evaluateEndDate(
+                    dateValue(eventForm.getStart()), eventForm.getDuration()
             )
     );
     schedule = scheduleRepository.save(schedule);
     Class clazz = Initiator.instanceClass(schedule, classTemplate);
     clazz = classRepository.save(clazz);
 
+    ClassInstance classInstance = new ClassInstance();
     classInstance.setClazz(clazz);
     return classInstance;
   }
@@ -132,13 +137,6 @@ public class EventService {
     classInstanceRepository.deleteInBatch(Arrays.asList(classInstance));
     log.debug("Delete event id: {} from calendar event", id);
   }
-
-//  public EventForm getEventForm(String id){
-//    log.debug("Load event id: {} from DB", id);
-//    ClassInstance classInstance = classInstanceRepository.findOne(Long.valueOf(id));
-//    Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
-//    return transform(classInstance, attendance);
-//  }
 
   public Event get(String id){
     return transform(classInstanceRepository.getOne(Long.valueOf(id)), true);
@@ -170,19 +168,27 @@ public class EventService {
   }
 
   private Event transform(ClassInstance classInstance, boolean full){
+
+    Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
+    int countOfPupil = 0;
+    if (attendance!=null) {
+      countOfPupil = pupilFilling(
+              classInstance.getClazz().getEvent().getCapacity(),
+              attendance.getPupils().size()
+      );
+    }
+
     Event event = new Event.EventBuilder()
             .setId(classInstance.getId())
             .setStart(classInstance.getTrueTime())
-            .setEnd(evaluateEndDate(classInstance.getTrueTime(), classInstance.getClazz().getEvent().getDuration()))
+            .setEnd(classInstance.getClazz().getSchedule().getEndDate())
             .setDuration(classInstance.getClazz().getEvent().getDuration())
             .setTitle(
                     classInstance.getClazz().getEvent().getName() + " "
                   + classInstance.getClazz().getEvent().getRequiredLevel().getName()
             )
             .setColor(classInstance.getClazz().getEvent().getType().getColor())
-            .setCount(pupilFilling(
-                    classInstance.getClazz().getEvent().getCapacity(),
-                    classInstance.getAttendedPupils().size()))
+            .setCount(countOfPupil)
             .setName(classInstance.getName())
             .setDescription(classInstance.getDescription())
             .createEvent();
@@ -197,33 +203,12 @@ public class EventService {
 
     if (full){
       event.setType(EventForm.Type.SIMPLE.getName());
-      Attendance attendance = attendanceRepository.findOneByClassInstance(classInstance);
-      if (attendance!=null)
+      if (attendance!=null) {
         event.setType(EventForm.Type.CLASS.getName());
+      }
     }
 
     return event;
-  }
-
-  private EventForm transform(ClassInstance classInstance, Attendance attendance){
-    EventForm eventForm = new EventForm();
-    eventForm.setId(String.valueOf(classInstance.getId()));
-    eventForm.setName(classInstance.getName());
-    eventForm.setDescription(classInstance.getDescription());
-   //todo: eventForm.setDuration(classInstance.get);
-   //todo: eventForm.setOccurence();
-   //todo: eventForm.setRecurrentType();
-    eventForm.setStart(classInstance.getTrueTime().toString());
-    eventForm.setDuration(classInstance.getClazz().getEvent().getDuration());
-    eventForm.setTitle(
-            classInstance.getClazz().getEvent().getName() + " "
-                    + classInstance.getClazz().getEvent().getRequiredLevel().getName());
-    //todo:eventForm.setType();
-    //todo:
-    eventForm.setAttendanceTeacherForm(null);
-    eventForm.setAttendanceForm(null);
-
-    return eventForm;
   }
 
   private Date dateValue(String dateS){

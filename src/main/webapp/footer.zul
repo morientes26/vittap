@@ -1,5 +1,5 @@
 <div align="end">
     <label style="font-weight:bold;" value="${sessionScope.userCredential.name}" />
     <!-- fixme: getting from pom.xml -->
-    <label value="version. 0.7.3" />
+    <label value="version. 0.8.0" />
 </div>

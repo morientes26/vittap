@@ -128,6 +128,8 @@ public class Event {
     this.room = room;
   }
 
+  public void setCount(int count){ this.count = count; }
+
   public AttendanceForm getAttendanceTeacherForm() {
     return attendanceTeacherForm;
   }

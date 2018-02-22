@@ -190,7 +190,7 @@ public class Initiator  {
       int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
       Class clazz = classRepository.save(instanceClass(schedule, classTemplaties.get(randomNum), classInstances.get(i), room, pupils.get(i)));
       classInstances.get(i).setClazz(clazz);
-      classInstances.get(i).setAttendedPupils(pupils);
+     // classInstances.get(i).setAttendedPupils(pupils);
       classInstances.set(i,classInstanceRepository.save(classInstances.get(i)));
       Attendant teacher = pupils.get(0);
       teacher.setPupil(false);
