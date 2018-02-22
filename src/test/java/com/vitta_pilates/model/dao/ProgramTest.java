@@ -14,6 +14,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
-/**
- * Created by  ??_?¬ morientes on 30/12/2017.
- */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @ActiveProfiles("test")
@@ -51,7 +50,7 @@ public class ProgramTest {
     schedule = scheduleRepository.save(schedule);
     List<ClassVisit> classVisit = new ArrayList<>();
 
-    Tarif tarif = tarifRepository.save(new Tarif("tarif1", "some tarif number 1",1.00, new Date()));
+    Tarif tarif = tarifRepository.save(new Tarif("tarif1", "some tarif number 1",new BigDecimal(1.00), new Date()));
     ProgramTemplate programTemplate = new ProgramTemplate(
             "template",
             "description of something",
@@ -62,7 +61,7 @@ public class ProgramTest {
     programTemplate = programTemplateRepository.save(programTemplate);
 
 
-    this.program = new Program(schedule, programTemplate, new Date(), 5.00);
+    this.program = new Program(schedule, programTemplate, new Date(), new BigDecimal(5.00));
   }
 
   @Test

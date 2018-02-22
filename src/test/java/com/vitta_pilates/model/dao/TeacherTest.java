@@ -13,6 +13,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -115,7 +116,7 @@ public class TeacherTest {
     attendants = attendantRepository.save(attendants);
 
     List<ClassVisit> classVisit = new ArrayList<>();
-    Tarif tarif = tarifRepository.save(new Tarif("tarif1", "some tarif number 1",1.00, new Date()));
+    Tarif tarif = tarifRepository.save(new Tarif("tarif1", "some tarif number 1",new BigDecimal(1.00), new Date()));
     ProgramTemplate programTemplate = new ProgramTemplate(
             "template",
             "description of something",
@@ -126,7 +127,7 @@ public class TeacherTest {
 
     programTemplate = programTemplateRepository.save(programTemplate);
 
-    this.program = new Program(schedule, programTemplate,  c.getTime(), 5.00);
+    this.program = new Program(schedule, programTemplate,  c.getTime(), new BigDecimal(5.00));
     programRepository.save(program);
   }
 
