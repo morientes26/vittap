@@ -6,7 +6,7 @@
     <div self="@define(content)"  width="100%" style="margin-top:50px" align="center">
 
         <hbox>
-            <label value="Welcome user " />
+            <label value="Welcome userAccount " />
             <label style="font-weight:bold;" value="${sessionScope.userCredential.name}" />
             <label value=" to VittaP " />
         </hbox>

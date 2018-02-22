@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The class Event is not DB entity, but it is used in calendar component as event
+ */
 public class Event {
 
   private String id;

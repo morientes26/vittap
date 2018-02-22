@@ -7,7 +7,6 @@ import javax.persistence.*;
 /**
  * example : matt class beginers 1 hour
  */
-//TODO: I suggest name of this class 'EventTemplate' or 'Box'
 @Entity
 public class ClassTemplate {
 

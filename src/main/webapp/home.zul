@@ -3,7 +3,7 @@
     <div self="@define(content)"  width="100%"  align="center">
 
         <hbox>
-            <label value="This can see not logged user ..." />
+            <label value="This can see not logged userAccount ..." />
         </hbox>
 
     </div>

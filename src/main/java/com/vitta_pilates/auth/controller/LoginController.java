@@ -72,7 +72,7 @@ public class LoginController extends SelectorComposer<Component> {
     }
 
     if(credential.hasRole(LevelOfAccess.TEACHER.name())){
-      Executions.sendRedirect("/index.zul");
+      Executions.sendRedirect("/event-calendar");
       return;
     }
 

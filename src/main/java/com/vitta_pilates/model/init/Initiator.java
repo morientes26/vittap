@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalTime;
 import java.util.*;
 import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
@@ -115,10 +114,10 @@ public class Initiator  {
     Role teacher = roleRepository.save(new Role(LevelOfAccess.TEACHER.name(),"Teacher"));
     Role secretary = roleRepository.save(new Role(LevelOfAccess.SECRETARY.name(),"Secretary"));
 
-    userRepository.save(new User("admin","admin","test", admin));
-    userRepository.save(new User("pupil","pupil","test", pupil));
-    userRepository.save(new User("teacher","teacher","test", teacher));
-    userRepository.save(new User("secretary","secretary","test", secretary));
+    userRepository.save(new UserAccount("admin","admin","test", admin));
+    userRepository.save(new UserAccount("pupil","pupil","test", pupil));
+    userRepository.save(new UserAccount("teacher","teacher","test", teacher));
+    userRepository.save(new UserAccount("secretary","secretary","test", secretary));
 
   }
 

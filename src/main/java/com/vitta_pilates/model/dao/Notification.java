@@ -17,7 +17,7 @@ public class Notification {
     private NotificationType type;
 
     @ManyToMany(mappedBy = "notifications")
-    private Set<User> users;
+    private Set<UserAccount> userAccounts;
 
     public long getId() {
         return id;
@@ -39,11 +39,11 @@ public class Notification {
         this.type = type;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<UserAccount> getUserAccounts() {
+        return userAccounts;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUserAccounts(Set<UserAccount> userAccounts) {
+        this.userAccounts = userAccounts;
     }
 }

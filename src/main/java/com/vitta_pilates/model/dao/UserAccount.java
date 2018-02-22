@@ -5,8 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="\"user\"") // special case of table because 'user' word is reserved by hibernate
-public class User {
+public class UserAccount {
 
   @Id
   @GeneratedValue
@@ -24,16 +23,16 @@ public class User {
 
   @ManyToMany(cascade = {CascadeType.ALL})
   @JoinTable(
-          name = "user_notification",
-          joinColumns = {@JoinColumn(name = "user_id")},
+          name = "user_account_notification",
+          joinColumns = {@JoinColumn(name = "user_account_id")},
           inverseJoinColumns = {@JoinColumn(name = "notification_id")}
   )
   Set<Notification> notifications = new HashSet<>();
 
-  public User(){
+  public UserAccount(){
   }
 
-  public User(String login, String name, String password, Role role){
+  public UserAccount(String login, String name, String password, Role role){
     this.login = login;
     this.name = name;
     this.password = password;

@@ -23,7 +23,7 @@ public class ClassInstance extends OccurrenceContent {
     private String name;
     private String description;
 
-    @ManyToMany//(cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(
             name = "class_instance_attendent",
             joinColumns = {@JoinColumn(name = "class_instance_id")},

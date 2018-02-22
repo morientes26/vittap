@@ -1,27 +1,19 @@
 package com.vitta_pilates;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.vitta_pilates.conf.ServiceInitializer;
-import com.vitta_pilates.core.people.service.ClassService;
-import com.vitta_pilates.core.people.service.PupilService;
-import com.vitta_pilates.core.studioadmin.service.*;
+import com.vitta_pilates.conf.SpringUtility;
 import com.vitta_pilates.model.init.Initiator;
-import com.vitta_pilates.model.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.context.annotation.*;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.zkoss.zk.au.http.DHtmlUpdateServlet;
 import org.zkoss.zk.ui.http.DHtmlLayoutServlet;
 import org.zkoss.zk.ui.http.HttpSessionListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @ComponentScan("com.vitta_pilates")
@@ -29,7 +21,8 @@ import org.zkoss.zk.ui.http.HttpSessionListener;
 @EnableTransactionManagement
 @Import({
 				Initiator.class,
-				ServiceInitializer.class
+				SpringUtility.class,
+				ServiceInitializer.class,
 })
 public class Application {
 

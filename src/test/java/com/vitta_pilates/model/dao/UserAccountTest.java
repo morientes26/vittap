@@ -24,9 +24,9 @@ import static org.hamcrest.core.IsInstanceOf.instanceOf;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @ActiveProfiles("test")
-public class UserTest {
+public class UserAccountTest {
 
-  private User user;
+  private UserAccount userAccount;
 
   @Autowired
   private UserRepository userRepository;
@@ -36,9 +36,9 @@ public class UserTest {
 
   @Before
   public void setUp() throws Exception {
-    this.user = new User();
+    this.userAccount = new UserAccount();
     Role role = roleRepository.save(new Role(LevelOfAccess.ADMIN.name(),"test"));
-    this.user.setRole(role);
+    this.userAccount.setRole(role);
   }
 
   @Test
@@ -46,14 +46,14 @@ public class UserTest {
 
     int count = userRepository.findAll().size();
 
-    User user = userRepository.save(this.user);
-    User user2 = userRepository.findOne(user.getId());
+    UserAccount userAccount = userRepository.save(this.userAccount);
+    UserAccount userAccount2 = userRepository.findOne(userAccount.getId());
 
-    assertThat(user, instanceOf(User.class));
-    assertThat(user2.getRole().getName(), is(LevelOfAccess.ADMIN.name()));
+    assertThat(userAccount, instanceOf(UserAccount.class));
+    assertThat(userAccount2.getRole().getName(), is(LevelOfAccess.ADMIN.name()));
 
-    userRepository.delete(user2);
-    List<User> result = userRepository.findAll();
+    userRepository.delete(userAccount2);
+    List<UserAccount> result = userRepository.findAll();
 
     assertThat(result.size(), is(count));
 

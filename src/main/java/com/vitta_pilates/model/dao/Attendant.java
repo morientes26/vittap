@@ -1,7 +1,5 @@
 package com.vitta_pilates.model.dao;
 
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 import java.lang.*;
 import java.util.ArrayList;
@@ -23,15 +21,13 @@ public class Attendant {
     @OneToOne(cascade = CascadeType.ALL)
     private PersonalData personalData;
 
-    //note: I suggest move Skills to User or Personal Data
+    //note: I suggest move Skills to UserAccount or Personal Data
     @OneToMany(mappedBy = "attendant")
     private List<Skill> skills = new ArrayList<>();
 
     @OneToOne
-    private User user; // optional
+    private UserAccount userAccount; // optional
 
-    //@Cascade({org.hibernate.annotations.CascadeType.ALL})
-//cascade = {CascadeType.REMOVE, CascadeType.DETACH}
     @ManyToMany(mappedBy = "attendedPupils")
      private Set<ClassInstance> classInstances;
 
@@ -42,8 +38,8 @@ public class Attendant {
 
 
     //note: it should be in service layer together with persistance operation
-    public void registerUser(User user) {
-        this.user = user;
+    public void registerUser(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
     public Attendant(){}
@@ -71,6 +67,7 @@ public class Attendant {
     }
 
     //FIXME: It is better to use ORM approach than 3 for cycles
+    @Deprecated
     public List<ClassInstance> listAllPupilAttendances(Map<String, com.vitta_pilates.model.dao.Class> managedEvents) {
         List<ClassInstance> result = new ArrayList<>();
         
@@ -93,6 +90,7 @@ public class Attendant {
     }
 
     //FIXME: It is better to use ORM approach than 3 for cycles
+    @Deprecated
     public List<ClassInstance> listAllTeacherAttendances(Map<String, com.vitta_pilates.model.dao.Class> managedEvents) {
         List<ClassInstance> result = new ArrayList<>();
         
@@ -139,12 +137,12 @@ public class Attendant {
         this.skills = skills;
     }
 
-    public User getUser() {
-        return user;
+    public UserAccount getUserAccount() {
+        return userAccount;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
     public Set<ClassInstance> getClassInstances() {

@@ -1,6 +1,6 @@
 package com.vitta_pilates.auth.service;
 
-import com.vitta_pilates.model.dao.User;
+import com.vitta_pilates.model.dao.UserAccount;
 import com.vitta_pilates.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 /**
  * Implementation of basic user authentication.
- * User will get userCredencial after login.
+ * UserAccount will get userCredencial after login.
  */
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService, Serializable {
@@ -22,17 +22,17 @@ public class AuthenticationServiceImpl implements AuthenticationService, Seriali
 
   @Override
   public boolean login(String nm, String pd) {
-    User user = userRepository.findOneByLogin(nm);
+    UserAccount userAccount = userRepository.findOneByLogin(nm);
     //a simple plan text password verification
-    if(user==null || !user.getPassword().equals(pd)){
+    if(userAccount ==null || !userAccount.getPassword().equals(pd)){
       return false;
     }
 
     Session sess = Sessions.getCurrent();
     UserCredential cre = new UserCredential(
-            user.getLogin(),
-            user.getName(),
-            Arrays.asList(user.getRole().getName())
+            userAccount.getLogin(),
+            userAccount.getName(),
+            Arrays.asList(userAccount.getRole().getName())
     );
 
     //just in case for this demo.
