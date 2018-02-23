@@ -1,13 +1,12 @@
 package com.vitta_pilates.core.event.service;
 
-import com.vitta_pilates.core.event.component.AttendanceForm;
 import com.vitta_pilates.core.event.component.EventForm;
 import com.vitta_pilates.core.event.component.Filter;
 import com.vitta_pilates.core.event.component.SelectPersonResult;
 import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.dao.Class;
 import com.vitta_pilates.model.dao.attendance.Attendance;
-import com.vitta_pilates.model.init.Initiator;
+import db.data.DataInitializer;
 import com.vitta_pilates.model.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,6 @@ import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -120,7 +118,7 @@ public class EventService {
             )
     );
     schedule = scheduleRepository.save(schedule);
-    Class clazz = Initiator.instanceClass(schedule, classTemplate);
+    Class clazz = DataInitializer.instanceClass(schedule, classTemplate);
     clazz = classRepository.save(clazz);
 
     ClassInstance classInstance = new ClassInstance();

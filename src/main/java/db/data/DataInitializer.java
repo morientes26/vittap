@@ -1,4 +1,4 @@
-package com.vitta_pilates.model.init;
+package db.data;
 
 
 import com.vitta_pilates.core.people.service.ClassService;
@@ -15,15 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.Calendar;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
-@Configuration
-public class Initiator  {
+/**
+ * Seed data management
+ */
+@Component
+public class DataInitializer {
 
   @Autowired
   private UserRepository userRepository;
@@ -86,34 +90,37 @@ public class Initiator  {
   private List<ClassInstance> classInstances = new ArrayList<>();
 
 
-  @Value("${spring.jpa.hibernate.ddl-auto}")
-  private String ddlAuto;
+  @Value("${db.data.seed}")
+  private Boolean dbDataSeed;
 
-  //FIXME: for this puprose will be use FLYWAY libs instead
-  // https://flywaydb.org/
+
   @Bean
-  InitializingBean initDbData() {
+  public InitializingBean seed() {
     return () -> {
-      if (ddlAuto.equals("create") || ddlAuto.equals("create-drop")) {
+      if (dbDataSeed) {
         importUsersAndRoles();
-//        importClassCategories();
-//        importTarifs();
-//        importAttendents();
-      //  importClassInstance();
-     //   importProgramInstance();
-      //  importEventAttendance(3);
+        importLevel();
+        importClassCategories();
+        importTarifs();
+        importAttendents();
+        importClassInstance();
+      // importProgramInstance();
+      // importEventAttendance(3);
       }
     };
   }
 
   private void importUsersAndRoles(){
-    if (!this.isEmptyDB())
+    if (!this.isEmptyDB(roleRepository))
       return;
 
     Role admin = roleRepository.save(new Role(LevelOfAccess.ADMIN.name(),"Administrator"));
     Role pupil = roleRepository.save(new Role(LevelOfAccess.PUPIL.name(),"Pupil"));
     Role teacher = roleRepository.save(new Role(LevelOfAccess.TEACHER.name(),"Teacher"));
     Role secretary = roleRepository.save(new Role(LevelOfAccess.SECRETARY.name(),"Secretary"));
+
+    if (!this.isEmptyDB(userRepository))
+      return;
 
     userRepository.save(new UserAccount("admin","admin","test", admin));
     userRepository.save(new UserAccount("pupil","pupil","test", pupil));
@@ -123,6 +130,10 @@ public class Initiator  {
   }
 
   private void importClassCategories(){
+
+    if (!this.isEmptyDB(classCategoryRepository))
+      return;
+
     ClassCategory classCategory = new ClassCategory("Category 1","desc 1");
     classCategory.setColor(ClassCategory.GRAY);
     classCategories.add(classCategoryRepository.save(classCategory));
@@ -137,6 +148,10 @@ public class Initiator  {
   }
 
   private void importTarifs(){
+
+    if (!this.isEmptyDB(tarifRepository))
+      return;
+
     tarifRepository.save(new Tarif("test tarif 1", "desc", new BigDecimal(1.00), new Date()));
   }
 
@@ -152,15 +167,30 @@ public class Initiator  {
     pupils = attendantRepository.save(attendants);
   }
 
-  private void importClassInstance(){
-    Room room = new Room("Room A", "desc room A");
-    room = roomRepository.save(room);
+  private void importLevel(){
+
+    if (!this.isEmptyDB(levelRepository))
+      return;
 
     Level level = new Level("1", "Basic");
     Level level2 = new Level("2", "Intermediate");
     Level level3 = new Level("3", "Advenced");
-    level = levelRepository.save(level);
-    levelRepository.save(Arrays.asList(level2, level3));
+    levelRepository.save(Arrays.asList(level, level2, level3));
+
+  }
+
+  private void importClassInstance(){
+
+    if (!this.isEmptyDB(classTemplateRepository))
+      return;
+
+    if (!this.isEmptyDB(classInstanceRepository))
+      return;
+
+    Room room = new Room("Room A", "desc room A");
+    room = roomRepository.save(room);
+
+    Level level = levelRepository.findAll().get(0);
 
     Schedule schedule = new Schedule(new Date(), new Date(), ReccurenceType.DAILY);
     schedule = scheduleRepository.save(schedule);
@@ -171,59 +201,23 @@ public class Initiator  {
     classTemplate.setCapacity(5);
     classTemplate.setDuration(60);
     classTemplate.setRequiredLevel(level);
-    classTemplaties.add(classTemplateRepository.save(classTemplate));
+    classTemplate = classTemplateRepository.save(classTemplate);
 
-    ClassTemplate classTemplate2 = new ClassTemplate("Rumba template", "desc 2", classCategories.get(1));
-    classTemplate2.setCapacity(5);
-    classTemplate2.setDuration(60);
-    classTemplate2.setRequiredLevel(level);
-    classTemplaties.add(classTemplateRepository.save(classTemplate2));
+    classInstances.add(new ClassInstance( todayRandomTime()));
+    Class clazz = classRepository.save(instanceClass(schedule, classTemplate, classInstances.get(0), room, pupils.get(0)));
+    classInstances.get(0).setClazz(clazz);
+   // classInstances.get(i).setAttendedPupils(pupils);
+    classInstances.set(0,classInstanceRepository.save(classInstances.get(0)));
+    Attendant teacher = pupils.get(0);
+    teacher.setPupil(false);
+    pupils.set(0, attendantRepository.save(teacher));
 
-    ClassTemplate classTemplate3 = new ClassTemplate("Chacha template ", "desc 3", classCategories.get(2));
-    classTemplate3.setCapacity(2);
-    classTemplate3.setDuration(5);
-    classTemplate3.setRequiredLevel(level);
-    classTemplaties.add(classTemplateRepository.save(classTemplate3));
-
-
-    for (int i=0; i<10; i++){
-      classInstances.add(new ClassInstance( todayRandomTime()));
-      int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
-      Class clazz = classRepository.save(instanceClass(schedule, classTemplaties.get(randomNum), classInstances.get(i), room, pupils.get(i)));
-      classInstances.get(i).setClazz(clazz);
-     // classInstances.get(i).setAttendedPupils(pupils);
-      classInstances.set(i,classInstanceRepository.save(classInstances.get(i)));
-      Attendant teacher = pupils.get(0);
-      teacher.setPupil(false);
-      pupils.set(0, attendantRepository.save(teacher));
-
-      if (i==7) {
-        // do nothing
-      } else if (i==8) {
-        classService.executeInstance(classInstances.get(i),
-                teacher,
-                pupils.get(1),
-                pupils.get(2),
-                pupils.get(3),
-                pupils.get(4)
-        );
-      } else if (i==9) {
-        classService.executeInstance(classInstances.get(i),
-                teacher,
-                pupils.get(1),
-                pupils.get(2),
-                pupils.get(3),
-                pupils.get(4)
-        );
-      } else {
-        classService.executeInstance(classInstances.get(i), teacher, pupils.get(1), pupils.get(2), pupils.get(3));
-      }
-    }
+    classService.executeInstance(classInstances.get(0), teacher, pupils.get(1), pupils.get(2), pupils.get(3));
 
   }
 
 
-  public static Class instanceClass(Schedule schedule,
+  private static Class instanceClass(Schedule schedule,
                                      ClassTemplate classTemplate,
                                      ClassInstance classInstance,
                                      Room room,
@@ -252,6 +246,10 @@ public class Initiator  {
   }
 
   public void importEventAttendance(int count){
+
+    if (!this.isEmptyDB(attendanceRepository))
+      return;
+
     for (int i=0;i<count;i++) {
       ClassSeatSlot slot = new ClassSeatSlot(pupils.get(i));
       //slot = classSeatSlotRepository.save(slot);
@@ -267,6 +265,12 @@ public class Initiator  {
   }
 
   private void importProgramInstance() {
+
+    if (!this.isEmptyDB(programTemplateRepository))
+      return;
+
+    if (!this.isEmptyDB(programInstanceRepository))
+      return;
 
     Calendar c = Calendar.getInstance();
     c.setTime(todayRandomTime());
@@ -296,8 +300,11 @@ public class Initiator  {
     programInstanceRepository.save(programInstance);
   }
 
-  private boolean isEmptyDB(){
-    return userRepository.findAll().isEmpty();
+  private boolean isEmptyDB(JpaRepository repository){
+    List test = repository.findAll();
+    if (test==null)
+      return false;
+    return test.isEmpty();
   }
 
   private static Date todayRandomTime(){

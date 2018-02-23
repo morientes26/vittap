@@ -1,8 +1,6 @@
 package com.vitta_pilates;
 
 import com.vitta_pilates.conf.ServiceInitializer;
-import com.vitta_pilates.conf.SpringUtility;
-import com.vitta_pilates.model.init.Initiator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
@@ -16,13 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ComponentScan("com.vitta_pilates")
+@ComponentScan({"com.vitta_pilates","db.data"})
 @EnableAutoConfiguration
 @EnableTransactionManagement
 @Import({
-				Initiator.class,
-				SpringUtility.class,
-				ServiceInitializer.class,
+				ServiceInitializer.class
 })
 public class Application {
 

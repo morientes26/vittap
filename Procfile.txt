@@ -1,1 +1,1 @@
-java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar -Duser.timezone=GMT-3:00 --spring.profiles.active=stage
+java -Dserver.port=$PORT $JAVA_OPTS -jar target/*.jar -Duser.timezone=UTC-3 --spring.profiles.active=stage

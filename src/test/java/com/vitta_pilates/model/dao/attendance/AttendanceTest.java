@@ -4,7 +4,7 @@ import com.vitta_pilates.Application;
 import com.vitta_pilates.model.dao.*;
 import com.vitta_pilates.model.dao.Class;
 import com.vitta_pilates.model.enumeration.ClassSeatSlotStatus;
-import com.vitta_pilates.model.init.Initiator;
+import db.data.DataInitializer;
 import com.vitta_pilates.model.repository.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -92,9 +92,9 @@ public class AttendanceTest {
     ClassTemplate classTemplate = classTemplateRepository.save(
             new ClassTemplate("test","test", classCategory));
 
-    Class clazz = classRepository.save(Initiator.instanceClass(schedule,classTemplate));
+    Class clazz = classRepository.save(DataInitializer.instanceClass(schedule,classTemplate));
     this.classInstance = classInstanceRepository.save(
-            Initiator.generateClassInstance(clazz)
+            DataInitializer.generateClassInstance(clazz)
     );
 
   }
